@@ -3,9 +3,6 @@
 #include "window.h"
 
 
-int window::count = 0;
-
-
 window::window(const std::wstring className, const std::wstring title)
 {
 	WNDCLASSEXW wcex = {};
@@ -20,7 +17,7 @@ window::window(const std::wstring className, const std::wstring title)
 
 	if (handle)
 	{
-		count++;
+		PostMessageW(nullptr, WM_APP_WINDOWCOUNT, 1, 0);
 		SetWindowLongPtrW(handle, GWLP_USERDATA, (LONG_PTR)this);
 		ShowWindow(handle, SW_SHOWDEFAULT);
 	}
@@ -30,9 +27,7 @@ window::~window()
 {
 	if (handle)
 	{
-		SetWindowLongPtrW(handle, GWLP_USERDATA, (LONG_PTR)nullptr);
 		DestroyWindow(handle);
-		if (!--count) PostQuitMessage(0);
 	}
 }
 
@@ -42,7 +37,7 @@ LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lPara
 	if (message == WM_DESTROY)
 	{
 		handle = nullptr;
-		if (!--count) PostQuitMessage(0);
+		PostMessageW(nullptr, WM_APP_WINDOWCOUNT, -1, 0);
 		return 0;
 	}
 

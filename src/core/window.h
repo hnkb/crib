@@ -26,7 +26,9 @@ public:
 protected:
 	virtual LRESULT proc(const UINT message, const WPARAM wParam, const LPARAM lParam);
 	static LRESULT CALLBACK proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	static int count;
 
 	HWND handle = nullptr;
 };
+
+
+#define WM_APP_WINDOWCOUNT (WM_APP + 1)
