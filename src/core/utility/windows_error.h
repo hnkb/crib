@@ -9,7 +9,9 @@
 class windows_error : public std::runtime_error
 {
 public:
-	windows_error(const HRESULT hr) : runtime_error(get_message(hr, "Operation")) {}
+	windows_error() : windows_error(GetLastError()) {}
+	windows_error(const char* operation_name) : windows_error(GetLastError(), operation_name) {}
+	windows_error(const HRESULT hr) : windows_error(hr, "Operation") {}
 	windows_error(const HRESULT hr, const char* operation_name) : runtime_error(get_message(hr, operation_name)) {}
 
 private:
@@ -22,7 +24,7 @@ private:
 
 		if (msg)
 		{
-			retval = retval + "\n\n" + msg;
+			retval = retval + "\n" + msg;
 			LocalFree(msg);
 		}
 		else
