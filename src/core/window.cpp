@@ -12,7 +12,7 @@ window::window(const std::wstring className, const std::wstring title)
 	wcex.hCursor = LoadCursorW(nullptr, IDC_ARROW);
 	wcex.lpszClassName = className.c_str();
 	wcex.lpfnWndProc = proc;
-	if (!RegisterClassExW(&wcex)) throw windows_error("RegisterClass");
+	RegisterClassExW(&wcex);
 
 	handle = CreateWindowExW(0, wcex.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, wcex.hInstance, nullptr);
 	if (!handle) throw windows_error("CreateWindow");
