@@ -1,18 +1,21 @@
 
 #pragma once
 
+#include <exception>
 #include <Windows.h>
 
 
 class com_initialize
 {
 public:
-	com_initialize() : hr(CoInitialize(nullptr)) {}
-	~com_initialize() { if (SUCCEEDED(hr)) CoUninitialize(); }
-	operator HRESULT() const { return hr; }
-	operator bool() const { return SUCCEEDED(hr); }
+	com_initialize()
+	{
+		if (FAILED(CoInitialize(nullptr)))
+			throw std::runtime_error("CoInitialize() failed.");
+	}
 
-private:
-	HRESULT hr;
+	~com_initialize()
+	{
+		CoUninitialize();
+	}
 };
-
