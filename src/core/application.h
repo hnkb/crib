@@ -10,10 +10,10 @@ class application
 public:
 	application() {}
 
-	application(const application& other) { throw std::exception("Copy constructor not supported for application."); }
-	application(application&& other) { throw std::exception("Move constructor not supported for application."); }
-	application& operator=(const application& other) { throw std::exception("Copy assignment not supported for application."); }
-	application& operator=(application&& other) { throw std::exception("Move assignment not supported for application."); }
+	application(const application& other) { throw std::logic_error("Copy constructor not supported for application."); }
+	application(application&& other) { throw std::logic_error("Move constructor not supported for application."); }
+	application& operator=(const application& other) { throw std::logic_error("Copy assignment not supported for application."); }
+	application& operator=(application&& other) { throw std::logic_error("Move assignment not supported for application."); }
 
 	~application() {}
 

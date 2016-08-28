@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <stdexcept>
+#include <exception>
 #include <string>
 #include <Windows.h>
 
@@ -13,10 +13,10 @@ public:
 	window(const std::wstring title) : window(L"crib", title) {}
 	window(const std::wstring className, const std::wstring title);
 
-	window(const window& other) { throw std::exception("Copy constructor not supported for window."); }
-	window(window&& other) { throw std::exception("Move constructor not supported for window."); }
-	window& operator=(const window& other) { throw std::exception("Copy assignment not supported for window."); }
-	window& operator=(window&& other) { throw std::exception("Move assignment not supported for window."); }
+	window(const window& other) { throw std::logic_error("Copy constructor not supported for window."); }
+	window(window&& other) { throw std::logic_error("Move constructor not supported for window."); }
+	window& operator=(const window& other) { throw std::logic_error("Copy assignment not supported for window."); }
+	window& operator=(window&& other) { throw std::logic_error("Move assignment not supported for window."); }
 
 	virtual ~window();
 
