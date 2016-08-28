@@ -17,7 +17,6 @@ window::window(const std::wstring className, const std::wstring title)
 	handle = CreateWindowExW(0, wcex.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, wcex.hInstance, nullptr);
 	if (!handle) throw windows_error("CreateWindow");
 
-	PostMessageW(nullptr, WM_APP_WINDOWCOUNT, 1, 0);
 	SetWindowLongPtrW(handle, GWLP_USERDATA, (LONG_PTR)this);
 	ShowWindow(handle, SW_SHOWDEFAULT);
 }
@@ -36,7 +35,7 @@ LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lPara
 	if (message == WM_DESTROY)
 	{
 		handle = nullptr;
-		PostMessageW(nullptr, WM_APP_WINDOWCOUNT, -1, 0);
+		PostMessageW(nullptr, WM_APP_WINDOWCLOSED, 0, 0);
 		return 0;
 	}
 

@@ -32,4 +32,4 @@ protected:
 };
 
 
-#define WM_APP_WINDOWCOUNT (WM_APP + 1)
+#define WM_APP_WINDOWCLOSED (WM_APP + 1)
