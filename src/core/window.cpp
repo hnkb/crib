@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "window.h"
+#include "utility.h"
 
 
 window::window(const std::wstring className, const std::wstring title)
@@ -11,16 +12,14 @@ window::window(const std::wstring className, const std::wstring title)
 	wcex.hCursor = LoadCursorW(nullptr, IDC_ARROW);
 	wcex.lpszClassName = className.c_str();
 	wcex.lpfnWndProc = proc;
-	RegisterClassExW(&wcex);
+	if (!RegisterClassExW(&wcex)) throw windows_error("RegisterClass");
 
 	handle = CreateWindowExW(0, wcex.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, wcex.hInstance, nullptr);
+	if (!handle) throw windows_error("CreateWindow");
 
-	if (handle)
-	{
-		PostMessageW(nullptr, WM_APP_WINDOWCOUNT, 1, 0);
-		SetWindowLongPtrW(handle, GWLP_USERDATA, (LONG_PTR)this);
-		ShowWindow(handle, SW_SHOWDEFAULT);
-	}
+	PostMessageW(nullptr, WM_APP_WINDOWCOUNT, 1, 0);
+	SetWindowLongPtrW(handle, GWLP_USERDATA, (LONG_PTR)this);
+	ShowWindow(handle, SW_SHOWDEFAULT);
 }
 
 window::~window()
