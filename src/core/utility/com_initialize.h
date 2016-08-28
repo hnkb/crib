@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <stdexcept>
+#include "windows_error.h"
 #include <Windows.h>
 
 
@@ -10,8 +10,7 @@ class com_initialize
 public:
 	com_initialize()
 	{
-		if (FAILED(CoInitialize(nullptr)))
-			throw std::runtime_error("CoInitialize() failed.");
+		throw_if_failed(CoInitialize(nullptr), "COM initialization");
 	}
 
 	~com_initialize()

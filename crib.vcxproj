@@ -172,6 +172,7 @@
     <ClInclude Include="src\core\application.h" />
     <ClInclude Include="src\core\utility.h" />
     <ClInclude Include="src\core\utility\com_initialize.h" />
+    <ClInclude Include="src\core\utility\windows_error.h" />
     <ClInclude Include="src\core\window.h" />
     <ClInclude Include="src\stdafx.h" />
   </ItemGroup>

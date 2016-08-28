@@ -1,0 +1,45 @@
+
+#pragma once
+
+#include <stdexcept>
+#include <string>
+#include <Windows.h>
+
+
+class windows_error : public std::runtime_error
+{
+public:
+	windows_error(const HRESULT hr) : runtime_error(get_message(hr, "Operation")) {}
+	windows_error(const HRESULT hr, const char* operation_name) : runtime_error(get_message(hr, operation_name)) {}
+
+private:
+	std::string get_message(const HRESULT hr, const char* operation_name)
+	{
+		std::string retval = std::string(operation_name) + " failed.";
+		char* msg;
+
+		FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&msg, 0, nullptr);
+
+		if (msg)
+		{
+			retval = retval + "\n\n" + msg;
+			LocalFree(msg);
+		}
+		else
+		{
+			retval += " Unknown error " + std::to_string(hr) + ".";
+		}
+
+		return retval;
+	}
+};
+
+inline void throw_if_failed(const HRESULT hr, const char* operation_name)
+{
+	if (FAILED(hr)) throw windows_error(hr, operation_name);
+}
+
+inline void throw_if_failed(const HRESULT hr)
+{
+	if (FAILED(hr)) throw windows_error(hr);
+}
