@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <exception>
+#include <stdexcept>
 #include <Windows.h>
 
 
