@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\core\application.cpp" />
+    <ClCompile Include="src\core\timer.cpp" />
     <ClCompile Include="src\core\window.cpp" />
     <ClCompile Include="src\graphics\context.cpp" />
     <ClCompile Include="src\graphics\d3d11\d3d11_context.cpp" />
@@ -173,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\application.h" />
+    <ClInclude Include="src\core\timer.h" />
     <ClInclude Include="src\core\utility.h" />
     <ClInclude Include="src\core\utility\com_initialize.h" />
     <ClInclude Include="src\core\utility\windows_error.h" />

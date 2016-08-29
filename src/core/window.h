@@ -2,6 +2,7 @@
 #pragma once
 
 #include "graphics/context.h"
+#include "timer.h"
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -40,6 +41,7 @@ namespace crib
 
 			HWND handle;
 			std::unique_ptr<graphics::context> graphics;
+			timer timer;
 		};
 
 
