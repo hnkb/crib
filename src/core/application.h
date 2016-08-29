@@ -5,21 +5,29 @@
 #include "utility.h"
 
 
-class application
+namespace crib
 {
-public:
-	application() {}
+	namespace core
+	{
 
-	application(const application& other) { throw std::logic_error("Copy constructor not supported for application."); }
-	application(application&& other) { throw std::logic_error("Move constructor not supported for application."); }
-	application& operator=(const application& other) { throw std::logic_error("Copy assignment not supported for application."); }
-	application& operator=(application&& other) { throw std::logic_error("Move assignment not supported for application."); }
+		class application
+		{
+		public:
+			application() {}
 
-	~application() {}
+			application(const application& other) { throw std::logic_error("Copy constructor not supported for application."); }
+			application(application&& other) { throw std::logic_error("Move constructor not supported for application."); }
+			application& operator=(const application& other) { throw std::logic_error("Copy assignment not supported for application."); }
+			application& operator=(application&& other) { throw std::logic_error("Move assignment not supported for application."); }
 
-	int run();
+			~application() {}
 
-private:
-	com_initialize com_init;
-	window main;
-};
+			int run();
+
+		private:
+			utility::com_initialize com_init;
+			window main;
+		};
+
+	}
+}

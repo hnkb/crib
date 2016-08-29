@@ -7,7 +7,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /
 {
 	try
 	{
-		application app;
+		crib::core::application app;
 		return app.run();
 	}
 	catch (std::exception e)

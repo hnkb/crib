@@ -3,6 +3,8 @@
 #include "window.h"
 #include "utility.h"
 
+using crib::core::window;
+
 
 window::window(const std::wstring className, const std::wstring title)
 {
@@ -35,7 +37,7 @@ LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lPara
 	if (message == WM_DESTROY)
 	{
 		handle = nullptr;
-		PostMessageW(nullptr, WM_APP_WINDOWCLOSED, 0, 0);
+		PostMessageW(nullptr, constants::wm_app_windowclosed, 0, 0);
 		return 0;
 	}
 

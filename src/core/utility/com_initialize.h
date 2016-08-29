@@ -5,16 +5,27 @@
 #include <Windows.h>
 
 
-class com_initialize
+namespace crib
 {
-public:
-	com_initialize()
+	namespace core
 	{
-		throw_if_failed(CoInitialize(nullptr), "COM initialization");
-	}
+		namespace utility
+		{
 
-	~com_initialize()
-	{
-		CoUninitialize();
+			class com_initialize
+			{
+			public:
+				com_initialize()
+				{
+					throw_if_failed(CoInitialize(nullptr), "COM initialization");
+				}
+
+				~com_initialize()
+				{
+					CoUninitialize();
+				}
+			};
+
+		}
 	}
-};
+}
