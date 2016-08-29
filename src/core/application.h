@@ -20,7 +20,7 @@ namespace crib
 			application& operator=(const application& other) { throw std::logic_error("Copy assignment not supported for application."); }
 			application& operator=(application&& other) { throw std::logic_error("Move assignment not supported for application."); }
 
-			~application() {}
+			virtual ~application() {}
 
 			int run();
 

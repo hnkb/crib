@@ -14,10 +14,6 @@ namespace crib
 		class buffer
 		{
 		public:
-			buffer() {}
-
-			~buffer() {}
-
 			void push(event&& evt);
 			void push(const UINT message, const WPARAM wParam, const LPARAM lParam, const double time);
 			void swap();

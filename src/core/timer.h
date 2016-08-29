@@ -14,8 +14,6 @@ namespace crib
 		public:
 			timer() : frame_origin(std::chrono::high_resolution_clock::now()) {}
 
-			~timer() {}
-
 			double next_frame();
 			double now() const;
 
