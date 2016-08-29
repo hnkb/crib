@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "graphics/context.h"
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <Windows.h>
@@ -30,10 +32,14 @@ namespace crib
 			HWND get_handle() const { return handle; }
 
 		protected:
+			void frame();
 			virtual LRESULT proc(const UINT message, const WPARAM wParam, const LPARAM lParam);
 			static LRESULT CALLBACK proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-			HWND handle = nullptr;
+			void create_graphics_context();
+
+			HWND handle;
+			std::unique_ptr<graphics::context> graphics;
 		};
 
 
@@ -43,4 +49,3 @@ namespace crib
 		}
 	}
 }
-

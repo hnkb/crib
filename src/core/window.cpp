@@ -6,7 +6,7 @@
 using crib::core::window;
 
 
-window::window(const std::wstring className, const std::wstring title)
+window::window(const std::wstring className, const std::wstring title) : handle(nullptr), graphics(nullptr)
 {
 	WNDCLASSEXW wcex = {};
 	wcex.cbSize = sizeof(WNDCLASSEXW);
@@ -21,6 +21,8 @@ window::window(const std::wstring className, const std::wstring title)
 
 	SetWindowLongPtrW(handle, GWLP_USERDATA, (LONG_PTR)this);
 	ShowWindow(handle, SW_SHOWDEFAULT);
+
+	create_graphics_context();
 }
 
 window::~window()
@@ -32,10 +34,51 @@ window::~window()
 }
 
 
+void window::frame()
+{
+	if (graphics)
+	{
+		try
+		{
+			graphics->draw();
+		}
+		catch (graphics::context_invalid e)
+		{
+			create_graphics_context();
+		}
+	}
+}
+
 LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lParam)
 {
-	if (message == WM_DESTROY)
+	switch (message)
 	{
+	case WM_SIZE:
+		if (graphics)
+		{
+			try
+			{
+				graphics->resize();
+			}
+			catch (graphics::context_invalid e)
+			{
+				create_graphics_context();
+			}
+		}
+		return 0;
+
+	case WM_ERASEBKGND:
+		// This handler is not necessary. The window class was created with hbrBackground set to nullptr,
+		// so the default processing (by DefWindowProcW) is to do nothing.
+		return TRUE;
+
+	case WM_PAINT:
+		// To have animation, do not validate window, so Windows keep sending WM_PAINT messages
+		frame();
+		return 0;
+
+	case WM_DESTROY:
+		graphics.release();
 		handle = nullptr;
 		PostMessageW(nullptr, constants::wm_app_windowclosed, 0, 0);
 		return 0;
@@ -61,4 +104,10 @@ std::wstring window::get_title() const
 	std::vector<wchar_t> buffer(GetWindowTextLengthW(handle) + 2);
 	GetWindowTextW(handle, buffer.data(), (int)buffer.size() - 1);
 	return std::wstring(buffer.data());
+}
+
+
+void window::create_graphics_context()
+{
+	graphics = graphics::context::create(L"d3d11", handle);
 }
