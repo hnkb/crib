@@ -51,6 +51,12 @@ void window::frame()
 
 LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lParam)
 {
+	if ((message >= WM_MOUSEFIRST && message <= WM_MOUSELAST) || (message >= WM_KEYFIRST && message <= WM_KEYLAST))
+	{
+		input.push(message, wParam, lParam, timer.now());
+		return 0;
+	}
+	
 	switch (message)
 	{
 	case WM_SIZE:

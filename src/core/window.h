@@ -2,6 +2,7 @@
 #pragma once
 
 #include "graphics/context.h"
+#include "input/buffer.h"
 #include "timer.h"
 #include <memory>
 #include <stdexcept>
@@ -41,6 +42,7 @@ namespace crib
 
 			HWND handle;
 			std::unique_ptr<graphics::context> graphics;
+			input::buffer input;
 			timer timer;
 		};
 
