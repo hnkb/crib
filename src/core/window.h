@@ -22,10 +22,10 @@ namespace crib
 			window(const std::wstring title) : window(L"crib", title) {}
 			window(const std::wstring className, const std::wstring title);
 
-			window(const window& other) { throw std::logic_error("Copy constructor not supported for window."); }
-			window(window&& other) { throw std::logic_error("Move constructor not supported for window."); }
-			window& operator=(const window& other) { throw std::logic_error("Copy assignment not supported for window."); }
-			window& operator=(window&& other) { throw std::logic_error("Move assignment not supported for window."); }
+			window(const window& other) = delete;
+			window(window&& other) = delete;
+			window& operator=(const window& other) = delete;
+			window& operator=(window&& other) = delete;
 
 			virtual ~window();
 
