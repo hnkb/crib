@@ -84,7 +84,7 @@ LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lPara
 		return 0;
 
 	case WM_DESTROY:
-		graphics.release();
+		graphics.reset();
 		handle = nullptr;
 		PostMessageW(nullptr, constants::wm_app_windowclosed, 0, 0);
 		return 0;
