@@ -23,6 +23,7 @@ namespace crib
 
 			virtual void draw() override;
 			virtual void resize() override;
+			virtual void attach_renderer(graphics::renderer* rndr) override;
 
 			CComPtr<ID3D11Device2> device;
 			CComPtr<ID3D11DeviceContext2> context;

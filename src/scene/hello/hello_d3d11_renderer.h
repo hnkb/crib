@@ -18,6 +18,7 @@ namespace crib
 			hello_d3d11_renderer(graphics::d3d11_context& context, hello_scene& hello_scene);
 
 			virtual void render() override;
+			virtual void resize(const float width, const float height) override;
 
 		protected:
 			hello_scene& scene;

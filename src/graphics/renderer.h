@@ -13,6 +13,7 @@ namespace crib
 			virtual ~renderer() {}
 
 			virtual void render() = 0;
+			virtual void resize(const float width, const float height) {}
 		};
 
 	}

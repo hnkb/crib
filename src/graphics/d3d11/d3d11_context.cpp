@@ -11,6 +11,7 @@ using crib::core::utility::throw_if_failed;
 
 d3d11_context::d3d11_context(const HWND handle)
 {
+	// Create D3D11 device
 	{
 		D3D_FEATURE_LEVEL featureLevels[] =
 		{
@@ -28,6 +29,7 @@ d3d11_context::d3d11_context(const HWND handle)
 		throw_if_failed(ctx.QueryInterface(&context), "Get D3D 11.2 interface");
 	}
 
+	// Create swap chain
 	{
 		DXGI_SWAP_CHAIN_DESC1 sd = {};
 		sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -64,6 +66,24 @@ d3d11_context::~d3d11_context()
 }
 
 
+void d3d11_context::attach_renderer(crib::graphics::renderer* rndr)
+{
+	context::attach_renderer(rndr);
+
+	if (swapchain)
+	{
+		// Send a resize to renderer with current size
+
+		CComPtr<ID3D11Texture2D> backBuffer;
+		D3D11_TEXTURE2D_DESC backBufferDesc = {};
+		throw_if_failed(swapchain->GetBuffer(0, IID_PPV_ARGS(&backBuffer)));
+		backBuffer->GetDesc(&backBufferDesc);
+
+		if (renderer) renderer->resize(float(backBufferDesc.Width), float(backBufferDesc.Height));
+	}
+}
+
+
 void d3d11_context::create_size_dependent_resources()
 {
 	// Create a Direct3D render target view of the swap chain back buffer.
@@ -91,8 +111,11 @@ void d3d11_context::create_size_dependent_resources()
 
 
 	// Set the 3D rendering viewport to target the entire window.
-	CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<FLOAT>(backBufferDesc.Width), static_cast<FLOAT>(backBufferDesc.Height));
-	context->RSSetViewports(1, &viewport);
+	context->RSSetViewports(1, &CD3D11_VIEWPORT(0.0f, 0.0f, float(backBufferDesc.Width), float(backBufferDesc.Height)));
+
+
+	// Send renderer the new size
+	if (renderer) renderer->resize(float(backBufferDesc.Width), float(backBufferDesc.Height));
 }
 
 

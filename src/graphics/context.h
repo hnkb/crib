@@ -19,8 +19,8 @@ namespace crib
 
 			virtual void draw() = 0;
 			virtual void resize() {}
+			virtual void attach_renderer(renderer* rndr);
 
-			void attach_renderer(renderer* rndr);
 			static std::unique_ptr<context> create(const std::wstring type, const HWND handle);
 
 		protected:

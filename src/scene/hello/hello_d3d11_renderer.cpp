@@ -45,6 +45,14 @@ hello_d3d11_renderer::hello_d3d11_renderer(crib::graphics::d3d11_context& contex
 	}
 }
 
+
+void hello_d3d11_renderer::resize(const float width, const float height)
+{
+	const float least = std::fminf(width, height);
+	ctx.context->RSSetViewports(1, &CD3D11_VIEWPORT((width - least) * .5f, (height - least) * .5f, least, least));
+}
+
+
 void hello_d3d11_renderer::render()
 {
 	ctx.context->ClearRenderTargetView(ctx.rtv, (FLOAT*)&DirectX::XMFLOAT4(std::fabsf(std::sinf(scene.time)) * .4f, .2f, .4f, 1.f));
