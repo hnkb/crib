@@ -52,7 +52,6 @@ d3d11_context::d3d11_context(const HWND handle)
 	}
 
 	create_size_dependent_resources();
-	renderer.reset(new d3d11_renderer(*this));
 }
 
 

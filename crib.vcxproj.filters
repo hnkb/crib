@@ -30,9 +30,6 @@
     <ClCompile Include="src\core\timer.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\d3d11\d3d11_renderer.cpp">
-      <Filter>graphics\d3d11</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphics\d3d11\d3d11_context.cpp">
       <Filter>graphics\d3d11</Filter>
     </ClCompile>
@@ -41,6 +38,8 @@
     <ClCompile Include="src\input\buffer.cpp">
       <Filter>input</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\scene.cpp" />
+    <ClCompile Include="src\scene\hello\hello_d3d11_renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\application.h">
@@ -80,5 +79,8 @@
     <ClInclude Include="src\core\utility\windows_error.h">
       <Filter>core\utility</Filter>
     </ClInclude>
+    <ClInclude Include="src\scene\scene.h" />
+    <ClInclude Include="src\scene\hello\hello_scene.h" />
+    <ClInclude Include="src\scene\hello\hello_d3d11_renderer.h" />
   </ItemGroup>
 </Project>

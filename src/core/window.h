@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "scene/scene.h"
 #include "graphics/context.h"
 #include "input/buffer.h"
 #include "timer.h"
@@ -38,9 +39,11 @@ namespace crib
 			virtual LRESULT proc(const UINT message, const WPARAM wParam, const LPARAM lParam);
 			static LRESULT CALLBACK proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+			void create_scene(std::wstring name);
 			void create_graphics_context();
 
 			HWND handle;
+			std::unique_ptr<scene::scene> scene;
 			std::unique_ptr<graphics::context> graphics;
 			input::buffer input;
 			timer timer;

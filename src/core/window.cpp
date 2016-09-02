@@ -22,6 +22,7 @@ window::window(const std::wstring className, const std::wstring title) : handle(
 	SetWindowLongPtrW(handle, GWLP_USERDATA, LONG_PTR(this));
 	ShowWindow(handle, SW_SHOWDEFAULT);
 
+	create_scene(L"hello");
 	create_graphics_context();
 }
 
@@ -36,15 +37,20 @@ window::~window()
 
 void window::frame()
 {
-	if (graphics)
+	if (scene)
 	{
-		try
+		scene->update(timer.next_frame(), input.swap());
+
+		if (graphics)
 		{
-			graphics->draw();
-		}
-		catch (graphics::context_invalid e)
-		{
-			create_graphics_context();
+			try
+			{
+				graphics->draw();
+			}
+			catch (graphics::context_invalid e)
+			{
+				create_graphics_context();
+			}
 		}
 	}
 }
@@ -113,7 +119,16 @@ std::wstring window::get_title() const
 }
 
 
+void window::create_scene(const std::wstring name)
+{
+	set_title(L"crib: " + name);
+
+	scene = scene::scene::create(name);
+	if (graphics) scene->attach_renderer(*graphics);
+}
+
 void window::create_graphics_context()
 {
 	graphics = graphics::context::create(L"d3d11", handle);
+	if (scene) scene->attach_renderer(*graphics);
 }

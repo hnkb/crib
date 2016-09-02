@@ -164,8 +164,9 @@
     <ClCompile Include="src\core\window.cpp" />
     <ClCompile Include="src\graphics\context.cpp" />
     <ClCompile Include="src\graphics\d3d11\d3d11_context.cpp" />
-    <ClCompile Include="src\graphics\d3d11\d3d11_renderer.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\scene\hello\hello_d3d11_renderer.cpp" />
+    <ClCompile Include="src\scene\scene.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -186,6 +187,9 @@
     <ClInclude Include="src\graphics\d3d11\d3d11_renderer.h" />
     <ClInclude Include="src\graphics\renderer.h" />
     <ClInclude Include="src\input\event.h" />
+    <ClInclude Include="src\scene\hello\hello_d3d11_renderer.h" />
+    <ClInclude Include="src\scene\hello\hello_scene.h" />
+    <ClInclude Include="src\scene\scene.h" />
     <ClInclude Include="src\stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

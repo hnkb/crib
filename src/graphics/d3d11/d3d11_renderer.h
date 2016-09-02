@@ -18,8 +18,6 @@ namespace crib
 
 			virtual ~d3d11_renderer() {}
 
-			virtual void render() override;
-
 		protected:
 			d3d11_context& ctx;
 		};
