@@ -15,7 +15,7 @@ namespace crib
 		public:
 			hello_scene() {}
 
-			virtual void update(const double delta, const input::buffer& input) override { time += float(delta); }
+			virtual std::wstring update(const double delta, const input::buffer& input) override;
 
 		protected:
 			virtual graphics::d3d11_renderer* create_renderer(graphics::d3d11_context& context) override { return new hello_d3d11_renderer(context, *this); }

@@ -21,7 +21,7 @@ namespace crib
 		class scene
 		{
 		public:
-			virtual void update(const double delta, const input::buffer& input) = 0;
+			virtual std::wstring update(const double delta, const input::buffer& input) = 0;
 
 			void attach_renderer(graphics::context& context);
 			static std::unique_ptr<scene> create(const std::wstring name);

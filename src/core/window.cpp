@@ -39,7 +39,15 @@ void window::frame()
 {
 	if (scene)
 	{
-		scene->update(timer.next_frame(), input.swap());
+		auto s = scene->update(timer.next_frame(), input.swap());
+		if (s.size())
+		{
+			if (s == L"quit")
+			{
+				DestroyWindow(handle);
+				return;
+			}
+		}
 
 		if (graphics)
 		{

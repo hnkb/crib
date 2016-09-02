@@ -40,6 +40,7 @@
     </ClCompile>
     <ClCompile Include="src\scene\scene.cpp" />
     <ClCompile Include="src\scene\hello\hello_d3d11_renderer.cpp" />
+    <ClCompile Include="src\scene\hello\hello_scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\application.h">
