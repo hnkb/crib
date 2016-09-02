@@ -21,6 +21,10 @@ namespace crib
 
 		protected:
 			hello_scene& scene;
+
+			CComPtr<ID3D11VertexShader> vs;
+			CComPtr<ID3D11PixelShader> ps;
+			CComPtr<ID3D11Buffer> vb;
 		};
 
 	}

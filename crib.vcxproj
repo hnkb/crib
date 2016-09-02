@@ -157,6 +157,13 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <FxCompile>
+      <ObjectFileOutput>
+      </ObjectFileOutput>
+      <HeaderFileOutput>%(RelativeDir)%(Filename)_fxc.h</HeaderFileOutput>
+    </FxCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\d3d12\d3d12_context.cpp" />
     <ClCompile Include="src\input\buffer.cpp" />
@@ -198,6 +205,19 @@
     <ClInclude Include="src\scene\hello\hello_scene.h" />
     <ClInclude Include="src\scene\scene.h" />
     <ClInclude Include="src\stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="src\scene\hello\shaders\pixel.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <VariableName>hello_ps_bytecode</VariableName>
+    </FxCompile>
+    <FxCompile Include="src\scene\hello\shaders\vertex.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <VariableName>hello_vs_bytecode</VariableName>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\scene\hello\shaders\common.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

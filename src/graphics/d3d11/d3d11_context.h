@@ -24,6 +24,7 @@ namespace crib
 			virtual void draw() override;
 			virtual void resize() override;
 
+			CComPtr<ID3D11Device2> device;
 			CComPtr<ID3D11DeviceContext2> context;
 			CComPtr<ID3D11RenderTargetView> rtv;
 			CComPtr<ID3D11DepthStencilView> dsv;
@@ -33,7 +34,6 @@ namespace crib
 
 			core::utility::com_initialize com_init;
 
-			CComPtr<ID3D11Device2> device;
 			CComPtr<IDXGISwapChain1> swapchain;
 		};
 
