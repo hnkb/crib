@@ -16,7 +16,7 @@ void buffer::push(const UINT message, const WPARAM wParam, const LPARAM lParam, 
 }
 
 
-void buffer::swap()
+buffer& buffer::swap()
 {
 	// TODO: to make this class thread-safe, ensure no access to buffer during execution of this function.
 	// This may need creating a new type for reference-counted iterators, as return value to begin()/end(),
@@ -24,6 +24,8 @@ void buffer::swap()
 
 	front.swap(back);
 	back.clear();
+
+	return *this;
 }
 
 
