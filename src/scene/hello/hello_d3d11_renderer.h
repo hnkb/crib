@@ -26,6 +26,9 @@ namespace crib
 			CComPtr<ID3D11VertexShader> vs;
 			CComPtr<ID3D11PixelShader> ps;
 			CComPtr<ID3D11Buffer> vb;
+
+			CComPtr<IDWriteTextFormat> font;
+			float width, height;
 		};
 
 	}

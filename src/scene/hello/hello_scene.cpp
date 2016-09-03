@@ -7,9 +7,9 @@ using crib::scene::hello_scene;
 
 hello_scene::hello_scene()
 	: vertex_data {
-		DirectX::XMFLOAT3( .0f,  .5f, .5f), DirectX::XMFLOAT4(1.f, 1.f, 1.f, 1.f),
-		DirectX::XMFLOAT3( .5f, -.5f, .5f), DirectX::XMFLOAT4(.2f, .2f, .2f, 1.f),
-		DirectX::XMFLOAT3(-.5f, -.5f, .5f), DirectX::XMFLOAT4(.5f, .5f, .5f, 1.f),
+		DirectX::XMFLOAT3( .0f,  .5f, .5f), DirectX::XMFLOAT4(0.f, 1.f, 1.f, 1.f),
+		DirectX::XMFLOAT3( .5f, -.5f, .5f), DirectX::XMFLOAT4(.2f, .0f, .2f, 1.f),
+		DirectX::XMFLOAT3(-.5f, -.5f, .5f), DirectX::XMFLOAT4(.5f, .5f, .0f, 1.f),
 	}
 {
 

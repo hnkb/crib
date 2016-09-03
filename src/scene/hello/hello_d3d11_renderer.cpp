@@ -43,11 +43,18 @@ hello_d3d11_renderer::hello_d3d11_renderer(crib::graphics::d3d11_context& contex
 
 		throw_if_failed(ctx.device->CreateBuffer(&bufferDesc, &initData, &vb), "Create vertex buffer");
 	}
+
+	// Create text formatting
+	{
+		throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 64.f, L"", &font));
+		font->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	}
 }
 
 
-void hello_d3d11_renderer::resize(const float width, const float height)
+void hello_d3d11_renderer::resize(const float w, const float h)
 {
+	height = h, width = w;
 	const float least = std::fminf(width, height);
 	ctx.context->RSSetViewports(1, &CD3D11_VIEWPORT((width - least) * .5f, (height - least) * .5f, least, least));
 }
@@ -58,6 +65,7 @@ void hello_d3d11_renderer::render()
 	ctx.context->ClearRenderTargetView(ctx.rtv, (FLOAT*)&DirectX::XMFLOAT4(std::fabsf(std::sinf(scene.time)) * .4f, .2f, .4f, 1.f));
 	ctx.context->ClearDepthStencilView(ctx.dsv, D3D11_CLEAR_DEPTH, 1.f, 0);
 
+	// Draw with D3D
 	{
 		UINT stride = sizeof(scene.vertex_data[0]);
 		UINT offset = 0;
@@ -65,5 +73,21 @@ void hello_d3d11_renderer::render()
 
 		ctx.context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		ctx.context->Draw(3, 0);
+	}
+
+	// Draw with D2D
+	{
+		CComPtr<ID2D1SolidColorBrush> brush;
+		throw_if_failed(ctx.context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red), &brush));
+
+		ctx.context2d->BeginDraw();
+
+		ctx.context2d->DrawRectangle(D2D1::RectF(20.f, 20.f, width - 20.f, height - 20.f), brush);
+
+		std::wstring text = L"Hello World!";
+		brush->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+		ctx.context2d->DrawTextW(text.c_str(), text.size(), font, D2D1::RectF(0, height - 120.f, width, height), brush);
+
+		throw_if_failed(ctx.context2d->EndDraw());
 	}
 }
