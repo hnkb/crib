@@ -30,7 +30,7 @@ d3d11_context::d3d11_context(const HWND handle)
 
 		throw_if_failed(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, flags, featureLevels, ARRAYSIZE(featureLevels), D3D11_SDK_VERSION, &dev, &feature_level, &ctx), "Create Direct3D 11 device");
 		throw_if_failed(dev.QueryInterface(&device), "Get D3D 11.2 interface");
-		throw_if_failed(ctx.QueryInterface(&context), "Get D3D 11.2 interface");
+		throw_if_failed(ctx.QueryInterface(&context3d), "Get D3D 11.2 interface");
 	}
 
 	// Create D2D device context
@@ -124,7 +124,7 @@ void d3d11_context::create_size_dependent_resources()
 	}
 
 	// Set the 3D rendering viewport to target the entire window.
-	context->RSSetViewports(1, &CD3D11_VIEWPORT(0.0f, 0.0f, float(backBufferDesc.Width), float(backBufferDesc.Height)));
+	context3d->RSSetViewports(1, &CD3D11_VIEWPORT(0.0f, 0.0f, float(backBufferDesc.Width), float(backBufferDesc.Height)));
 
 	// Create D2D target
 	{
@@ -159,17 +159,24 @@ void d3d11_context::resize()
 
 void d3d11_context::draw()
 {
-	if (!swapchain || !context) throw context_invalid();
+	if (!swapchain || !context3d) throw context_invalid();
 
-	context->OMSetRenderTargets(1, &rtv.p, dsv);
+	context3d->OMSetRenderTargets(1, &rtv.p, dsv);
 
 	if (renderer) renderer->render();
 
 	HRESULT hr = swapchain->Present(1, 0);
 	
-	context->DiscardView(rtv);
-	context->DiscardView(dsv);
+	context3d->DiscardView(rtv);
+	context3d->DiscardView(dsv);
 
 	if (hr == DXGI_ERROR_DEVICE_REMOVED) throw context_invalid();
 	throw_if_failed(hr, "Rendernig");
+}
+
+
+void d3d11_context::clear(const FLOAT rgba[4])
+{
+	context3d->ClearRenderTargetView(rtv, rgba);
+	context3d->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH, 1.f, 0);
 }

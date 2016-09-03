@@ -27,11 +27,10 @@ namespace crib
 			virtual void resize() override;
 			virtual void attach_renderer(graphics::renderer* rndr) override;
 
-			CComPtr<ID3D11Device2> device;
-			CComPtr<ID3D11DeviceContext2> context;
-			CComPtr<ID3D11RenderTargetView> rtv;
-			CComPtr<ID3D11DepthStencilView> dsv;
+			void clear(const FLOAT rgba[4]);
 
+			CComPtr<ID3D11Device2> device;
+			CComPtr<ID3D11DeviceContext2> context3d;
 			CComPtr<ID2D1DeviceContext> context2d;
 			CComPtr<IDWriteFactory> write;
 
@@ -41,6 +40,8 @@ namespace crib
 			core::utility::com_initialize com_init;
 
 			CComPtr<IDXGISwapChain1> swapchain;
+			CComPtr<ID3D11RenderTargetView> rtv;
+			CComPtr<ID3D11DepthStencilView> dsv;
 		};
 
 	}
