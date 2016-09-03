@@ -45,6 +45,7 @@ d3d11_context::d3d11_context(const HWND handle)
 		throw_if_failed(dxgiDevice->GetAdapter(&dxgiAdapter), "Create swap chain");
 		throw_if_failed(dxgiAdapter->GetParent(IID_PPV_ARGS(&dxgiFactory)), "Create swap chain");
 		throw_if_failed(dxgiFactory->CreateSwapChainForHwnd(device, handle, &sd, nullptr, nullptr, &swapchain), "Create swap chain");
+		throw_if_failed(dxgiFactory->MakeWindowAssociation(handle, DXGI_MWA_NO_ALT_ENTER));
 
 		// Ensure that DXGI does not queue more than one frame at a time. This both reduces latency and
 		// ensures that the application will only render after each VSync, minimizing power consumption.
@@ -57,10 +58,7 @@ d3d11_context::d3d11_context(const HWND handle)
 
 d3d11_context::~d3d11_context()
 {
-	if (swapchain)
-	{
-		swapchain->SetFullscreenState(FALSE, nullptr);
-	}
+
 }
 
 
