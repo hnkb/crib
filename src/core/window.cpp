@@ -22,7 +22,7 @@ window::window(const std::wstring className, const std::wstring title) : handle(
 	SetWindowLongPtrW(handle, GWLP_USERDATA, LONG_PTR(this));
 	ShowWindow(handle, SW_SHOWDEFAULT);
 
-	create_scene(L"hello");
+	create_scene(L"menu");
 	create_graphics_context();
 }
 
