@@ -30,6 +30,7 @@ std::wstring menu_scene::update(const double delta, const crib::input::buffer& i
 				break;
 
 			case VK_ESCAPE:
+			case VK_BACK:
 				if (selected_index == items.size() - 1) return L"quit";
 				else selected_index = items.size() - 1;
 				break;
