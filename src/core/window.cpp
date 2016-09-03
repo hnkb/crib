@@ -44,8 +44,16 @@ void window::frame()
 		{
 			if (s == L"quit")
 			{
-				DestroyWindow(handle);
+				if (get_title() == L"crib: menu")
+					DestroyWindow(handle);
+				else
+					create_scene(L"menu");
 				return;
+			}
+
+			if (s.compare(0, 5, L"scene") == 0)
+			{
+				create_scene(s.substr(6));
 			}
 		}
 
