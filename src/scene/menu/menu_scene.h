@@ -17,7 +17,7 @@ namespace crib
 			class menu_scene : public scene
 			{
 			public:
-				menu_scene();
+				menu_scene(core::settings& setting);
 
 				virtual std::wstring update(const double delta, const input::buffer& input) override;
 
@@ -32,6 +32,8 @@ namespace crib
 				std::vector<menu_item> root_items;
 				size_t root_sel;
 				std::vector<std::pair<std::vector<menu_item>&, size_t&>> navigation;
+
+				core::settings& settings;
 			};
 
 		}

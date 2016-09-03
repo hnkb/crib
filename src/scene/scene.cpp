@@ -9,10 +9,10 @@
 using crib::scene::scene;
 
 
-std::unique_ptr<scene> scene::create(const std::wstring name)
+std::unique_ptr<scene> scene::create(const std::wstring name, crib::core::settings& setting)
 {
 	if (name == L"hello") return std::unique_ptr<scene>(new hello::hello_scene());
-	if (name == L"menu") return std::unique_ptr<scene>(new menu::menu_scene());
+	if (name == L"menu") return std::unique_ptr<scene>(new menu::menu_scene(setting));
 
 	throw std::invalid_argument("crib::scene::scene name is invalid.");
 }

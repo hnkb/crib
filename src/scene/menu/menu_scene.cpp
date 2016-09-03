@@ -5,7 +5,7 @@
 using crib::scene::menu::menu_scene;
 
 
-menu_scene::menu_scene() : root_sel(0), root_items({
+menu_scene::menu_scene(crib::core::settings& setting) : settings(setting), root_sel(0), root_items({
 	menu_item(L"2D test scene", L"scene hello"),
 	menu_item(L"3D test scene", L"scene hello"),
 	menu_item(L"Settings", std::vector<menu_item>({

@@ -165,7 +165,7 @@ void window::create_scene(const std::wstring name)
 {
 	set_title(L"crib: " + name);
 
-	scene = scene::scene::create(name);
+	scene = scene::scene::create(name, settings);
 	if (graphics) scene->attach_renderer(*graphics);
 }
 
