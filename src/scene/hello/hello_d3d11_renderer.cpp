@@ -6,11 +6,11 @@
 #include "shaders/pixel_fxc.h"
 #include "shaders/vertex_fxc.h"
 
-using crib::scene::hello_d3d11_renderer;
+using crib::scene::hello::hello_d3d11_renderer;
 using crib::core::utility::throw_if_failed;
 
 
-hello_d3d11_renderer::hello_d3d11_renderer(crib::graphics::d3d11_context& context, crib::scene::hello_scene& hello_scene) : d3d11_renderer(context), scene(hello_scene)
+hello_d3d11_renderer::hello_d3d11_renderer(crib::graphics::d3d11_context& context, crib::scene::hello::hello_scene& hello_scene) : d3d11_renderer(context), scene(hello_scene)
 {
 	// Set up pipeline
 	{

@@ -4,11 +4,11 @@
 #include "menu_scene.h"
 #include "graphics/d3d11/d3d11_context.h"
 
-using crib::scene::menu_d3d11_renderer;
+using crib::scene::menu::menu_d3d11_renderer;
 using crib::core::utility::throw_if_failed;
 
 
-menu_d3d11_renderer::menu_d3d11_renderer(crib::graphics::d3d11_context& context, crib::scene::menu_scene& hello_scene) : d3d11_renderer(context), scene(hello_scene)
+menu_d3d11_renderer::menu_d3d11_renderer(crib::graphics::d3d11_context& context, crib::scene::menu::menu_scene& hello_scene) : d3d11_renderer(context), scene(hello_scene)
 {
 	throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 28.f, L"", &font));
 	throw_if_failed(ctx.context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &brush));

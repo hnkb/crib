@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "hello_scene.h"
 
-using crib::scene::hello_scene;
+using crib::scene::hello::hello_scene;
 
 
 hello_scene::hello_scene()
