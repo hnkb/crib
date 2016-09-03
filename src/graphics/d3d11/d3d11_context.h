@@ -7,6 +7,8 @@
 #include <Windows.h>
 #include <atlbase.h>
 #include <d3d11_2.h>
+#include <d2d1_1.h>
+#include <dwrite.h>
 
 
 namespace crib
@@ -29,6 +31,9 @@ namespace crib
 			CComPtr<ID3D11DeviceContext2> context;
 			CComPtr<ID3D11RenderTargetView> rtv;
 			CComPtr<ID3D11DepthStencilView> dsv;
+
+			CComPtr<ID2D1DeviceContext> context2d;
+			CComPtr<IDWriteFactory> write;
 
 		protected:
 			void create_size_dependent_resources();
