@@ -5,6 +5,7 @@
 #include "graphics/context.h"
 #include "input/buffer.h"
 #include "timer.h"
+#include "settings.h"
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -19,9 +20,8 @@ namespace crib
 		class window
 		{
 		public:
-			window() : window(L"crib") {}
-			window(const std::wstring title) : window(L"crib", title) {}
-			window(const std::wstring className, const std::wstring title);
+			window(settings& setting) : window(setting, L"crib", L"crib") {}
+			window(settings& setting, const std::wstring className, const std::wstring title);
 
 			window(const window& other) = delete;
 			window(window&& other) = delete;
@@ -43,6 +43,7 @@ namespace crib
 			void create_graphics_context();
 
 			HWND handle;
+			settings& settings;
 			std::unique_ptr<scene::scene> scene;
 			std::unique_ptr<graphics::context> graphics;
 			input::buffer input;

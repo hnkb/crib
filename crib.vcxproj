@@ -161,6 +161,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\settings.cpp" />
     <ClCompile Include="src\graphics\d3d12\d3d12_context.cpp" />
     <ClCompile Include="src\input\buffer.cpp" />
     <ClCompile Include="src\core\application.cpp" />
@@ -180,6 +181,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\settings.h" />
     <ClInclude Include="src\graphics\d3d12\d3d12_context.h" />
     <ClInclude Include="src\graphics\d3d12\d3d12_renderer.h" />
     <ClInclude Include="src\graphics\d3d12\d3dx12.h" />

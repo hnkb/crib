@@ -2,6 +2,7 @@
 #pragma once
 
 #include "window.h"
+#include "settings.h"
 #include "utility.h"
 
 
@@ -13,7 +14,7 @@ namespace crib
 		class application
 		{
 		public:
-			application() {}
+			application() : main(settings) {}
 
 			application(const application& other) = delete;
 			application(application&& other) = delete;
@@ -26,6 +27,7 @@ namespace crib
 
 		private:
 			utility::com_initialize com_init;
+			settings settings;
 			window main;
 		};
 

@@ -6,8 +6,20 @@
 using crib::core::window;
 
 
-window::window(const std::wstring className, const std::wstring title) : handle(nullptr), graphics(nullptr)
+window::window(crib::core::settings& setting, const std::wstring className, const std::wstring title) : settings(setting), handle(nullptr), graphics(nullptr)
 {
+	int width = settings.get(L"window.width", CW_USEDEFAULT),
+		height = settings.get(L"window.height", 0),
+		left = settings.get(L"window.left", CW_USEDEFAULT),
+		top = settings.get(L"window.top", 0);
+	if (width != CW_USEDEFAULT)
+	{
+		RECT rect { 0, 0, width, height };
+		AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
+		width = rect.right - rect.left;
+		height = rect.bottom - rect.top;
+	}
+
 	WNDCLASSEXW wcex = {};
 	wcex.cbSize = sizeof(WNDCLASSEXW);
 	wcex.hInstance = GetModuleHandleW(nullptr);
@@ -16,7 +28,7 @@ window::window(const std::wstring className, const std::wstring title) : handle(
 	wcex.lpfnWndProc = proc;
 	RegisterClassExW(&wcex);
 
-	handle = CreateWindowExW(0, wcex.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, wcex.hInstance, nullptr);
+	handle = CreateWindowExW(0, wcex.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW, left, top, width, height, nullptr, nullptr, wcex.hInstance, nullptr);
 	if (!handle) throw windows_error("CreateWindow");
 
 	SetWindowLongPtrW(handle, GWLP_USERDATA, LONG_PTR(this));
@@ -81,7 +93,17 @@ LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lPara
 	
 	switch (message)
 	{
+	case WM_MOVE:
+		settings.set(L"window.left", LOWORD(lParam));
+		settings.set(L"window.top", HIWORD(lParam));
+		break;
+
 	case WM_SIZE:
+		if (wParam == SIZE_RESTORED)
+		{
+			settings.set(L"window.width", LOWORD(lParam));
+			settings.set(L"window.height", HIWORD(lParam));
+		}
 		if (graphics)
 		{
 			try
