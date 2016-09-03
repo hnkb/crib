@@ -33,8 +33,7 @@ d3d11_context::d3d11_context(const HWND handle)
 	{
 		DXGI_SWAP_CHAIN_DESC1 sd = {};
 		sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		sd.SampleDesc.Count = 1; // D3D11 devices are guaranteed to support 8x MSAA
-		//sd.SampleDesc.Quality = D3D11_STANDARD_MULTISAMPLE_PATTERN;
+		sd.SampleDesc = true ? DXGI_SAMPLE_DESC { 8, UINT(D3D11_STANDARD_MULTISAMPLE_PATTERN) } : DXGI_SAMPLE_DESC { 1, 0 }; // 8x MSAA supported on all D3D11 feature level devices
 		sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		sd.BufferCount = 2;
 		//sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
@@ -42,7 +41,6 @@ d3d11_context::d3d11_context(const HWND handle)
 		CComPtr<IDXGIDevice1> dxgiDevice;
 		CComPtr<IDXGIAdapter> dxgiAdapter;
 		CComPtr<IDXGIFactory2> dxgiFactory;
-
 		throw_if_failed(device.QueryInterface(&dxgiDevice), "Create swap chain");
 		throw_if_failed(dxgiDevice->GetAdapter(&dxgiAdapter), "Create swap chain");
 		throw_if_failed(dxgiAdapter->GetParent(IID_PPV_ARGS(&dxgiFactory)), "Create swap chain");
@@ -107,7 +105,7 @@ void d3d11_context::create_size_dependent_resources()
 
 	CComPtr<ID3D11Texture2D> depthStencil;
 	throw_if_failed(device->CreateTexture2D(&depthStencilDesc, nullptr, &depthStencil), "Create depth stencil");
-	throw_if_failed(device->CreateDepthStencilView(depthStencil, &CD3D11_DEPTH_STENCIL_VIEW_DESC(D3D11_DSV_DIMENSION_TEXTURE2D), &dsv), "Create depth stencil");
+	throw_if_failed(device->CreateDepthStencilView(depthStencil, &CD3D11_DEPTH_STENCIL_VIEW_DESC(depthStencilDesc.SampleDesc.Count == 1 ? D3D11_DSV_DIMENSION_TEXTURE2D : D3D11_DSV_DIMENSION_TEXTURE2DMS), &dsv), "Create depth stencil");
 
 
 	// Set the 3D rendering viewport to target the entire window.
