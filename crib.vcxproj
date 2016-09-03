@@ -199,6 +199,7 @@
     <ClInclude Include="src\scene\hello\hello_d3d12_renderer.h" />
     <ClInclude Include="src\scene\hello\hello_scene.h" />
     <ClInclude Include="src\scene\menu\menu_d3d11_renderer.h" />
+    <ClInclude Include="src\scene\menu\menu_item.h" />
     <ClInclude Include="src\scene\menu\menu_scene.h" />
     <ClInclude Include="src\scene\scene.h" />
     <ClInclude Include="src\stdafx.h" />

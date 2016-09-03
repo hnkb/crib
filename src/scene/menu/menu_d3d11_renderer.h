@@ -25,7 +25,8 @@ namespace crib
 				menu_scene& scene;
 
 				CComPtr<ID2D1SolidColorBrush> brush;
-				CComPtr<IDWriteTextFormat> font;
+				CComPtr<IDWriteTextFormat> tf_normal;
+				CComPtr<IDWriteTextFormat> tf_selected;
 				float width, height;
 			};
 
