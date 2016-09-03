@@ -22,7 +22,7 @@ std::wstring hello_scene::update(const double delta, const crib::input::buffer& 
 
 	for (auto& e : input)
 	{
-		if (e.message == WM_KEYDOWN && e.wParam == VK_ESCAPE)
+		if (e.message == WM_KEYDOWN && (e.wParam == VK_ESCAPE || e.wParam == VK_BACK))
 			return L"quit";
 	}
 
