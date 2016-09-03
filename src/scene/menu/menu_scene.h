@@ -4,6 +4,7 @@
 #include "scene/scene.h"
 #include "menu_item.h"
 #include "menu_d3d11_renderer.h"
+#include <utility>
 
 
 namespace crib
@@ -20,14 +21,17 @@ namespace crib
 
 				virtual std::wstring update(const double delta, const input::buffer& input) override;
 
-				const std::vector<menu_item>& get_items() const { return items; }
-				const size_t get_selected_index() const { return selected_index; }
+				const std::vector<menu_item>& get_items() const { return navigation.back().first; }
+				const size_t get_selected_index() const { return navigation.back().second; }
 
 			protected:
 				virtual graphics::d3d11_renderer* create_renderer(graphics::d3d11_context& context) override { return new menu_d3d11_renderer(context, *this); }
 
-				std::vector<menu_item> items;
-				size_t selected_index;
+				std::wstring enter(menu_item& item);
+
+				std::vector<menu_item> root_items;
+				size_t root_sel;
+				std::vector<std::pair<std::vector<menu_item>&, size_t&>> navigation;
 			};
 
 		}

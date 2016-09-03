@@ -5,14 +5,32 @@
 using crib::scene::menu::menu_scene;
 
 
-menu_scene::menu_scene() : selected_index(0)
+menu_scene::menu_scene() : root_sel(0), root_items({
+	menu_item(L"2D test scene", L"scene hello"),
+	menu_item(L"3D test scene", L"scene hello"),
+	menu_item(L"Settings", std::vector<menu_item>({
+		menu_item(L"Graphics", std::vector<menu_item>({
+			menu_item(L"Direct3D 11", L""),
+			menu_item(L"Direct3D 12", L""),
+			menu_item(L"8x MSAA", L"", true),
+			menu_item(L"4x MSAA", L""),
+			menu_item(L"2x MSAA", L""),
+			menu_item(L"No anti-aliasing", L""),
+			menu_item(L"Back", L"back", true)
+			})),
+		menu_item(L"Back", L"back", true)
+		}), true),
+	menu_item(L"Quit", L"quit", true)
+})
 {
-	items.emplace_back(L"Hello scene", L"scene hello");
-	items.emplace_back(L"Quit", L"quit");
+	navigation.emplace_back(root_items, root_sel);
 }
 
 std::wstring menu_scene::update(const double delta, const crib::input::buffer& input)
 {
+	auto& items = navigation.back().first;
+	auto& sel = navigation.back().second;
+
 	for (auto& e : input)
 	{
 		if (e.message == WM_KEYDOWN)
@@ -20,27 +38,52 @@ std::wstring menu_scene::update(const double delta, const crib::input::buffer& i
 			switch (e.wParam)
 			{
 			case VK_DOWN:
-				if (selected_index == items.size() - 1) selected_index = 0;
-				else if (selected_index < items.size()) selected_index++;
+				if (++sel == items.size()) sel = 0;
 				break;
 
 			case VK_UP:
-				if (selected_index == 0) selected_index = items.size() - 1;
-				else selected_index--;
+				if (--sel == -1) sel = items.size() - 1;
 				break;
 
 			case VK_ESCAPE:
 			case VK_BACK:
-				if (selected_index == items.size() - 1) return L"quit";
-				else selected_index = items.size() - 1;
+				if (navigation.size() == 1)
+				{
+					if (sel == items.size() - 1)
+						return L"quit";
+
+					sel = items.size() - 1;
+				}
+				else
+				{
+					navigation.pop_back();
+				}
 				break;
 
 			case VK_SPACE:
 			case VK_RETURN:
-				if (items[selected_index].action.size()) return items[selected_index].action;
-				break;
+				return enter(items[sel]);
 			}
 		}
+	}
+
+	return L"";
+}
+
+std::wstring menu_scene::enter(crib::scene::menu::menu_item& item)
+{
+	if (item.subitems.size())
+	{
+		navigation.emplace_back(item.subitems, item.sel_index);
+	}
+	else if (item.action.size())
+	{
+		if (item.action == L"back")
+		{
+			navigation.pop_back();
+		}
+		else
+			return item.action;
 	}
 
 	return L"";
