@@ -94,9 +94,13 @@ LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lPara
 	switch (message)
 	{
 	case WM_MOVE:
-		settings.set(L"window.left", LOWORD(lParam));
-		settings.set(L"window.top", HIWORD(lParam));
+	{
+		RECT rect;
+		GetWindowRect(handle, &rect);
+		settings.set(L"window.left", rect.left);
+		settings.set(L"window.top", rect.top);
 		break;
+	}
 
 	case WM_SIZE:
 		if (wParam == SIZE_RESTORED)
