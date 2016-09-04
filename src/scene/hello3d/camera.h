@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "input/event.h"
 #include <DirectXMath.h>
 
 
@@ -14,16 +15,12 @@ namespace crib
 			class camera
 			{
 			public:
-				DirectX::XMMATRIX get_view_matrix() const
-				{
-					auto focus = DirectX::XMVectorSet(0, 0, 0, 1.f);
-					auto up = DirectX::XMVectorSet(0, 1.f, 0, 1.f);
-					auto eye = DirectX::XMVectorScale(DirectX::XMVectorSet(1.f, 0, 1.f, 1.f), radius);
+				DirectX::XMMATRIX get_view_matrix() const;
+				void update(const float delta, const input::event& input);
 
-					return DirectX::XMMatrixTranspose(DirectX::XMMatrixLookAtRH(eye, focus, up));
-				}
-
-				float radius = 4.f;
+				float radius = 6.f;
+				float theta = 0.f;
+				float phi = 1.5f;
 			};
 
 		}

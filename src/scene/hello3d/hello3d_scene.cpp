@@ -27,8 +27,7 @@ std::wstring hello3d_scene::update(const double delta, const crib::input::buffer
 		if (e.message == WM_KEYDOWN && (e.wParam == VK_ESCAPE || e.wParam == VK_BACK))
 			return L"quit";
 
-		if (e.message == WM_MOUSEWHEEL)
-			camera.radius = std::max(camera.radius + float(GET_WHEEL_DELTA_WPARAM(e.wParam)) * -.15f * float(delta), 2.f);
+		camera.update(float(delta), e);
 	}
 
 	return L"";
