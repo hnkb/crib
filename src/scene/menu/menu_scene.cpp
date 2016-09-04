@@ -37,10 +37,12 @@ std::wstring menu_scene::update(const double delta, const crib::input::buffer& i
 		{
 			switch (e.wParam)
 			{
+			case VK_NUMPAD2:
 			case VK_DOWN:
 				if (++sel == items.size()) sel = 0;
 				break;
 
+			case VK_NUMPAD8:
 			case VK_UP:
 				if (--sel == -1) sel = items.size() - 1;
 				break;
