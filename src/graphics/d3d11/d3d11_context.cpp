@@ -11,7 +11,7 @@ using crib::graphics::d3d11_context;
 using crib::core::utility::throw_if_failed;
 
 
-d3d11_context::d3d11_context(const HWND handle)
+d3d11_context::d3d11_context(const HWND handle, crib::core::settings& setting)
 {
 	// Create D3D11 device
 	{
@@ -51,7 +51,8 @@ d3d11_context::d3d11_context(const HWND handle)
 	{
 		DXGI_SWAP_CHAIN_DESC1 sd = {};
 		sd.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-		sd.SampleDesc = true ? DXGI_SAMPLE_DESC { 8, UINT(D3D11_STANDARD_MULTISAMPLE_PATTERN) } : DXGI_SAMPLE_DESC { 1, 0 }; // 8x MSAA supported on all D3D11 feature level devices
+		sd.SampleDesc.Count = setting.get(L"graphics.msaa", 8);
+		sd.SampleDesc.Quality = sd.SampleDesc.Count == 1 ? 0 : D3D11_STANDARD_MULTISAMPLE_PATTERN;
 		sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		sd.BufferCount = 2;
 		//sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;

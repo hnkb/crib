@@ -170,6 +170,6 @@ void window::create_scene(const std::wstring name)
 
 void window::create_graphics_context()
 {
-	graphics = graphics::context::create(settings.get(L"graphics", L"d3d11"), handle);
+	graphics = graphics::context::create(settings, handle);
 	if (scene) scene->attach_renderer(*graphics);
 }

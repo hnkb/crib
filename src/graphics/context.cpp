@@ -8,10 +8,12 @@
 using crib::graphics::context;
 
 
-std::unique_ptr<context> context::create(const std::wstring type, const HWND handle)
+std::unique_ptr<context> context::create(crib::core::settings& setting, const HWND handle)
 {
+	auto type = setting.get(L"graphics", L"d3d11");
+
 	if (type == L"d3d11")
-		return std::unique_ptr<context>(new d3d11_context(handle));
+		return std::unique_ptr<context>(new d3d11_context(handle, setting));
 
 	if (type == L"d3d12")
 		return std::unique_ptr<context>(new d3d12_context(handle));

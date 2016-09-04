@@ -19,7 +19,7 @@ namespace crib
 		class d3d11_context : public context
 		{
 		public:
-			d3d11_context(const HWND handle);
+			d3d11_context(const HWND handle, core::settings& setting);
 
 			virtual ~d3d11_context();
 

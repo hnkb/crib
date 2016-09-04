@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "core/settings.h"
 #include <memory>
 #include <stdexcept>
 
@@ -21,7 +22,7 @@ namespace crib
 			virtual void resize() {}
 			virtual void attach_renderer(renderer* rndr);
 
-			static std::unique_ptr<context> create(const std::wstring type, const HWND handle);
+			static std::unique_ptr<context> create(core::settings& setting, const HWND handle);
 
 		protected:
 			std::unique_ptr<renderer> renderer;
