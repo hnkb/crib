@@ -27,6 +27,7 @@ namespace crib
 				const std::vector<object>& get_objects() const { return objects; }
 				DirectX::XMMATRIX get_view_matrix() const { return camera.get_view_matrix(); }
 				const stats& get_stats() const { return stats; }
+				const std::wstring print_camera_params() const { return camera.print_params(); }
 
 			protected:
 				virtual graphics::d3d11_renderer* create_renderer(graphics::d3d11_context& context) override { return new hello3d_d3d11_renderer(context, *this); }

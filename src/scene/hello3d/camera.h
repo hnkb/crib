@@ -18,6 +18,7 @@ namespace crib
 			public:
 				DirectX::XMMATRIX get_view_matrix() const;
 				void update(const float delta, const input::event& input);
+				const std::wstring print_params() const;
 
 			protected:
 				float radius = 6.f;

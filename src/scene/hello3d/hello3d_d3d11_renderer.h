@@ -53,7 +53,7 @@ namespace crib
 
 
 				void draw_stats();
-				void draw_stat(std::wstring title, std::wstring value, float top);
+				void draw_stat(std::wstring title, std::wstring value, float top, float line_width = 200);
 
 				CComPtr<IDWriteTextFormat> tf_value;
 				CComPtr<IDWriteTextFormat> tf_title;

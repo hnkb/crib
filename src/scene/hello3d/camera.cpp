@@ -91,3 +91,11 @@ void camera::update(const float delta, const crib::input::event& e)
 		break;
 	}
 }
+
+
+const std::wstring camera::print_params() const
+{
+	wchar_t buffer[24];
+	StringCchPrintfW(buffer, 24, L"r=%.1f \u03c6=%.1f\u03c0 \u03b8=%.1f\u03c0", radius, phi / XM_PI, theta / XM_PI);
+	return buffer;
+}

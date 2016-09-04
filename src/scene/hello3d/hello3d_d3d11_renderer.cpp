@@ -135,12 +135,14 @@ void hello3d_d3d11_renderer::draw_stats()
 
 	draw_stat(L"input buffer", std::to_wstring(scene.get_stats().buffer_size), 280);
 
+	draw_stat(L"camera", scene.print_camera_params(), height - 160, 660);
+
 	throw_if_failed(ctx.context2d->EndDraw());
 }
 
-void hello3d_d3d11_renderer::draw_stat(std::wstring title, std::wstring value, float top)
+void hello3d_d3d11_renderer::draw_stat(std::wstring title, std::wstring value, float top, float line_width)
 {
 	ctx.context2d->DrawTextW(value.c_str(), UINT32(value.size()), tf_value, D2D1::RectF(50, top, width - 50, top + 76), brush);
-	ctx.context2d->DrawLine(D2D1::Point2F(width - 50, top + 76), D2D1::Point2F(width - 200, top + 76), brush);
+	ctx.context2d->DrawLine(D2D1::Point2F(width - 50, top + 76), D2D1::Point2F(width - line_width, top + 76), brush);
 	ctx.context2d->DrawTextW(title.c_str(), UINT32(title.size()), tf_title, D2D1::RectF(50, top + 76, width - 50, top + 100), brush);
 }
