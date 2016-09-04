@@ -23,6 +23,7 @@ namespace crib
 
 			protected:
 				void draw_stat(std::wstring title, std::wstring value, float top);
+				DirectX::XMMATRIX get_projection_matrix() const;
 
 				hello3d_scene& scene;
 

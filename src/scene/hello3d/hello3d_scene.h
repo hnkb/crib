@@ -21,6 +21,8 @@ namespace crib
 
 				virtual std::wstring update(const double delta, const input::buffer& input) override;
 
+				DirectX::XMMATRIX get_view_matrix() const;
+
 			protected:
 				virtual graphics::d3d11_renderer* create_renderer(graphics::d3d11_context& context) override { return new hello3d_d3d11_renderer(context, *this); }
 

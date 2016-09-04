@@ -97,24 +97,13 @@ void hello3d_d3d11_renderer::resize(const float w, const float h)
 void hello3d_d3d11_renderer::render()
 {
 	constant_buffer_layout constants;
+	constants.camera = get_projection_matrix() * scene.get_view_matrix();
 
 
 	// Clear background
 	{
 		const float clear[] = { 0.f, .2f, .4f, 1.f };
 		ctx.clear(clear);
-	}
-
-	// Update camera
-	{
-		auto focus = DirectX::XMVectorSet(0, 0, 0, 1.f);
-		auto up = DirectX::XMVectorSet(0, 1.f, 0, 1.f);
-		auto eye = DirectX::XMVectorSet(4.f, 0, 4.f, 1.f);
-		auto view = DirectX::XMMatrixTranspose(DirectX::XMMatrixLookAtRH(eye, focus, up));
-
-		auto projection = DirectX::XMMatrixPerspectiveFovRH(.5f, width / height, 1.f, 100.f);
-
-		constants.camera = projection * view;
 	}
 
 	// Texture
@@ -162,4 +151,9 @@ void hello3d_d3d11_renderer::draw_stat(std::wstring title, std::wstring value, f
 	ctx.context2d->DrawTextW(value.c_str(), UINT32(value.size()), tf_value, D2D1::RectF(50, top, width - 50, top + 76), brush);
 	ctx.context2d->DrawLine(D2D1::Point2F(width - 50, top + 76), D2D1::Point2F(width - 200, top + 76), brush);
 	ctx.context2d->DrawTextW(title.c_str(), UINT32(title.size()), tf_title, D2D1::RectF(50, top + 76, width - 50, top + 100), brush);
+}
+
+DirectX::XMMATRIX hello3d_d3d11_renderer::get_projection_matrix() const
+{
+	return DirectX::XMMatrixPerspectiveFovRH(.5f, width / height, 1.f, 100.f);
 }

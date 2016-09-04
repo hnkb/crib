@@ -43,3 +43,12 @@ std::wstring hello3d_scene::update(const double delta, const crib::input::buffer
 
 	return L"";
 }
+
+DirectX::XMMATRIX hello3d_scene::get_view_matrix() const
+{
+	auto focus = DirectX::XMVectorSet(0, 0, 0, 1.f);
+	auto up = DirectX::XMVectorSet(0, 1.f, 0, 1.f);
+	auto eye = DirectX::XMVectorSet(4.f, 0, 4.f, 1.f);
+	
+	return DirectX::XMMatrixTranspose(DirectX::XMMatrixLookAtRH(eye, focus, up));
+}
