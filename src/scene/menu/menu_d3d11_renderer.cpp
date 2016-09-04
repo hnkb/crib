@@ -31,20 +31,38 @@ void menu_d3d11_renderer::render()
 	auto items = scene.get_items();
 	auto sel = scene.get_selected_index();
 
-	const float spacing = 48.f;
-	const float extra = 1.4f;
+	constexpr float line_spacing = 48.f;
+	constexpr float extra_ratio = 1.4f;
+	constexpr float checkbox_size = 17.f;
+	constexpr float checkbox_border_x = 2.f;
+	constexpr float checkbox_border_y = 12.f;
+
 	float top = 0;
 
 	for (size_t i = 0; i < items.size(); i++)
 	{
-		top += (items[i].extra_space ? spacing * extra : spacing);
+		const float left = line_spacing;
+		top += (items[i].extra_space ? line_spacing * extra_ratio : line_spacing);
 
 		brush->SetOpacity(i == sel ? 1.f : .7f);
 
 		ctx.context2d->DrawTextW(items[i].text.c_str(), UINT32(items[i].text.size()),
 			i == sel ? tf_selected : tf_normal,
-			D2D1::RectF(spacing, top, width - spacing, top + spacing),
+			D2D1::RectF(items[i].setting_key.size() ? left + checkbox_size + 16.f : left, top, width - line_spacing, top + line_spacing),
 			brush);
+
+
+		if (items[i].setting_key.size())
+		{
+			auto box = D2D1::RectF(left + checkbox_border_x, top + checkbox_border_y, left + checkbox_border_x + checkbox_size, top + checkbox_size + checkbox_border_y);
+			ctx.context2d->DrawRectangle(box, brush);
+
+			if (scene.is_active(items[i]))
+			{
+				box.left += 2.f; box.top += 2.f; box.right -= 2.f; box.bottom -= 2.f;
+				ctx.context2d->FillRectangle(box, brush);
+			}
+		}
 	}
 
 

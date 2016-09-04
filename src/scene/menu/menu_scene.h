@@ -23,6 +23,7 @@ namespace crib
 
 				const std::vector<menu_item>& get_items() const { return navigation.back().first; }
 				const size_t get_selected_index() const { return navigation.back().second; }
+				const bool is_active(const menu_item item) { return settings.get(item.setting_key, L"") == item.setting_value; }
 
 			protected:
 				virtual graphics::d3d11_renderer* create_renderer(graphics::d3d11_context& context) override { return new menu_d3d11_renderer(context, *this); }
