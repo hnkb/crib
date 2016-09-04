@@ -86,13 +86,14 @@ void d3d11_context::attach_renderer(crib::graphics::renderer* rndr)
 
 	if (swapchain)
 	{
-		// Send the current size to new renderer
+		// Send the current size to new renderer, also set default viewport (in case previous renderer has changed it)
 
 		CComPtr<ID3D11Texture2D> backBuffer;
 		D3D11_TEXTURE2D_DESC backBufferDesc;
 		throw_if_failed(swapchain->GetBuffer(0, IID_PPV_ARGS(&backBuffer)), "Get swap buffer");
 		backBuffer->GetDesc(&backBufferDesc);
 
+		context3d->RSSetViewports(1, &CD3D11_VIEWPORT(0.0f, 0.0f, float(backBufferDesc.Width), float(backBufferDesc.Height)));
 		if (renderer) renderer->resize(float(backBufferDesc.Width), float(backBufferDesc.Height));
 	}
 }
