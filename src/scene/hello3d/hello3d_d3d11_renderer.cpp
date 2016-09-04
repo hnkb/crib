@@ -128,10 +128,10 @@ void hello3d_d3d11_renderer::draw_stats()
 
 	draw_stat(L"average fps", std::to_wstring(int(std::round(scene.get_stats().avg_fps()))), 40);
 
-	wchar_t msg[100];
+	wchar_t buffer[16];
 	double minutes = std::floor(scene.get_stats().time / 60.);
-	wsprintfW(msg, L"%d:%02d", int(minutes), int(std::floor(scene.get_stats().time - minutes * 60.)));
-	draw_stat(L"running time", msg, 160);
+	StringCchPrintfW(buffer, 16, L"%d:%02d", int(minutes), int(std::floor(scene.get_stats().time - minutes * 60.)));
+	draw_stat(L"running time", buffer, 160);
 
 	draw_stat(L"input buffer", std::to_wstring(scene.get_stats().buffer_size), 280);
 
