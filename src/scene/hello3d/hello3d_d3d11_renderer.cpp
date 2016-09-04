@@ -75,16 +75,16 @@ void hello3d_d3d11_renderer::render()
 
 
 	constant_buffer_layout constants;
-	constants.camera = get_projection_matrix() * scene.get_view_matrix();
+	constants.projection_view = get_projection_matrix() * scene.get_view_matrix();
 
 	for (const auto& obj : scene.get_objects())
 	{
-		constants.model = obj.world_transform;
+		constants.world = obj.world_transform;
 		ctx.context3d->UpdateSubresource(const_buffer, 0, nullptr, &constants, 0, 0);
 		draw_model(models[obj.model]);
 	}
 
-
+	
 	// Draw 2D stats over 3D scene
 	draw_stats();
 }

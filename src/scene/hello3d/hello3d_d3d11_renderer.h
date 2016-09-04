@@ -2,7 +2,7 @@
 #pragma once
 
 #include "graphics/d3d11/d3d11_renderer.h"
-#include "model.h"
+//#include "model.h"
 
 
 namespace crib
@@ -13,6 +13,7 @@ namespace crib
 		{
 
 			class hello3d_scene;
+			class model;
 
 			class hello3d_d3d11_renderer : public graphics::d3d11_renderer
 			{
@@ -39,8 +40,8 @@ namespace crib
 
 				struct constant_buffer_layout
 				{
-					DirectX::XMMATRIX model;
-					DirectX::XMMATRIX camera;
+					DirectX::XMMATRIX world;
+					DirectX::XMMATRIX projection_view;
 				};
 
 				std::map<std::wstring, model_buffers> models;
