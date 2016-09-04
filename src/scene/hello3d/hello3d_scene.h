@@ -5,6 +5,7 @@
 #include "hello3d_d3d11_renderer.h"
 #include "model.h"
 #include "object.h"
+#include "camera.h"
 #include "stats.h"
 
 
@@ -22,9 +23,9 @@ namespace crib
 
 				virtual std::wstring update(const double delta, const input::buffer& input) override;
 
-				DirectX::XMMATRIX get_view_matrix() const;
 				const std::map<std::wstring, model>& get_models() const { return models; }
 				const std::vector<object>& get_objects() const { return objects; }
+				DirectX::XMMATRIX get_view_matrix() const { return camera.get_view_matrix(); }
 				const stats& get_stats() const { return stats; }
 
 			protected:
@@ -32,6 +33,7 @@ namespace crib
 
 				std::map<std::wstring, model> models;
 				std::vector<object> objects;
+				camera camera;
 
 				double time = 0;
 
