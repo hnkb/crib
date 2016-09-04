@@ -17,8 +17,7 @@ hello3d_scene::hello3d_scene()
 std::wstring hello3d_scene::update(const double delta, const crib::input::buffer& input)
 {
 	time += delta;
-	frames += 1.;
-	buffer_size = std::max(buffer_size, size_t(input.end() - input.begin()));
+	stats.update(delta, input);
 
 	objects[0].world_transform = DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation( 1.f, 0, 0)) * DirectX::XMMatrixRotationX(float(time));
 	objects[1].world_transform = DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(-1.f, 0, 0)) * DirectX::XMMatrixRotationY(float(time));

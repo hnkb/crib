@@ -5,6 +5,7 @@
 #include "hello3d_d3d11_renderer.h"
 #include "model.h"
 #include "object.h"
+#include "stats.h"
 
 
 namespace crib
@@ -24,6 +25,7 @@ namespace crib
 				DirectX::XMMATRIX get_view_matrix() const;
 				const std::map<std::wstring, model>& get_models() const { return models; }
 				const std::vector<object>& get_objects() const { return objects; }
+				const stats& get_stats() const { return stats; }
 
 			protected:
 				virtual graphics::d3d11_renderer* create_renderer(graphics::d3d11_context& context) override { return new hello3d_d3d11_renderer(context, *this); }
@@ -31,10 +33,9 @@ namespace crib
 				std::map<std::wstring, model> models;
 				std::vector<object> objects;
 
-			public:
 				double time = 0;
-				double frames = 0;
-				size_t buffer_size = 0;
+
+				stats stats;
 			};
 
 		}

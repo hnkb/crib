@@ -126,14 +126,14 @@ void hello3d_d3d11_renderer::draw_stats()
 {
 	ctx.context2d->BeginDraw();
 
-	draw_stat(L"average fps", std::to_wstring(int(std::round(scene.frames / scene.time))), 40);
+	draw_stat(L"average fps", std::to_wstring(int(std::round(scene.get_stats().avg_fps()))), 40);
 
 	wchar_t msg[100];
-	double minutes = std::floor(scene.time / 60.);
-	wsprintfW(msg, L"%d:%02d", int(minutes), int(std::floor(scene.time - minutes * 60.)));
+	double minutes = std::floor(scene.get_stats().time / 60.);
+	wsprintfW(msg, L"%d:%02d", int(minutes), int(std::floor(scene.get_stats().time - minutes * 60.)));
 	draw_stat(L"running time", msg, 160);
 
-	draw_stat(L"input buffer", std::to_wstring(scene.buffer_size), 280);
+	draw_stat(L"input buffer", std::to_wstring(scene.get_stats().buffer_size), 280);
 
 	throw_if_failed(ctx.context2d->EndDraw());
 }
