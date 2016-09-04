@@ -28,11 +28,36 @@ XMMATRIX camera::get_view_matrix() const
 
 void camera::update(const float delta, const crib::input::event& e)
 {
-	if (e.message == WM_MOUSEWHEEL)
-		radius = std::max(min_radius, radius + float(GET_WHEEL_DELTA_WPARAM(e.wParam)) * -.15f * delta);
-
-	if (e.message == WM_KEYDOWN)
+	switch (e.message)
 	{
+	case WM_MOUSEWHEEL:
+		radius = std::max(min_radius, radius + float(GET_WHEEL_DELTA_WPARAM(e.wParam)) * -.15f * delta);
+		break;
+
+	case WM_MBUTTONDOWN:
+		// Assuming window captures all mouse-down events
+		// If not, call SetCapture() here, and ReleaseCapture() in WM_MBUTTONUP
+		GetCursorPos(&origin_cursor);
+		origin_phi = phi, origin_theta = theta;
+		SetCursor(LoadCursor(NULL, IDC_SIZEALL));
+		break;
+
+	case WM_MOUSEMOVE:
+		if (e.wParam & MK_MBUTTON)
+		{
+			POINT current;
+			GetCursorPos(&current);
+
+			phi = std::min(max_phi, std::max(min_phi, origin_phi + (origin_cursor.y - current.y) / 200.0f));
+			theta = origin_theta - (origin_cursor.x - current.x) / 200.0f;
+
+			// Cursor won't change as long as mouse capture is set, so no need for this,
+			// unless on rare occasions when capture is lost unexpectedly (ALT+TAB)
+			SetCursor(LoadCursor(NULL, IDC_SIZEALL));
+		}
+		break;
+
+	case WM_KEYDOWN:
 		switch (e.wParam)
 		{
 		case VK_NUMPAD4:
@@ -63,5 +88,6 @@ void camera::update(const float delta, const crib::input::event& e)
 			radius += 5.f * delta;
 			break;
 		}
+		break;
 	}
 }
