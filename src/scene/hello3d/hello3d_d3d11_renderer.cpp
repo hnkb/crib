@@ -71,30 +71,17 @@ void hello3d_d3d11_renderer::resize(const float w, const float h)
 
 void hello3d_d3d11_renderer::render()
 {
+	ctx.clear(DirectX::XMVectorSet(0.f, .2f, .4f, 1.f).m128_f32);
+
+
 	constant_buffer_layout constants;
 	constants.camera = get_projection_matrix() * scene.get_view_matrix();
 
-
-	// Clear background
+	for (const auto& obj : scene.get_objects())
 	{
-		const float clear[] = { 0.f, .2f, .4f, 1.f };
-		ctx.clear(clear);
-	}
-
-	// Draw first cube
-	{
-		constants.model = DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.f, 0, 0)) * DirectX::XMMatrixRotationX(float(scene.time));
+		constants.model = obj.world_transform;
 		ctx.context3d->UpdateSubresource(const_buffer, 0, nullptr, &constants, 0, 0);
-
-		draw_model(models[L"cube"]);
-	}
-
-	// Draw second cube
-	{
-		constants.model = DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(-1.f, 0, 0)) * DirectX::XMMatrixRotationY(float(scene.time));
-		ctx.context3d->UpdateSubresource(const_buffer, 0, nullptr, &constants, 0, 0);
-
-		draw_model(models[L"cube"]);
+		draw_model(models[obj.model]);
 	}
 
 
