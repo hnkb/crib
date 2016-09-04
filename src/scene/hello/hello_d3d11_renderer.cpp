@@ -44,10 +44,14 @@ hello_d3d11_renderer::hello_d3d11_renderer(crib::graphics::d3d11_context& contex
 		throw_if_failed(ctx.device->CreateBuffer(&bufferDesc, &initData, &vb), "Create vertex buffer");
 	}
 
-	// Create text formatting
+	// D2D objects
 	{
-		throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 64.f, L"", &font));
-		font->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+		throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 64.f, L"", &tf_value));
+		throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 20.f, L"", &tf_title));
+		tf_value->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+		tf_title->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+
+		throw_if_failed(ctx.context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &brush));
 	}
 }
 
@@ -62,7 +66,7 @@ void hello_d3d11_renderer::resize(const float w, const float h)
 
 void hello_d3d11_renderer::render()
 {
-	ctx.clear((FLOAT*)&DirectX::XMFLOAT4(std::fabsf(std::sinf(scene.time)) * .4f, .2f, .4f, 1.f));
+	ctx.clear((FLOAT*)&DirectX::XMFLOAT4(std::fabsf(std::sinf(float(scene.time))) * .4f, .2f, .4f, 1.f));
 
 	// Draw with D3D
 	{
@@ -74,19 +78,26 @@ void hello_d3d11_renderer::render()
 		ctx.context3d->Draw(3, 0);
 	}
 
-	// Draw with D2D
+	// Draw stats with D2D
 	{
-		CComPtr<ID2D1SolidColorBrush> brush;
-		throw_if_failed(ctx.context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red), &brush));
-
 		ctx.context2d->BeginDraw();
 
-		ctx.context2d->DrawRectangle(D2D1::RectF(20.f, 20.f, width - 20.f, height - 20.f), brush);
+		draw_stat(L"average fps", std::to_wstring(int(std::round(scene.frames / scene.time))), 40);
 
-		std::wstring text = L"Hello World!";
-		brush->SetColor(D2D1::ColorF(D2D1::ColorF::White));
-		ctx.context2d->DrawTextW(text.c_str(), UINT32(text.size()), font, D2D1::RectF(0, height - 120.f, width, height), brush);
+		wchar_t msg[100];
+		double minutes = std::floor(scene.time / 60.);
+		wsprintfW(msg, L"%d:%02d", int(minutes), int(std::floor(scene.time - minutes * 60.)));
+		draw_stat(L"running time", msg, 160);
+
+		draw_stat(L"input buffer", std::to_wstring(scene.buffer_size), 280);
 
 		throw_if_failed(ctx.context2d->EndDraw());
 	}
+}
+
+void hello_d3d11_renderer::draw_stat(std::wstring title, std::wstring value, float top)
+{
+	ctx.context2d->DrawTextW(value.c_str(), UINT32(value.size()), tf_value, D2D1::RectF(50, top, width - 50, top + 76), brush);
+	ctx.context2d->DrawLine(D2D1::Point2F(width - 50, top + 76), D2D1::Point2F(width - 200, top + 76), brush);
+	ctx.context2d->DrawTextW(title.c_str(), UINT32(title.size()), tf_title, D2D1::RectF(50, top + 76, width - 50, top + 100), brush);
 }

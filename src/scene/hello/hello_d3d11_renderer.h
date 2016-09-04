@@ -22,14 +22,20 @@ namespace crib
 				virtual void resize(const float width, const float height) override;
 
 			protected:
+				void draw_stat(std::wstring title, std::wstring value, float top);
+
 				hello_scene& scene;
 
 				CComPtr<ID3D11VertexShader> vs;
 				CComPtr<ID3D11PixelShader> ps;
 				CComPtr<ID3D11Buffer> vb;
 
-				CComPtr<IDWriteTextFormat> font;
-				float width, height;
+				CComPtr<IDWriteTextFormat> tf_value;
+				CComPtr<IDWriteTextFormat> tf_title;
+				CComPtr<ID2D1SolidColorBrush> brush;
+				
+				float width;
+				float height;
 			};
 
 		}

@@ -18,7 +18,9 @@ hello_scene::hello_scene()
 
 std::wstring hello_scene::update(const double delta, const crib::input::buffer& input)
 {
-	time += float(delta);
+	time += delta;
+	frames += 1.;
+	buffer_size = std::max(buffer_size, size_t(input.end() - input.begin()));
 
 	for (auto& e : input)
 	{

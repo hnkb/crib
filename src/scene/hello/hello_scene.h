@@ -31,10 +31,13 @@ namespace crib
 					DirectX::XMFLOAT4 color;
 				} vertex_data[3];
 
-				float time = 0;
-
 				friend hello_d3d11_renderer;
 				friend hello_d3d12_renderer;
+
+
+				double frames = 0;
+				double time = 0;
+				size_t buffer_size = 0;
 			};
 
 		}
