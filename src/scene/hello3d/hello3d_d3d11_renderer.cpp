@@ -36,44 +36,20 @@ hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::d3d11_context& co
 		ctx.context3d->VSSetShader(vs, nullptr, 0);
 		ctx.context3d->PSSetShader(ps, nullptr, 0);
 		ctx.context3d->IASetInputLayout(layout);
+
+		ctx.context3d->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	}
 
 	// Create buffers
 	{
-		CComPtr<ID3D11Buffer> vertex_buffer;
-		CComPtr<ID3D11Buffer> index_buffer;
-		
-		
 		throw_if_failed(ctx.device->CreateBuffer(&CD3D11_BUFFER_DESC(sizeof(constant_buffer_layout), D3D11_BIND_CONSTANT_BUFFER), nullptr, &const_buffer), "Create constant buffer");
-
-
-		D3D11_BUFFER_DESC bufferDesc = {};
-		bufferDesc.ByteWidth = UINT(sizeof(scene.vertex_data[0]) * scene.vertex_data.size());
-		bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-		D3D11_SUBRESOURCE_DATA initData = {};
-		initData.pSysMem = scene.vertex_data.data();
-
-		throw_if_failed(ctx.device->CreateBuffer(&bufferDesc, &initData, &vertex_buffer), "Create vertex buffer");
-
-
-		bufferDesc.ByteWidth = UINT(sizeof(scene.index_data[0]) * scene.index_data.size());
-		bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-
-		initData.pSysMem = scene.index_data.data();
-
-		throw_if_failed(ctx.device->CreateBuffer(&bufferDesc, &initData, &index_buffer), "Create index buffer");
-
-
-		// if there are more than one set of buffers, these calls must be made during drawing
-		UINT stride = sizeof(scene.vertex_data[0]);
-		UINT offset = 0;
-		ctx.context3d->IASetVertexBuffers(0, 1, &vertex_buffer, &stride, &offset);
-		ctx.context3d->IASetIndexBuffer(index_buffer, DXGI_FORMAT_R16_UINT, 0);
-
 		ctx.context3d->VSSetConstantBuffers(0, 1, &const_buffer);
 
-		ctx.context3d->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		for (const auto& model : scene.get_models())
+		{
+			models.emplace(model.first, model_buffers());
+			create_buffers(model.second, models[model.first]);
+		}
 	}
 
 	// D2D objects
@@ -86,7 +62,6 @@ hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::d3d11_context& co
 		throw_if_failed(ctx.context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &brush));
 	}
 }
-
 
 void hello3d_d3d11_renderer::resize(const float w, const float h)
 {
@@ -106,18 +81,12 @@ void hello3d_d3d11_renderer::render()
 		ctx.clear(clear);
 	}
 
-	// Texture
-	{
-		//ctx.context3d->PSSetShaderResources(0, 1, m_textureSRV);
-		//ctx.context3d->PSSetSamplers(0, 1, m_sampler);
-	}
-
 	// Draw first cube
 	{
 		constants.model = DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.f, 0, 0)) * DirectX::XMMatrixRotationX(float(scene.time));
 		ctx.context3d->UpdateSubresource(const_buffer, 0, nullptr, &constants, 0, 0);
 
-		ctx.context3d->DrawIndexed(UINT(scene.index_data.size()), 0, 0);
+		draw_model(models[L"cube"]);
 	}
 
 	// Draw second cube
@@ -125,25 +94,61 @@ void hello3d_d3d11_renderer::render()
 		constants.model = DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(-1.f, 0, 0)) * DirectX::XMMatrixRotationY(float(scene.time));
 		ctx.context3d->UpdateSubresource(const_buffer, 0, nullptr, &constants, 0, 0);
 
-		ctx.context3d->DrawIndexed(UINT(scene.index_data.size()), 0, 0);
+		draw_model(models[L"cube"]);
 	}
 
 
-	// Draw stats with D2D
-	{
-		ctx.context2d->BeginDraw();
+	// Draw 2D stats over 3D scene
+	draw_stats();
+}
 
-		draw_stat(L"average fps", std::to_wstring(int(std::round(scene.frames / scene.time))), 40);
 
-		wchar_t msg[100];
-		double minutes = std::floor(scene.time / 60.);
-		wsprintfW(msg, L"%d:%02d", int(minutes), int(std::floor(scene.time - minutes * 60.)));
-		draw_stat(L"running time", msg, 160);
+void hello3d_d3d11_renderer::create_buffers(const crib::scene::hello3d::model& model, model_buffers& buffers)
+{
+	D3D11_SUBRESOURCE_DATA initData = {};
 
-		draw_stat(L"input buffer", std::to_wstring(scene.buffer_size), 280);
+	initData.pSysMem = model.vertex_data();
+	throw_if_failed(ctx.device->CreateBuffer(&CD3D11_BUFFER_DESC(model.vertex_size_bytes(), D3D11_BIND_VERTEX_BUFFER), &initData, &buffers.vertex), "Create vertex buffer");
 
-		throw_if_failed(ctx.context2d->EndDraw());
-	}
+	initData.pSysMem = model.index_data();
+	throw_if_failed(ctx.device->CreateBuffer(&CD3D11_BUFFER_DESC(model.index_size_bytes(), D3D11_BIND_INDEX_BUFFER), &initData, &buffers.index), "Create index buffer");
+
+	buffers.vertex_stride = model.vertex_stride();
+	buffers.idx_count = model.index_count();
+}
+
+void hello3d_d3d11_renderer::draw_model(hello3d_d3d11_renderer::model_buffers& model)
+{
+	UINT stride = model.vertex_stride;
+	UINT offset = 0;
+	ctx.context3d->IASetVertexBuffers(0, 1, &model.vertex, &stride, &offset);
+
+	ctx.context3d->IASetIndexBuffer(model.index, DXGI_FORMAT_R16_UINT, 0);
+
+	ctx.context3d->DrawIndexed(model.idx_count, 0, 0);
+}
+
+
+DirectX::XMMATRIX hello3d_d3d11_renderer::get_projection_matrix() const
+{
+	return DirectX::XMMatrixPerspectiveFovRH(.5f, width / height, 1.f, 100.f);
+}
+
+
+void hello3d_d3d11_renderer::draw_stats()
+{
+	ctx.context2d->BeginDraw();
+
+	draw_stat(L"average fps", std::to_wstring(int(std::round(scene.frames / scene.time))), 40);
+
+	wchar_t msg[100];
+	double minutes = std::floor(scene.time / 60.);
+	wsprintfW(msg, L"%d:%02d", int(minutes), int(std::floor(scene.time - minutes * 60.)));
+	draw_stat(L"running time", msg, 160);
+
+	draw_stat(L"input buffer", std::to_wstring(scene.buffer_size), 280);
+
+	throw_if_failed(ctx.context2d->EndDraw());
 }
 
 void hello3d_d3d11_renderer::draw_stat(std::wstring title, std::wstring value, float top)
@@ -151,9 +156,4 @@ void hello3d_d3d11_renderer::draw_stat(std::wstring title, std::wstring value, f
 	ctx.context2d->DrawTextW(value.c_str(), UINT32(value.size()), tf_value, D2D1::RectF(50, top, width - 50, top + 76), brush);
 	ctx.context2d->DrawLine(D2D1::Point2F(width - 50, top + 76), D2D1::Point2F(width - 200, top + 76), brush);
 	ctx.context2d->DrawTextW(title.c_str(), UINT32(title.size()), tf_title, D2D1::RectF(50, top + 76, width - 50, top + 100), brush);
-}
-
-DirectX::XMMATRIX hello3d_d3d11_renderer::get_projection_matrix() const
-{
-	return DirectX::XMMatrixPerspectiveFovRH(.5f, width / height, 1.f, 100.f);
 }
