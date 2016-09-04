@@ -7,7 +7,7 @@ using crib::scene::menu::menu_scene;
 
 menu_scene::menu_scene(crib::core::settings& setting) : settings(setting), root_sel(0), root_items({
 	menu_item(L"2D test scene", L"scene hello"),
-	menu_item(L"3D test scene", L"scene hello"),
+	menu_item(L"3D test scene", L"scene hello3d"),
 	menu_item(L"Settings", std::vector<menu_item>({
 		menu_item(L"Graphics", std::vector<menu_item>({
 			menu_item(L"Direct3D 11", L"graphics", L"d3d11", L"reset-graphics", false),
