@@ -29,7 +29,7 @@ XMMATRIX camera::get_view_matrix() const
 void camera::update(const float delta, const crib::input::event& e)
 {
 	if (e.message == WM_MOUSEWHEEL)
-		radius = std::max(2.f, radius + float(GET_WHEEL_DELTA_WPARAM(e.wParam)) * -.15f * delta);
+		radius = std::max(min_radius, radius + float(GET_WHEEL_DELTA_WPARAM(e.wParam)) * -.15f * delta);
 
 	if (e.message == WM_KEYDOWN)
 	{
@@ -47,16 +47,16 @@ void camera::update(const float delta, const crib::input::event& e)
 
 		case VK_NUMPAD8:
 		case VK_UP:
-			phi = std::max(.3f, phi - 3.f * delta);
+			phi = std::max(min_phi, phi - 3.f * delta);
 			break;
 
 		case VK_NUMPAD2:
 		case VK_DOWN:
-			phi = std::min(2.f, phi + 3.f * delta);
+			phi = std::min(max_phi, phi + 3.f * delta);
 			break;
 
 		case VK_ADD:
-			radius = std::max(2.f, radius - 5.f * delta);
+			radius = std::max(min_radius, radius - 5.f * delta);
 			break;
 
 		case VK_SUBTRACT:
