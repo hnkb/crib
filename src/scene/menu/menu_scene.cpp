@@ -10,12 +10,12 @@ menu_scene::menu_scene(crib::core::settings& setting) : settings(setting), root_
 	menu_item(L"3D test scene", L"scene hello"),
 	menu_item(L"Settings", std::vector<menu_item>({
 		menu_item(L"Graphics", std::vector<menu_item>({
-			menu_item(L"Direct3D 11", L"graphics", L"d3d11", false),
-			menu_item(L"Direct3D 12", L"graphics", L"d3d12", false),
-			menu_item(L"8x MSAA", L"graphics.msaa", L"8", true),
-			menu_item(L"4x MSAA", L"graphics.msaa", L"4", false),
-			menu_item(L"2x MSAA", L"graphics.msaa", L"2", false),
-			menu_item(L"No anti-aliasing", L"graphics.msaa", L"1", false),
+			menu_item(L"Direct3D 11", L"graphics", L"d3d11", L"reset-graphics", false),
+			menu_item(L"Direct3D 12", L"graphics", L"d3d12", L"reset-graphics", false),
+			menu_item(L"8x MSAA", L"graphics.msaa", L"8", L"reset-graphics", true),
+			menu_item(L"4x MSAA", L"graphics.msaa", L"4", L"reset-graphics", false),
+			menu_item(L"2x MSAA", L"graphics.msaa", L"2", L"reset-graphics", false),
+			menu_item(L"No anti-aliasing", L"graphics.msaa", L"1", L"reset-graphics", false),
 			menu_item(L"Back", L"back", true)
 			})),
 		menu_item(L"Back", L"back", true)
@@ -72,13 +72,12 @@ std::wstring menu_scene::update(const double delta, const crib::input::buffer& i
 
 std::wstring menu_scene::enter(crib::scene::menu::menu_item& item)
 {
+	if (item.setting_key.size())
+		settings.set(item.setting_key, item.setting_value);
+
 	if (item.subitems.size())
 	{
 		navigation.emplace_back(item.subitems, item.sel_index);
-	}
-	else if (item.setting_key.size())
-	{
-		settings.set(item.setting_key, item.setting_value);
 	}
 	else if (item.action.size())
 	{

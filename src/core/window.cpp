@@ -62,11 +62,10 @@ void window::frame()
 					create_scene(L"menu");
 				return;
 			}
-
-			if (s.compare(0, 5, L"scene") == 0)
-			{
+			else if (s.compare(0, 5, L"scene") == 0)
 				create_scene(s.substr(6));
-			}
+			else if (s == L"reset-graphics")
+				create_graphics_context();
 		}
 
 		if (graphics)
