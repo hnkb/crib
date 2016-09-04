@@ -32,8 +32,6 @@ namespace crib
 		protected:
 			virtual graphics::d3d11_renderer* create_renderer(graphics::d3d11_context& context) { return nullptr; }
 			virtual graphics::d3d12_renderer* create_renderer(graphics::d3d12_context& context) { return nullptr; }
-
-			std::unique_ptr<graphics::renderer> renderer;
 		};
 
 	}
