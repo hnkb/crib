@@ -73,17 +73,37 @@ std::wstring menu_scene::handle(const crib::input::event& e)
 	case WM_RBUTTONDOWN:
 		return navigate_back();
 
+	case WM_MOUSEWHEEL:
+	{
+		POINT pt;
+		GetCursorPos(&pt);
+		ScreenToClient(GetForegroundWindow(), &pt);
+		if (find_item(float(pt.x), float(pt.y)) == -1)
+			sel = (sel - GET_WHEEL_DELTA_WPARAM(e.wParam) / WHEEL_DELTA) % items.size();
+		break;
+	}
+
+	case WM_MBUTTONDOWN:
+	{
+		POINT pt;
+		GetCursorPos(&pt);
+		ScreenToClient(GetForegroundWindow(), &pt);
+		if (find_item(float(pt.x), float(pt.y)) == -1)
+			return navigate_to(items[sel]);
+		break;
+	}
+
 	case WM_KEYDOWN:
 		switch (e.wParam)
 		{
 		case VK_NUMPAD2:
 		case VK_DOWN:
-			if (++sel == items.size()) sel = 0;
+			sel = (sel + 1) % items.size();
 			break;
 
 		case VK_NUMPAD8:
 		case VK_UP:
-			if (--sel == -1) sel = items.size() - 1;
+			sel = (sel - 1) % items.size();
 			break;
 
 		case VK_ESCAPE:
