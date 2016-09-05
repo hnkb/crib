@@ -26,6 +26,7 @@ namespace crib
 				const std::map<std::wstring, model>& get_models() const { return models; }
 				const std::vector<object>& get_objects() const { return objects; }
 				const DirectX::XMMATRIX get_view_matrix() const { return camera.get_view_matrix(); }
+				const pipeline::directional_light& get_light() const { return light; }
 
 				const stats& get_stats() const { return stats; }
 				const std::wstring print_camera_params() const { return camera.print_params(); }
@@ -36,6 +37,7 @@ namespace crib
 				std::map<std::wstring, model> models;
 				std::vector<object> objects;
 				camera camera;
+				pipeline::directional_light light;
 
 				double time = 0;
 

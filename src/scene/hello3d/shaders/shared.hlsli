@@ -14,3 +14,11 @@ struct PS_INPUT
     float3 color : COLOR;
 	float3 normal : NORMAL;
 };
+
+
+struct DIRECTIONAL_LIGHT
+{
+	float3 direction;
+	float4 ambient;
+	float4 diffuse;
+};

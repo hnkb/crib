@@ -46,6 +46,9 @@ hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::d3d11_context& co
 		throw_if_failed(ctx.device->CreateBuffer(&CD3D11_BUFFER_DESC(sizeof(pipeline::cb_vs_perobject_layout), D3D11_BIND_CONSTANT_BUFFER), nullptr, &cb_vs_perobject), "Create constant buffer");
 		ctx.context3d->VSSetConstantBuffers(0, 1, &cb_vs_perobject);
 
+		throw_if_failed(ctx.device->CreateBuffer(&CD3D11_BUFFER_DESC(sizeof(pipeline::cb_ps_perframe_layout), D3D11_BIND_CONSTANT_BUFFER), nullptr, &cb_ps_perframe), "Create constant buffer");
+		ctx.context3d->PSSetConstantBuffers(0, 1, &cb_ps_perframe);
+
 		for (const auto& model : scene.get_models())
 		{
 			models.emplace(model.first, model_assets());
@@ -76,6 +79,10 @@ void hello3d_d3d11_renderer::render()
 
 
 	pipeline::cb_vs_perobject_layout vs_perobject;
+	pipeline::cb_ps_perframe_layout ps_perframe;
+	
+	ps_perframe.light = scene.get_light();
+	ctx.context3d->UpdateSubresource(cb_ps_perframe, 0, nullptr, &ps_perframe, 0, 0);
 
 	for (const auto& obj : scene.get_objects())
 	{

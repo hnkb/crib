@@ -44,6 +44,7 @@ namespace crib
 
 				std::map<std::wstring, model_assets> models;
 				CComPtr<ID3D11Buffer> cb_vs_perobject;
+				CComPtr<ID3D11Buffer> cb_ps_perframe;
 
 
 				void draw_stats();

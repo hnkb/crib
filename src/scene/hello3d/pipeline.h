@@ -28,6 +28,21 @@ namespace crib
 					DirectX::XMMATRIX wvp; // world * view * projection;
 				};
 
+
+				struct directional_light
+				{
+					DirectX::XMFLOAT3 direction;
+					float __padding;
+					DirectX::XMFLOAT4 ambient;
+					DirectX::XMFLOAT4 diffuse;
+				};
+
+				struct cb_ps_perframe_layout
+				{
+					directional_light light;
+				};
+
+
 			}
 		}
 	}

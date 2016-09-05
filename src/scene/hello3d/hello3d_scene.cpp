@@ -11,6 +11,10 @@ hello3d_scene::hello3d_scene()
 
 	objects.emplace_back(L"cube");
 	objects.emplace_back(L"cube");
+
+	light.direction = DirectX::XMFLOAT3(DirectX::XMVector3Normalize(DirectX::XMVectorSet(.2f, 1.f, .5f, 0.f)).m128_f32);
+	light.ambient = DirectX::XMFLOAT4(.2f, .1f, .1f, 1.f);
+	light.diffuse = DirectX::XMFLOAT4(.6f, .7f, .7f, 1.f);
 }
 
 
