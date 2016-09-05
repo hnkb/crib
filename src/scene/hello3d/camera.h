@@ -22,7 +22,7 @@ namespace crib
 
 			protected:
 				float radius = 6.f;
-				float theta = 0.f;
+				float theta = .7f;
 				float phi = 1.5f;
 
 				static constexpr float min_radius = 4.f;
