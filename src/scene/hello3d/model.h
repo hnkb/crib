@@ -16,6 +16,7 @@ namespace crib
 			{
 			public:
 				static model cube();
+				static model pyramid();
 
 				const UINT vertex_size_bytes() const { return UINT(sizeof(pipeline::vertex_format) * vertex.size()); }
 				const UINT vertex_stride() const { return UINT(sizeof(pipeline::vertex_format)); }

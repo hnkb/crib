@@ -53,3 +53,46 @@ model model::cube()
 
 	return model(std::move(vertices), std::move(indices));
 }
+
+model model::pyramid()
+{
+	// pyramid has a point on top (a), four at the base (b, c, d, e)
+
+	XMFLOAT3 colors[] = {
+		XMFLOAT3(.9f, .3f, .1f),
+		XMFLOAT3(.8f, .7f, .5f),
+		XMFLOAT3(.6f, .6f, .6f),
+		XMFLOAT3(.1f, .9f, .9f)
+	};
+
+	std::pair<XMVECTOR, int> a(XMVectorSet( 0.f,  .5f,  0.f, 1.f), 0);
+	std::pair<XMVECTOR, int> b(XMVectorSet(-.5f, -.5f, -.5f, 1.f), 1);
+	std::pair<XMVECTOR, int> c(XMVectorSet( .5f, -.5f, -.5f, 1.f), 2);
+	std::pair<XMVECTOR, int> d(XMVectorSet(-.5f, -.5f,  .5f, 1.f), 1);
+	std::pair<XMVECTOR, int> e(XMVectorSet( .5f, -.5f,  .5f, 1.f), 3);
+
+
+	std::vector<pipeline::vertex_format> vertices;
+	std::vector<unsigned short> indices;
+
+	auto add_triangle = [&](const std::vector<std::pair<XMVECTOR, int>> vv, const XMVECTOR n)
+	{
+		unsigned short offset = (unsigned short)vertices.size();
+		unsigned short idx[] = { 0,1,2 };
+		for (auto& i : idx) indices.push_back(i + offset);
+
+		XMFLOAT3 normal(n.m128_f32);
+		for (auto& v : vv) vertices.push_back({ XMFLOAT3(v.first.m128_f32), colors[v.second], normal });
+	};
+
+
+	add_triangle({ c,b,d }, XMVectorSet(0, -1.f, 0, 1.f));
+	add_triangle({ c,d,e }, XMVectorSet(0, -1.f, 0, 1.f));
+	add_triangle({ a,e,d }, XMVectorSet(                      0, XMScalarSin(XM_PIDIV4),  XMScalarCos(XM_PIDIV4), 1.f));
+	add_triangle({ a,b,c }, XMVectorSet(                      0, XMScalarSin(XM_PIDIV4), -XMScalarCos(XM_PIDIV4), 1.f));
+	add_triangle({ a,d,b }, XMVectorSet(-XMScalarCos(XM_PIDIV4), XMScalarSin(XM_PIDIV4),                       0, 1.f));
+	add_triangle({ a,c,e }, XMVectorSet( XMScalarCos(XM_PIDIV4), XMScalarSin(XM_PIDIV4),                       0, 1.f));
+
+
+	return model(std::move(vertices), std::move(indices));
+}

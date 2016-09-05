@@ -8,9 +8,11 @@ using crib::scene::hello3d::hello3d_scene;
 hello3d_scene::hello3d_scene()
 {
 	models.emplace(std::make_pair(L"cube", model::cube()));
+	models.emplace(std::make_pair(L"pyramid", model::pyramid()));
 
 	objects.emplace_back(L"cube");
 	objects.emplace_back(L"cube");
+	objects.emplace_back(L"pyramid");
 
 	light.direction = DirectX::XMFLOAT3(DirectX::XMVector3Normalize(DirectX::XMVectorSet(.2f, 1.f, .5f, 0.f)).m128_f32);
 	light.ambient = DirectX::XMFLOAT4(.2f, .1f, .1f, 1.f);
@@ -25,6 +27,7 @@ std::wstring hello3d_scene::update(const double delta, const crib::input::buffer
 
 	objects[0].world_transform = DirectX::XMMatrixRotationX(float(time)) * DirectX::XMMatrixTranslation( 1.f, 0, 0);
 	objects[1].world_transform = DirectX::XMMatrixRotationY(float(time)) * DirectX::XMMatrixTranslation(-1.f, 0, 0);
+	objects[2].world_transform = DirectX::XMMatrixRotationZ(float(time)) * DirectX::XMMatrixTranslation(0, 0, 1.5f);
 
 	for (auto& e : input)
 	{
