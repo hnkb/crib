@@ -41,7 +41,7 @@ namespace crib
 				struct constant_buffer_layout
 				{
 					DirectX::XMMATRIX world;
-					DirectX::XMMATRIX projection_view;
+					DirectX::XMMATRIX view_projection;
 				};
 
 				std::map<std::wstring, model_buffers> models;

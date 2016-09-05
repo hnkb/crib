@@ -3,8 +3,8 @@
 
 cbuffer CB_LAYOUT : register(b0)
 {
-    matrix model;
-    matrix camera; // projection * view
+    matrix world;
+    matrix view_projection; // view * projection
 };
 
 struct VS_INPUT
@@ -18,8 +18,8 @@ PS_INPUT main(VS_INPUT input)
 {
     float4 pos = float4(input.pos, 1.0f);
 
-    pos = mul(pos, model);
-    pos = mul(pos, camera);
+    pos = mul(pos, world);
+    pos = mul(pos, view_projection);
 	
 	PS_INPUT vertexShaderOutput;
 	vertexShaderOutput.pos = pos;

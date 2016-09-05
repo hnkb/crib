@@ -75,11 +75,11 @@ void hello3d_d3d11_renderer::render()
 
 
 	constant_buffer_layout constants;
-	constants.projection_view = get_projection_matrix() * scene.get_view_matrix();
+	constants.view_projection = DirectX::XMMatrixTranspose(scene.get_view_matrix() * get_projection_matrix());
 
 	for (const auto& obj : scene.get_objects())
 	{
-		constants.world = obj.world_transform;
+		constants.world = DirectX::XMMatrixTranspose(obj.world_transform);
 		ctx.context3d->UpdateSubresource(const_buffer, 0, nullptr, &constants, 0, 0);
 		draw_model(models[obj.model]);
 	}
@@ -118,7 +118,7 @@ void hello3d_d3d11_renderer::draw_model(hello3d_d3d11_renderer::model_buffers& m
 
 DirectX::XMMATRIX hello3d_d3d11_renderer::get_projection_matrix() const
 {
-	return DirectX::XMMatrixPerspectiveFovRH(.5f, width / height, 1.f, 100.f);
+	return DirectX::XMMatrixPerspectiveFovRH(1.f, width / height, 1.f, 100.f);
 }
 
 

@@ -22,7 +22,7 @@ XMMATRIX camera::get_view_matrix() const
 	// if phi is not clamped to 0-PI, we can calculate correct up vector like this
 	//auto up = XMVectorSet(0, (phi > 0 ? 1.f : -1.f) * (1.f - 2.f*float(abs(int(phi / XM_PI) % 2))), 0, 1.f);
 
-	return XMMatrixTranspose(XMMatrixLookAtRH(eye, focus, up));
+	return XMMatrixLookAtRH(eye, focus, up);
 }
 
 
