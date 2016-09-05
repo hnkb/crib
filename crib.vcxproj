@@ -186,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\settings.h" />
+    <ClInclude Include="src\core\utility\redirect_stdout.h" />
     <ClInclude Include="src\graphics\d3d12\d3d12_context.h" />
     <ClInclude Include="src\graphics\d3d12\d3d12_renderer.h" />
     <ClInclude Include="src\graphics\d3d12\d3dx12.h" />
