@@ -24,6 +24,8 @@ namespace crib
 		class scene
 		{
 		public:
+			virtual ~scene() {}
+
 			virtual std::wstring update(const double delta, const input::buffer& input) = 0;
 
 			void attach_renderer(graphics::context& context);
