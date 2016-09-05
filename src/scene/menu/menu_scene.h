@@ -30,6 +30,7 @@ namespace crib
 
 
 				std::wstring enter(menu_item& item);
+				const size_t find_item(const float x, const float y) const;
 
 				std::vector<menu_item> root_items;
 				size_t root_sel;

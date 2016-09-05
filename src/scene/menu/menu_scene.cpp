@@ -31,10 +31,37 @@ std::wstring menu_scene::update(const double delta, const crib::input::buffer& i
 	auto& items = navigation.back().first;
 	auto& sel = navigation.back().second;
 
+	static size_t click = -1;
+
 	for (auto& e : input)
 	{
-		if (e.message == WM_KEYDOWN)
+		switch (e.message)
 		{
+		case WM_LBUTTONDOWN:
+		{
+			click = find_item(short(LOWORD(e.lParam)), short(HIWORD(e.lParam)));
+			if (click != -1) SetCursor(LoadCursor(NULL, IDC_HAND));
+			break;
+		}
+
+		case WM_MOUSEMOVE:
+		{
+			auto i = find_item(short(LOWORD(e.lParam)), short(HIWORD(e.lParam)));
+			SetCursor(LoadCursor(NULL, i != -1 && ((e.wParam & MK_LBUTTON) == 0 || i == click) ? IDC_HAND : IDC_ARROW));
+			if (i != -1) sel = i;
+			break;
+		}
+
+		case WM_LBUTTONUP:
+		{
+			const auto i = click;
+			click = -1;
+			if (i != -1 && i == find_item(short(LOWORD(e.lParam)), short(HIWORD(e.lParam))))
+				return enter(items[i]);
+			break;
+		}
+
+		case WM_KEYDOWN:
 			switch (e.wParam)
 			{
 			case VK_NUMPAD2:
@@ -66,6 +93,7 @@ std::wstring menu_scene::update(const double delta, const crib::input::buffer& i
 			case VK_RETURN:
 				return enter(items[sel]);
 			}
+			break;
 		}
 	}
 
@@ -92,6 +120,15 @@ std::wstring menu_scene::enter(crib::scene::menu::menu_item& item)
 	}
 
 	return L"";
+}
+
+const size_t menu_scene::find_item(const float x, const float y) const
+{
+	const auto& items = navigation.back().first;
+	for (size_t i = 0; i < items.size(); i++)
+		if (items[i].bounding_rect.left <= x && items[i].bounding_rect.right >= x && items[i].bounding_rect.top <= y && items[i].bounding_rect.bottom >= y)
+			return i;
+	return -1;
 }
 
 
