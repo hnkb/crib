@@ -26,6 +26,7 @@ menu_scene::menu_scene(crib::core::settings& setting) : settings(setting), root_
 	navigation.emplace_back(root_items, root_sel);
 }
 
+
 std::wstring menu_scene::update(const double delta, const crib::input::buffer& input)
 {
 	for (auto& e : input)
@@ -36,6 +37,7 @@ std::wstring menu_scene::update(const double delta, const crib::input::buffer& i
 
 	return L"";
 }
+
 
 std::wstring menu_scene::handle(const crib::input::event& e)
 {
@@ -67,6 +69,9 @@ std::wstring menu_scene::handle(const crib::input::event& e)
 			return navigate_to(items[i]);
 		break;
 	}
+
+	case WM_RBUTTONDOWN:
+		return navigate_back();
 
 	case WM_KEYDOWN:
 		switch (e.wParam)
