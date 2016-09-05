@@ -1,29 +1,25 @@
 
-#include "ps_input.hlsli"
+#include "shared.hlsli"
 
-cbuffer CB_LAYOUT : register(b0)
+
+cbuffer CB_VS_PEROBJECT : register(b0)
 {
     matrix world;
-    matrix view_projection; // view * projection
-};
-
-struct VS_INPUT
-{
-    float3 pos : POSITION;
-    float3 color : COLOR;
+    matrix wvp; // world * view * projection
 };
 
 
-PS_INPUT main(VS_INPUT input)
+PS_INPUT main(INPUT_VERTEX_FORMAT input)
 {
-    float4 pos = float4(input.pos, 1.0f);
+    float4 pos = float4(input.pos, 1.f);
+    pos = mul(pos, wvp);
 
-    pos = mul(pos, world);
-    pos = mul(pos, view_projection);
-	
-	PS_INPUT vertexShaderOutput;
-	vertexShaderOutput.pos = pos;
-    vertexShaderOutput.color = float4(input.color, 1.0f);
+	float4 normal = float4(input.normal, 0.f);
+	normal = mul(normal, world);
 
-	return vertexShaderOutput;
+	PS_INPUT output;
+	output.pos = pos;
+	output.color = input.color;
+	output.normal = normal.xyz;
+	return output;
 }

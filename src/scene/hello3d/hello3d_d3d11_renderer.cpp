@@ -25,8 +25,9 @@ hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::d3d11_context& co
 
 		D3D11_INPUT_ELEMENT_DESC ld[] =
 		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "COLOR",    0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 		};
 
 		throw_if_failed(ctx.device->CreateInputLayout(ld, _countof(ld), hello3d_vs_bytecode, sizeof(hello3d_vs_bytecode), &layout), "Register vertex layout");
@@ -42,17 +43,17 @@ hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::d3d11_context& co
 
 	// Create buffers
 	{
-		throw_if_failed(ctx.device->CreateBuffer(&CD3D11_BUFFER_DESC(sizeof(constant_buffer_layout), D3D11_BIND_CONSTANT_BUFFER), nullptr, &const_buffer), "Create constant buffer");
-		ctx.context3d->VSSetConstantBuffers(0, 1, &const_buffer);
+		throw_if_failed(ctx.device->CreateBuffer(&CD3D11_BUFFER_DESC(sizeof(pipeline::cb_vs_perobject_layout), D3D11_BIND_CONSTANT_BUFFER), nullptr, &cb_vs_perobject), "Create constant buffer");
+		ctx.context3d->VSSetConstantBuffers(0, 1, &cb_vs_perobject);
 
 		for (const auto& model : scene.get_models())
 		{
-			models.emplace(model.first, model_buffers());
-			create_buffers(model.second, models[model.first]);
+			models.emplace(model.first, model_assets());
+			create_model_assets(model.second, models[model.first]);
 		}
 	}
 
-	// D2D objects
+	// D2D objects (for stats display)
 	{
 		throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 64.f, L"", &tf_value));
 		throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 20.f, L"", &tf_title));
@@ -74,13 +75,14 @@ void hello3d_d3d11_renderer::render()
 	ctx.clear(DirectX::XMVectorSet(0.f, .2f, .4f, 1.f).m128_f32);
 
 
-	constant_buffer_layout constants;
-	constants.view_projection = DirectX::XMMatrixTranspose(scene.get_view_matrix() * get_projection_matrix());
+	pipeline::cb_vs_perobject_layout vs_perobject;
 
 	for (const auto& obj : scene.get_objects())
 	{
-		constants.world = DirectX::XMMatrixTranspose(obj.world_transform);
-		ctx.context3d->UpdateSubresource(const_buffer, 0, nullptr, &constants, 0, 0);
+		vs_perobject.world = DirectX::XMMatrixTranspose(obj.world_transform);
+		vs_perobject.wvp = DirectX::XMMatrixTranspose(obj.world_transform * scene.get_view_matrix() * get_projection_matrix());
+		ctx.context3d->UpdateSubresource(cb_vs_perobject, 0, nullptr, &vs_perobject, 0, 0);
+
 		draw_model(models[obj.model]);
 	}
 
@@ -90,7 +92,7 @@ void hello3d_d3d11_renderer::render()
 }
 
 
-void hello3d_d3d11_renderer::create_buffers(const crib::scene::hello3d::model& model, model_buffers& buffers)
+void hello3d_d3d11_renderer::create_model_assets(const crib::scene::hello3d::model& model, model_assets& buffers)
 {
 	D3D11_SUBRESOURCE_DATA initData = {};
 
@@ -104,7 +106,7 @@ void hello3d_d3d11_renderer::create_buffers(const crib::scene::hello3d::model& m
 	buffers.idx_count = model.index_count();
 }
 
-void hello3d_d3d11_renderer::draw_model(hello3d_d3d11_renderer::model_buffers& model)
+void hello3d_d3d11_renderer::draw_model(hello3d_d3d11_renderer::model_assets& model)
 {
 	UINT stride = model.vertex_stride;
 	UINT offset = 0;

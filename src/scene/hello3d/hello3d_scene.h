@@ -25,7 +25,8 @@ namespace crib
 
 				const std::map<std::wstring, model>& get_models() const { return models; }
 				const std::vector<object>& get_objects() const { return objects; }
-				DirectX::XMMATRIX get_view_matrix() const { return camera.get_view_matrix(); }
+				const DirectX::XMMATRIX get_view_matrix() const { return camera.get_view_matrix(); }
+
 				const stats& get_stats() const { return stats; }
 				const std::wstring print_camera_params() const { return camera.print_params(); }
 

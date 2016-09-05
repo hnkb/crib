@@ -1,7 +1,8 @@
 
-#include "ps_input.hlsli"
+#include "shared.hlsli"
+
 
 float4 main(PS_INPUT input) : SV_TARGET
 {
-    return input.color;
+	return float4(input.color, 1.f);
 }

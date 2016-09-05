@@ -2,7 +2,7 @@
 #pragma once
 
 #include "graphics/d3d11/d3d11_renderer.h"
-//#include "model.h"
+#include "pipeline.h"
 
 
 namespace crib
@@ -30,7 +30,7 @@ namespace crib
 				float height;
 
 
-				struct model_buffers
+				struct model_assets
 				{
 					CComPtr<ID3D11Buffer> vertex;
 					CComPtr<ID3D11Buffer> index;
@@ -38,18 +38,12 @@ namespace crib
 					UINT idx_count;
 				};
 
-				struct constant_buffer_layout
-				{
-					DirectX::XMMATRIX world;
-					DirectX::XMMATRIX view_projection;
-				};
-
-				std::map<std::wstring, model_buffers> models;
-				CComPtr<ID3D11Buffer> const_buffer;
-
-				void create_buffers(const model& model, model_buffers& buffers);
-				void draw_model(model_buffers& model);
+				void create_model_assets(const model& model, model_assets& buffers);
+				void draw_model(model_assets& model);
 				DirectX::XMMATRIX get_projection_matrix() const;
+
+				std::map<std::wstring, model_assets> models;
+				CComPtr<ID3D11Buffer> cb_vs_perobject;
 
 
 				void draw_stats();
