@@ -79,7 +79,11 @@ std::wstring menu_scene::handle(const crib::input::event& e)
 		GetCursorPos(&pt);
 		ScreenToClient(GetForegroundWindow(), &pt);
 		if (find_item(float(pt.x), float(pt.y)) == -1)
-			sel = (sel - GET_WHEEL_DELTA_WPARAM(e.wParam) / WHEEL_DELTA) % items.size();
+		{
+			int n = (int(sel) - GET_WHEEL_DELTA_WPARAM(e.wParam) / WHEEL_DELTA);
+			while (n < 0) n += int(items.size());
+			sel = n % items.size();
+		}
 		break;
 	}
 
@@ -98,12 +102,12 @@ std::wstring menu_scene::handle(const crib::input::event& e)
 		{
 		case VK_NUMPAD2:
 		case VK_DOWN:
-			sel = (sel + 1) % items.size();
+			if (++sel == items.size()) sel = 0;
 			break;
 
 		case VK_NUMPAD8:
 		case VK_UP:
-			sel = (sel - 1) % items.size();
+			if (--sel == -1) sel = items.size() - 1;
 			break;
 
 		case VK_ESCAPE:
