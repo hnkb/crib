@@ -28,79 +28,75 @@ menu_scene::menu_scene(crib::core::settings& setting) : settings(setting), root_
 
 std::wstring menu_scene::update(const double delta, const crib::input::buffer& input)
 {
-	auto& items = navigation.back().first;
-	auto& sel = navigation.back().second;
-
-	static size_t click = -1;
-
 	for (auto& e : input)
 	{
-		switch (e.message)
-		{
-		case WM_LBUTTONDOWN:
-		{
-			click = find_item(short(LOWORD(e.lParam)), short(HIWORD(e.lParam)));
-			if (click != -1) SetCursor(LoadCursor(NULL, IDC_HAND));
-			break;
-		}
-
-		case WM_MOUSEMOVE:
-		{
-			auto i = find_item(short(LOWORD(e.lParam)), short(HIWORD(e.lParam)));
-			SetCursor(LoadCursor(NULL, i != -1 && ((e.wParam & MK_LBUTTON) == 0 || i == click) ? IDC_HAND : IDC_ARROW));
-			if (i != -1) sel = i;
-			break;
-		}
-
-		case WM_LBUTTONUP:
-		{
-			const auto i = click;
-			click = -1;
-			if (i != -1 && i == find_item(short(LOWORD(e.lParam)), short(HIWORD(e.lParam))))
-				return enter(items[i]);
-			break;
-		}
-
-		case WM_KEYDOWN:
-			switch (e.wParam)
-			{
-			case VK_NUMPAD2:
-			case VK_DOWN:
-				if (++sel == items.size()) sel = 0;
-				break;
-
-			case VK_NUMPAD8:
-			case VK_UP:
-				if (--sel == -1) sel = items.size() - 1;
-				break;
-
-			case VK_ESCAPE:
-			case VK_BACK:
-				if (navigation.size() == 1)
-				{
-					if (sel == items.size() - 1)
-						return L"quit";
-
-					sel = items.size() - 1;
-				}
-				else
-				{
-					navigation.pop_back();
-				}
-				break;
-
-			case VK_SPACE:
-			case VK_RETURN:
-				return enter(items[sel]);
-			}
-			break;
-		}
+		auto ret = handle(e);
+		if (ret.size()) return ret;
 	}
 
 	return L"";
 }
 
-std::wstring menu_scene::enter(crib::scene::menu::menu_item& item)
+std::wstring menu_scene::handle(const crib::input::event& e)
+{
+	auto& items = navigation.back().first;
+	auto& sel = navigation.back().second;
+
+	static size_t click = -1;
+
+	switch (e.message)
+	{
+	case WM_LBUTTONDOWN:
+		click = find_item(short(LOWORD(e.lParam)), short(HIWORD(e.lParam)));
+		if (click != -1) SetCursor(LoadCursor(NULL, IDC_HAND));
+		break;
+
+	case WM_MOUSEMOVE:
+	{
+		auto i = find_item(short(LOWORD(e.lParam)), short(HIWORD(e.lParam)));
+		SetCursor(LoadCursor(NULL, i != -1 && ((e.wParam & MK_LBUTTON) == 0 || i == click) ? IDC_HAND : IDC_ARROW));
+		if (i != -1) sel = i;
+		break;
+	}
+
+	case WM_LBUTTONUP:
+	{
+		const auto i = click;
+		click = -1;
+		if (i != -1 && i == find_item(short(LOWORD(e.lParam)), short(HIWORD(e.lParam))))
+			return navigate_to(items[i]);
+		break;
+	}
+
+	case WM_KEYDOWN:
+		switch (e.wParam)
+		{
+		case VK_NUMPAD2:
+		case VK_DOWN:
+			if (++sel == items.size()) sel = 0;
+			break;
+
+		case VK_NUMPAD8:
+		case VK_UP:
+			if (--sel == -1) sel = items.size() - 1;
+			break;
+
+		case VK_ESCAPE:
+		case VK_BACK:
+			return navigate_back();
+			break;
+
+		case VK_SPACE:
+		case VK_RETURN:
+			return navigate_to(items[sel]);
+		}
+		break;
+	}
+
+	return L"";
+}
+
+std::wstring menu_scene::navigate_to(crib::scene::menu::menu_item& item)
 {
 	if (item.setting_key.size())
 		settings.set(item.setting_key, item.setting_value);
@@ -111,14 +107,26 @@ std::wstring menu_scene::enter(crib::scene::menu::menu_item& item)
 	}
 	else if (item.action.size())
 	{
-		if (item.action == L"back")
-		{
-			navigation.pop_back();
-		}
-		else
-			return item.action;
+		return item.action == L"back" ? navigate_back() : item.action;
 	}
 
+	return L"";
+}
+
+std::wstring menu_scene::navigate_back()
+{
+	auto& items = navigation.back().first;
+	auto& sel = navigation.back().second;
+
+	if (navigation.size() == 1)
+	{
+		if (sel == items.size() - 1) return L"quit";
+		sel = items.size() - 1;
+	}
+	else
+	{
+		navigation.pop_back();
+	}
 	return L"";
 }
 

@@ -29,7 +29,9 @@ namespace crib
 				virtual graphics::d3d11_renderer* create_renderer(graphics::d3d11_context& context) override;
 
 
-				std::wstring enter(menu_item& item);
+				std::wstring handle(const input::event& e);
+				std::wstring navigate_to(menu_item& item);
+				std::wstring navigate_back();
 				const size_t find_item(const float x, const float y) const;
 
 				std::vector<menu_item> root_items;
