@@ -26,9 +26,6 @@ namespace crib
 			protected:
 				hello3d_scene& scene;
 
-				float width;
-				float height;
-
 
 				struct model_assets
 				{
@@ -40,7 +37,6 @@ namespace crib
 
 				void create_model_assets(const model& model, model_assets& buffers);
 				void draw_model(model_assets& model);
-				DirectX::XMMATRIX get_projection_matrix() const;
 
 				std::map<std::wstring, model_assets> models;
 				CComPtr<ID3D11Buffer> cb_vs_perobject;
@@ -53,6 +49,8 @@ namespace crib
 				CComPtr<IDWriteTextFormat> tf_value;
 				CComPtr<IDWriteTextFormat> tf_title;
 				CComPtr<ID2D1SolidColorBrush> brush;
+				float width;
+				float height;
 			};
 
 		}

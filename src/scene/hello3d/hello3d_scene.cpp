@@ -39,3 +39,9 @@ std::wstring hello3d_scene::update(const double delta, const crib::input::buffer
 
 	return L"";
 }
+
+
+const DirectX::XMMATRIX hello3d_scene::get_projection_matrix() const
+{
+	return DirectX::XMMatrixPerspectiveFovRH(fov, width / height, 1.f, 100.f);
+}

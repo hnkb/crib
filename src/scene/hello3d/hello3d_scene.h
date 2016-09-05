@@ -23,10 +23,13 @@ namespace crib
 
 				virtual std::wstring update(const double delta, const input::buffer& input) override;
 
+				void resize(const float w, const float h) { height = h, width = w; }
+
 				const std::map<std::wstring, model>& get_models() const { return models; }
 				const std::vector<object>& get_objects() const { return objects; }
-				const DirectX::XMMATRIX get_view_matrix() const { return camera.get_view_matrix(); }
 				const pipeline::directional_light& get_light() const { return light; }
+				const DirectX::XMMATRIX get_view_matrix() const { return camera.get_view_matrix(); }
+				const DirectX::XMMATRIX get_projection_matrix() const;
 
 				const stats& get_stats() const { return stats; }
 				const std::wstring print_camera_params() const { return camera.print_params(); }
@@ -38,6 +41,10 @@ namespace crib
 				std::vector<object> objects;
 				camera camera;
 				pipeline::directional_light light;
+
+				float width;
+				float height;
+				float fov = 1.f;
 
 				double time = 0;
 

@@ -70,6 +70,7 @@ hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::d3d11_context& co
 void hello3d_d3d11_renderer::resize(const float w, const float h)
 {
 	height = h, width = w;
+	scene.resize(w, h);
 }
 
 
@@ -87,7 +88,7 @@ void hello3d_d3d11_renderer::render()
 	for (const auto& obj : scene.get_objects())
 	{
 		vs_perobject.world = DirectX::XMMatrixTranspose(obj.world_transform);
-		vs_perobject.wvp = DirectX::XMMatrixTranspose(obj.world_transform * scene.get_view_matrix() * get_projection_matrix());
+		vs_perobject.wvp = DirectX::XMMatrixTranspose(obj.world_transform * scene.get_view_matrix() * scene.get_projection_matrix());
 		ctx.context3d->UpdateSubresource(cb_vs_perobject, 0, nullptr, &vs_perobject, 0, 0);
 
 		draw_model(models[obj.model]);
@@ -122,12 +123,6 @@ void hello3d_d3d11_renderer::draw_model(hello3d_d3d11_renderer::model_assets& mo
 	ctx.context3d->IASetIndexBuffer(model.index, DXGI_FORMAT_R16_UINT, 0);
 
 	ctx.context3d->DrawIndexed(model.idx_count, 0, 0);
-}
-
-
-DirectX::XMMATRIX hello3d_d3d11_renderer::get_projection_matrix() const
-{
-	return DirectX::XMMatrixPerspectiveFovRH(1.f, width / height, 1.f, 100.f);
 }
 
 
