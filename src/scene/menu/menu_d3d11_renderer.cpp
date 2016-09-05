@@ -31,30 +31,25 @@ void menu_d3d11_renderer::render()
 	auto items = scene.get_items();
 	auto sel = scene.get_selected_index();
 
-	constexpr float line_spacing = 48.f;
-	constexpr float extra_ratio = 1.4f;
-	constexpr float checkbox_size = 17.f;
-	constexpr float checkbox_border_x = 2.f;
-	constexpr float checkbox_border_y = 12.f;
-
-	float top = 0;
 
 	for (size_t i = 0; i < items.size(); i++)
 	{
-		const float left = line_spacing;
-		top += (items[i].extra_space ? line_spacing * extra_ratio : line_spacing);
+		brush->SetOpacity(sel == i ? 1.f : .7f);
 
-		brush->SetOpacity(i == sel ? 1.f : .7f);
+		auto box = items[i].bounding_rect;
+		if (items[i].setting_key.size()) box.left += checkbox_padding;
 
-		ctx.context2d->DrawTextW(items[i].text.c_str(), UINT32(items[i].text.size()),
-			i == sel ? tf_selected : tf_normal,
-			D2D1::RectF(items[i].setting_key.size() ? left + checkbox_size + 16.f : left, top, width - line_spacing, top + line_spacing),
-			brush);
-
+		ctx.context2d->DrawTextW(items[i].text.c_str(), UINT32(items[i].text.size()), sel == i ? tf_selected : tf_normal, box, brush);
 
 		if (items[i].setting_key.size())
 		{
-			auto box = D2D1::RectF(left + checkbox_border_x, top + checkbox_border_y, left + checkbox_border_x + checkbox_size, top + checkbox_size + checkbox_border_y);
+			const float vertical_border = (box.bottom - box.top - checkbox_size) * .5f;
+
+			box = items[i].bounding_rect;
+			box.left += checkbox_border;
+			box.top += checkbox_border + vertical_border;
+			box.right = box.left + checkbox_size, box.bottom = box.top + checkbox_size;
+
 			ctx.context2d->DrawRectangle(box, brush);
 
 			if (scene.is_active(items[i]))
@@ -67,4 +62,17 @@ void menu_d3d11_renderer::render()
 
 
 	throw_if_failed(ctx.context2d->EndDraw());
+}
+
+
+void menu_d3d11_renderer::update_bounding_rect(crib::scene::menu::menu_item& item) const
+{
+	CComPtr<IDWriteTextLayout> layout;
+	DWRITE_TEXT_METRICS metrics;
+
+	throw_if_failed(ctx.write->CreateTextLayout(item.text.c_str(), UINT32(item.text.size()), tf_selected, 1000.f, 100.f, &layout), "Measure text");
+	layout->GetMetrics(&metrics);
+
+	item.bounding_rect = D2D1::RectF(0, 0, metrics.width, metrics.height);
+	if (item.setting_key.size()) item.bounding_rect.right += checkbox_padding;
 }

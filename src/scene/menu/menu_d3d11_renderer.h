@@ -2,6 +2,7 @@
 #pragma once
 
 #include "graphics/d3d11/d3d11_renderer.h"
+#include "menu_item.h"
 
 
 namespace crib
@@ -21,6 +22,8 @@ namespace crib
 				virtual void resize(const float w, const float h) override;
 				virtual void render() override;
 
+				void update_bounding_rect(menu_item& item) const;
+
 			protected:
 				menu_scene& scene;
 
@@ -28,6 +31,10 @@ namespace crib
 				CComPtr<IDWriteTextFormat> tf_normal;
 				CComPtr<IDWriteTextFormat> tf_selected;
 				float width, height;
+
+				static constexpr float checkbox_size = 17.f;
+				static constexpr float checkbox_border = 2.f;
+				static constexpr float checkbox_padding = 12.f + checkbox_size + checkbox_border;
 			};
 
 		}

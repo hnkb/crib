@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <d2d1_1.h>
 
 
 namespace crib
@@ -29,6 +30,8 @@ namespace crib
 
 				std::vector<menu_item> subitems;
 				size_t sel_index = 0;
+
+				D2D1_RECT_F bounding_rect;
 			};
 
 		}

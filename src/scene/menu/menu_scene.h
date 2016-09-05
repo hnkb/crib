@@ -26,7 +26,8 @@ namespace crib
 				const bool is_active(const menu_item item) { return settings.get(item.setting_key, L"") == item.setting_value; }
 
 			protected:
-				virtual graphics::d3d11_renderer* create_renderer(graphics::d3d11_context& context) override { return new menu_d3d11_renderer(context, *this); }
+				virtual graphics::d3d11_renderer* create_renderer(graphics::d3d11_context& context) override;
+
 
 				std::wstring enter(menu_item& item);
 
@@ -35,6 +36,12 @@ namespace crib
 				std::vector<std::pair<std::vector<menu_item>&, size_t&>> navigation;
 
 				core::settings& settings;
+
+
+				void update_bounding_rect(std::vector<menu_item>& items, const menu_d3d11_renderer* rndr);
+
+				static constexpr float const_line_spacing = 48.f;
+				static constexpr float const_line_extra_spacing = 67.f;
 			};
 
 		}

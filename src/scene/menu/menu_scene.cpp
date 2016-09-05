@@ -93,3 +93,27 @@ std::wstring menu_scene::enter(crib::scene::menu::menu_item& item)
 
 	return L"";
 }
+
+
+crib::graphics::d3d11_renderer* menu_scene::create_renderer(crib::graphics::d3d11_context& context)
+{
+	auto rndr = new menu_d3d11_renderer(context, *this);
+	update_bounding_rect(root_items, rndr);
+	return rndr;
+}
+
+void menu_scene::update_bounding_rect(std::vector<crib::scene::menu::menu_item>& items, const crib::scene::menu::menu_d3d11_renderer* rndr)
+{
+	float top = 0;
+
+	for (auto& item : items)
+	{
+		rndr->update_bounding_rect(item);
+
+		top += (item.extra_space ? const_line_extra_spacing : const_line_spacing);
+		item.bounding_rect.top += top, item.bounding_rect.bottom += top;
+		item.bounding_rect.left += const_line_spacing, item.bounding_rect.right += const_line_spacing;
+
+		if (item.subitems.size()) update_bounding_rect(item.subitems, rndr);
+	}
+}
