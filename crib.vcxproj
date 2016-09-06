@@ -170,6 +170,8 @@
     <ClCompile Include="src\graphics\context.cpp" />
     <ClCompile Include="src\graphics\d3d11\d3d11_context.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\scenes\tetris\tetris_renderer.cpp" />
+    <ClCompile Include="src\scenes\tetris\tetris_scene.cpp" />
     <ClCompile Include="src\scene\hello3d\camera.cpp" />
     <ClCompile Include="src\scene\hello3d\hello3d_d3d11_renderer.cpp" />
     <ClCompile Include="src\scene\hello3d\hello3d_scene.cpp" />
@@ -202,6 +204,8 @@
     <ClInclude Include="src\graphics\d3d11\d3d11_renderer.h" />
     <ClInclude Include="src\graphics\renderer.h" />
     <ClInclude Include="src\input\event.h" />
+    <ClInclude Include="src\scenes\tetris\tetris_renderer.h" />
+    <ClInclude Include="src\scenes\tetris\tetris_scene.h" />
     <ClInclude Include="src\scene\hello3d\camera.h" />
     <ClInclude Include="src\scene\hello3d\hello3d_d3d11_renderer.h" />
     <ClInclude Include="src\scene\hello3d\hello3d_scene.h" />
