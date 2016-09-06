@@ -20,9 +20,36 @@ void renderer::render()
 	ctx.context2d->BeginDraw();
 	ctx.context2d->Clear(D2D1::ColorF(0, .2f, .4f));
 
+	const float y0 = height * (1 - baseline_y);
 
-	ctx.context2d->DrawTextW(L"(straw man)", 11, text_format, D2D1::RectF(10, 10, 500, 100), brush);
+	brush->SetOpacity(.7f);
+	ctx.context2d->DrawLine(D2D1::Point2F(0, y0), D2D1::Point2F(width, y0), brush, 5);
+
+
+	// assuming leg is never lifted and y for both legs is 0
+	const auto torso_base = D2D1::Point2F(
+		(scene.leg[0].x + scene.leg[1].x) * .5,
+		y0 - std::sqrtf(leg_length * leg_length - (scene.leg[0].x - scene.leg[1].x) * (scene.leg[0].x - scene.leg[1].x) * .25f)
+	);
+
+	draw_man(scene.leg[0], scene.leg[1], torso_base, y0);
 
 
 	throw_if_failed(ctx.context2d->EndDraw());
+}
+
+
+void renderer::draw_man(const D2D1_POINT_2F front_leg, const D2D1_POINT_2F back_leg, const D2D1_POINT_2F torso_base, const float y0)
+{
+	// Draw far limbs with less opacity
+	brush->SetOpacity(.7f);
+	ctx.context2d->DrawLine(D2D1::Point2F(back_leg.x, y0 - back_leg.y), torso_base, brush, 2); // back leg
+	ctx.context2d->DrawLine(D2D1::Point2F(torso_base.x, torso_base.y - 30), D2D1::Point2F(2.f * torso_base.x - back_leg.x, torso_base.y + 10), brush, 2); // back hand
+
+	brush->SetOpacity(1.f);
+	ctx.context2d->DrawLine(torso_base, D2D1::Point2F(torso_base.x, torso_base.y - torso_height), brush, 2); // torso
+	ctx.context2d->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(torso_base.x, torso_base.y - torso_height - head_radius), head_radius, head_radius), brush, 2); // head
+	ctx.context2d->DrawLine(D2D1::Point2F(front_leg.x, y0 - front_leg.y), torso_base, brush, 2); // front leg
+	ctx.context2d->DrawLine(D2D1::Point2F(torso_base.x, torso_base.y - 30), D2D1::Point2F(2.f * torso_base.x - front_leg.x, torso_base.y + 10), brush, 2);
+
 }

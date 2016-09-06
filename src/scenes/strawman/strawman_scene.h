@@ -18,8 +18,13 @@ namespace crib_scenes
 
 			virtual std::wstring update(const double delta, const crib::input::buffer& input) override;
 
+			std::vector<D2D1_POINT_2F> leg;
+
 		protected:
 			virtual crib::graphics::d3d11_renderer* create_renderer(crib::graphics::d3d11_context& context) override { return new renderer(context, *this); }
+
+			int active_leg = 0;
+			static constexpr float max_dist = 50.f;
 		};
 
 	}
