@@ -28,6 +28,8 @@ const XMVECTOR camera::get_position() const
 	// A simple non-rotating setup would be:
 	// return XMVectorSet(radius, 0, radius, 1.f);
 
+	// for left-hand, use -theta
+
 	return XMVectorAdd(get_focus(), XMVectorScale(XMVectorSet(XMScalarSin(phi)*XMScalarCos(theta), XMScalarCos(phi), XMScalarSin(phi)*XMScalarSin(theta), 1.f), radius));
 }
 

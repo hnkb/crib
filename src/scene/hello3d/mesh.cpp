@@ -19,6 +19,7 @@ mesh mesh::cube()
 	XMVECTOR d = XMVectorSet(-.5f, -.5f, .5f, 1.f);
 
 	unsigned short idx[] = { 0,1,2 , 0,2,3 };
+	// for left-hand, use { 0,2,1 , 0,3,2 }
 
 
 	std::vector<pipeline::vertex_format> vertices;
@@ -75,7 +76,7 @@ mesh mesh::pyramid()
 	auto add_triangle = [&](const std::vector<std::pair<XMVECTOR, int>> vv)
 	{
 		unsigned short offset = (unsigned short)vertices.size();
-		unsigned short idx[] = { 0,1,2 };
+		unsigned short idx[] = { 0,1,2 }; // for left-hand, use { 0,2,1 }
 		for (auto& i : idx) indices.push_back(i + offset);
 
 		XMFLOAT3 normal(XMVector3Normalize(XMVector3Cross(vv[2].first - vv[0].first, vv[1].first - vv[0].first)).m128_f32);

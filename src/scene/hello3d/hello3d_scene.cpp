@@ -101,13 +101,11 @@ const DirectX::XMVECTOR hello3d_scene::screen_to_world(const float x, const floa
 	//       \|/                                        hypotenuse
 	//       fov
 	//
-	// (multiply -1 to z to adjust for right-hand coordinates)
-	//
 
 	auto ray = DirectX::XMVector3Normalize(DirectX::XMVectorSet(
 		2.f * x / width - 1.f,
 		1.f - 2.f * y / height,
-		-1.f / std::tanf(fov / 2.f),
+		-1.f / std::tanf(fov / 2.f), // for left-hand, remove minus sign
 		0));
 
 	if (0)
@@ -119,7 +117,7 @@ const DirectX::XMVECTOR hello3d_scene::screen_to_world(const float x, const floa
 		auto ray = DirectX::XMVector3Normalize(DirectX::XMVectorSet(
 			(2.f * x / width - 1.f) / Mproj.r[0].m128_f32[0],
 			(1.f - 2.f * y / height) / Mproj.r[1].m128_f32[1],
-			-1,
+			-1, // for left-hand, use 1
 			0));
 	}
 
