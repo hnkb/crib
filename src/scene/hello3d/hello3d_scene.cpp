@@ -7,8 +7,8 @@ using crib::scene::hello3d::hello3d_scene;
 
 hello3d_scene::hello3d_scene()
 {
-	models.emplace(std::make_pair(L"cube", model::cube()));
-	models.emplace(std::make_pair(L"pyramid", model::pyramid()));
+	models.emplace(std::make_pair(L"cube", mesh::cube()));
+	models.emplace(std::make_pair(L"pyramid", mesh::pyramid()));
 
 	objects.emplace_back(L"cube0", L"cube");
 	objects.emplace_back(L"cube1", L"cube");

@@ -13,7 +13,7 @@ namespace crib
 		{
 
 			class hello3d_scene;
-			class model;
+			class mesh;
 
 			class hello3d_d3d11_renderer : public graphics::d3d11_renderer
 			{
@@ -35,7 +35,7 @@ namespace crib
 					UINT idx_count;
 				};
 
-				void create_model_assets(const model& model, model_assets& buffers);
+				void create_model_assets(const mesh& model, model_assets& buffers);
 				void draw_model(model_assets& model);
 
 				std::map<std::wstring, model_assets> models;

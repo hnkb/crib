@@ -6,8 +6,8 @@ using crib::scene::hello3d::camera;
 using namespace DirectX;
 
 
-// in 1st-person camera, eye is fixed (to player position), focus rotates around it
-// in 3rd-person, focus is fixed (to player position), eye rotates around it
+// In 1st-person camera, eye is fixed (to player position), focus rotates around it.
+// In 3rd-person, focus is fixed (to player position), eye rotates around it.
 
 
 const XMVECTOR camera::get_focus() const
@@ -17,16 +17,16 @@ const XMVECTOR camera::get_focus() const
 
 const XMVECTOR camera::get_up() const
 {
-	// if phi is not clamped to 0-PI, we can calculate correct up vector like this
-	//return XMVectorSet(0, (phi > 0 ? 1.f : -1.f) * (1.f - 2.f*float(abs(int(phi / XM_PI) % 2))), 0, 1.f);
+	// If phi is not clamped to 0-PI, we can calculate correct up vector like this:
+	// return XMVectorSet(0, (phi > 0 ? 1.f : -1.f) * (1.f - 2.f*float(abs(int(phi / XM_PI) % 2))), 0, 1.f);
 
 	return XMVectorSet(0, 1.f, 0, 1.f);
 }
 
 const XMVECTOR camera::get_position() const
 {
-	// a simple non-rotating setup would be:
-	//return XMVectorSet(radius, 0, radius, 1.f);
+	// A simple non-rotating setup would be:
+	// return XMVectorSet(radius, 0, radius, 1.f);
 
 	return XMVectorAdd(get_focus(), XMVectorScale(XMVectorSet(XMScalarSin(phi)*XMScalarCos(theta), XMScalarCos(phi), XMScalarSin(phi)*XMScalarSin(theta), 1.f), radius));
 }

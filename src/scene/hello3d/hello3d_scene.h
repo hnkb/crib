@@ -3,7 +3,7 @@
 
 #include "scene/scene.h"
 #include "hello3d_d3d11_renderer.h"
-#include "model.h"
+#include "mesh.h"
 #include "object.h"
 #include "camera.h"
 #include "stats.h"
@@ -25,7 +25,7 @@ namespace crib
 
 				void resize(const float w, const float h) { height = h, width = w; }
 
-				const std::map<std::wstring, model>& get_models() const { return models; }
+				const std::map<std::wstring, mesh>& get_models() const { return models; }
 				const std::vector<object>& get_objects() const { return objects; }
 				const pipeline::directional_light& get_light() const { return light; }
 				const DirectX::XMMATRIX get_view_matrix() const { return camera.get_view_matrix(); }
@@ -41,7 +41,7 @@ namespace crib
 				void hit_testing(const float x, const float y);
 				const DirectX::XMVECTOR screen_to_world(const float x, const float y) const;
 
-				std::map<std::wstring, model> models;
+				std::map<std::wstring, mesh> models;
 				std::vector<object> objects;
 				camera camera;
 				pipeline::directional_light light;

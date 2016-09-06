@@ -37,7 +37,7 @@ std::wstring menu_scene::update(const double delta, const crib::input::buffer& i
 {
 	for (auto& e : input)
 	{
-		auto ret = handle(e);
+		auto ret = handle_event(e);
 		if (ret.size()) return ret;
 	}
 
@@ -45,7 +45,7 @@ std::wstring menu_scene::update(const double delta, const crib::input::buffer& i
 }
 
 
-std::wstring menu_scene::handle(const crib::input::event& e)
+std::wstring menu_scene::handle_event(const crib::input::event& e)
 {
 	auto& items = navigation.back().first;
 	auto& sel = navigation.back().second;

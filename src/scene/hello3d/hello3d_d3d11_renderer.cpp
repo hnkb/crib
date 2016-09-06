@@ -100,7 +100,7 @@ void hello3d_d3d11_renderer::render()
 }
 
 
-void hello3d_d3d11_renderer::create_model_assets(const crib::scene::hello3d::model& model, model_assets& buffers)
+void hello3d_d3d11_renderer::create_model_assets(const crib::scene::hello3d::mesh& model, model_assets& buffers)
 {
 	D3D11_SUBRESOURCE_DATA initData = {};
 

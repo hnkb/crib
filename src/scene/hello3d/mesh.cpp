@@ -1,12 +1,12 @@
 
 #include "stdafx.h"
-#include "model.h"
+#include "mesh.h"
 
-using crib::scene::hello3d::model;
+using crib::scene::hello3d::mesh;
 using namespace DirectX;
 
 
-model model::cube()
+mesh mesh::cube()
 {
 	// To create cube programatically:
 	//    define one face (here with a,b,c,d vertices and two triangles)
@@ -48,10 +48,10 @@ model model::cube()
 	add_face(XMMatrixRotationX(XM_PIDIV2));
 
 
-	return model(std::move(vertices), std::move(indices));
+	return mesh(std::move(vertices), std::move(indices));
 }
 
-model model::pyramid()
+mesh mesh::pyramid()
 {
 	// pyramid has a point on top (a), four at the base (b, c, d, e)
 
@@ -93,5 +93,5 @@ model model::pyramid()
 	add_triangle({ a,c,e });
 
 
-	return model(std::move(vertices), std::move(indices));
+	return mesh(std::move(vertices), std::move(indices));
 }

@@ -14,6 +14,7 @@ PS_INPUT main(INPUT_VERTEX_FORMAT input)
     float4 pos = float4(input.pos, 1.f);
     pos = mul(pos, wvp);
 
+	// Calculate normal in world coordinates to be used by PS in lighting
 	float4 normal = float4(input.normal, 0.f);
 	normal = mul(normal, world);
 
