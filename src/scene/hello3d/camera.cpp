@@ -6,23 +6,34 @@ using crib::scene::hello3d::camera;
 using namespace DirectX;
 
 
-XMMATRIX camera::get_view_matrix() const
+// in 1st-person camera, eye is fixed (to player position), focus rotates around it
+// in 3rd-person, focus is fixed (to player position), eye rotates around it
+
+
+const XMVECTOR camera::get_focus() const
 {
-	// in 1st-person camera, eye is fixed (to player position), focus rotates around it
-	// in 3rd-person, focus is fixed (to player position), eye rotates around it
+	return XMVectorSet(0, 0, 0, 1.f);
+}
 
-	// a simple non-rotating setup
-	auto focus = XMVectorSet(0, 0, 0, 1.f);
-	auto up = XMVectorSet(0, 1.f, 0, 1.f);
-	//auto eye = XMVectorSet(radius, 0, radius, 1.f);
-
-	// calculate 3rd-person camera position on a sphere around focus
-	auto eye = XMVectorAdd(focus, XMVectorScale(XMVectorSet(XMScalarSin(phi)*XMScalarCos(theta), XMScalarCos(phi), XMScalarSin(phi)*XMScalarSin(theta), 1.f), radius));
-
+const XMVECTOR camera::get_up() const
+{
 	// if phi is not clamped to 0-PI, we can calculate correct up vector like this
-	//auto up = XMVectorSet(0, (phi > 0 ? 1.f : -1.f) * (1.f - 2.f*float(abs(int(phi / XM_PI) % 2))), 0, 1.f);
+	//return XMVectorSet(0, (phi > 0 ? 1.f : -1.f) * (1.f - 2.f*float(abs(int(phi / XM_PI) % 2))), 0, 1.f);
 
-	return XMMatrixLookAtRH(eye, focus, up);
+	return XMVectorSet(0, 1.f, 0, 1.f);
+}
+
+const XMVECTOR camera::get_position() const
+{
+	// a simple non-rotating setup would be:
+	//return XMVectorSet(radius, 0, radius, 1.f);
+
+	return XMVectorAdd(get_focus(), XMVectorScale(XMVectorSet(XMScalarSin(phi)*XMScalarCos(theta), XMScalarCos(phi), XMScalarSin(phi)*XMScalarSin(theta), 1.f), radius));
+}
+
+const XMMATRIX camera::get_view_matrix() const
+{
+	return XMMatrixLookAtRH(get_position(), get_focus(), get_up());
 }
 
 
@@ -31,7 +42,7 @@ void camera::update(const float delta, const crib::input::event& e)
 	switch (e.message)
 	{
 	case WM_MOUSEWHEEL:
-		radius = std::max(min_radius, radius + float(GET_WHEEL_DELTA_WPARAM(e.wParam)) * -.15f * delta);
+		radius = std::min(max_radius, std::max(min_radius, radius + float(GET_WHEEL_DELTA_WPARAM(e.wParam)) * -.15f * delta));
 		break;
 
 	case WM_MBUTTONDOWN:
@@ -85,7 +96,7 @@ void camera::update(const float delta, const crib::input::event& e)
 			break;
 
 		case VK_SUBTRACT:
-			radius += 5.f * delta;
+			radius = std::min(max_radius, radius + 5.f * delta);
 			break;
 		}
 		break;
