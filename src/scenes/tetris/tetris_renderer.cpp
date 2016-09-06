@@ -17,8 +17,8 @@ renderer::renderer(crib::graphics::d3d11_context& context, crib_scenes::tetris::
 
 void renderer::render()
 {
-	ctx.clear((FLOAT*)&DirectX::XMFLOAT4(0.f, .2f, .4f, 1.f));
 	ctx.context2d->BeginDraw();
+	ctx.context2d->Clear(D2D1::ColorF(0, .2f, .4f));
 
 
 	ctx.context2d->DrawTextW(L"TETRIS", 6, text_format, D2D1::RectF(10, 10, 500, 100), brush);
