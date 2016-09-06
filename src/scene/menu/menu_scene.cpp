@@ -18,6 +18,12 @@ menu_scene::menu_scene(crib::core::settings& setting) : settings(setting), root_
 			menu_item(L"No anti-aliasing", L"graphics.msaa", L"1", L"reset-graphics", false),
 			menu_item(L"Back", L"back", true)
 			})),
+		menu_item(L"Startup", std::vector<menu_item>({
+			menu_item(L"Menu", L"startup", L"menu", L"", false),
+			menu_item(L"2d test scene", L"startup", L"hello", L"", true),
+			menu_item(L"3d test scene", L"startup", L"hello3d", L"", false),
+			menu_item(L"Back", L"back", true)
+			})),
 		menu_item(L"Back", L"back", true)
 		}), true),
 	menu_item(L"Quit", L"quit", true)

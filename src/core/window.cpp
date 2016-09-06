@@ -34,7 +34,7 @@ window::window(crib::core::settings& setting, const std::wstring className, cons
 	SetWindowLongPtrW(handle, GWLP_USERDATA, LONG_PTR(this));
 	ShowWindow(handle, SW_SHOWDEFAULT);
 
-	create_scene(L"menu");
+	create_scene(settings.get(L"startup", L"menu"));
 	create_graphics_context();
 }
 
