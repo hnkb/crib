@@ -140,6 +140,7 @@ void hello3d_d3d11_renderer::draw_stats()
 	draw_stat(L"input buffer", std::to_wstring(scene.get_stats().buffer_size), 280);
 
 	draw_stat(L"camera", scene.print_camera_params(), height - 160, 660);
+	if (scene.get_hit_test_result().size()) draw_stat(L"hit test", scene.get_hit_test_result(), height - 280, 500);
 
 	throw_if_failed(ctx.context2d->EndDraw());
 }
