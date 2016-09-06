@@ -18,8 +18,6 @@ model model::cube()
 	XMVECTOR c = XMVectorSet( .5f, -.5f, .5f, 1.f);
 	XMVECTOR d = XMVectorSet(-.5f, -.5f, .5f, 1.f);
 
-	XMVECTOR n = XMVectorSet(0.f, 0.f, 1.f, 1.f);
-
 	unsigned short idx[] = { 0,1,2 , 0,2,3 };
 
 
@@ -31,8 +29,7 @@ model model::cube()
 		unsigned short offset = (unsigned short)vertices.size();
 		for (auto&t : idx) indices.push_back(t + offset);
 
-		XMFLOAT3 normal(XMVector4Transform(n, M).m128_f32);
-
+		XMFLOAT3 normal(XMVector3Normalize(XMVector4Transform(XMVector3Cross(c - a, b - a), M)).m128_f32);
 		vertices.push_back({ XMFLOAT3(XMVector4Transform(a, M).m128_f32), XMFLOAT3(.8f, .7f, .5f), normal });
 		vertices.push_back({ XMFLOAT3(XMVector4Transform(b, M).m128_f32), XMFLOAT3(.6f, .6f, .6f), normal });
 		vertices.push_back({ XMFLOAT3(XMVector4Transform(c, M).m128_f32), XMFLOAT3(.1f, .9f, .9f), normal });
@@ -75,23 +72,25 @@ model model::pyramid()
 	std::vector<pipeline::vertex_format> vertices;
 	std::vector<unsigned short> indices;
 
-	auto add_triangle = [&](const std::vector<std::pair<XMVECTOR, int>> vv, const XMVECTOR n)
+	auto add_triangle = [&](const std::vector<std::pair<XMVECTOR, int>> vv)
 	{
 		unsigned short offset = (unsigned short)vertices.size();
 		unsigned short idx[] = { 0,1,2 };
 		for (auto& i : idx) indices.push_back(i + offset);
 
-		XMFLOAT3 normal(n.m128_f32);
+		XMFLOAT3 normal(XMVector3Normalize(XMVector3Cross(vv[2].first - vv[0].first, vv[1].first - vv[0].first)).m128_f32);
 		for (auto& v : vv) vertices.push_back({ XMFLOAT3(v.first.m128_f32), colors[v.second], normal });
 	};
 
 
-	add_triangle({ c,b,d }, XMVectorSet(0, -1.f, 0, 1.f));
-	add_triangle({ c,d,e }, XMVectorSet(0, -1.f, 0, 1.f));
-	add_triangle({ a,e,d }, XMVectorSet(                      0, XMScalarSin(XM_PIDIV4),  XMScalarCos(XM_PIDIV4), 1.f));
-	add_triangle({ a,b,c }, XMVectorSet(                      0, XMScalarSin(XM_PIDIV4), -XMScalarCos(XM_PIDIV4), 1.f));
-	add_triangle({ a,d,b }, XMVectorSet(-XMScalarCos(XM_PIDIV4), XMScalarSin(XM_PIDIV4),                       0, 1.f));
-	add_triangle({ a,c,e }, XMVectorSet( XMScalarCos(XM_PIDIV4), XMScalarSin(XM_PIDIV4),                       0, 1.f));
+	// instead of 6 vectors we can add only 4 vectors (with something like add_face in cube() method)
+	add_triangle({ c,b,d });
+	add_triangle({ c,d,e });
+	
+	add_triangle({ a,e,d });
+	add_triangle({ a,b,c });
+	add_triangle({ a,d,b });
+	add_triangle({ a,c,e });
 
 
 	return model(std::move(vertices), std::move(indices));
