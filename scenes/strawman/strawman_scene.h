@@ -19,7 +19,7 @@ namespace crib_scenes
 			std::vector<D2D1_POINT_2F> leg;
 
 		protected:
-			virtual crib::graphics::d3d11_renderer* create_renderer(crib::graphics::d3d11_context& context) override { return new renderer(context, *this); }
+			virtual crib::graphics::dx11::renderer* create_renderer(crib::graphics::dx11::context& context) override { return new renderer(context, *this); }
 
 			int active_leg = 0;
 			static constexpr float max_dist = 50.f;

@@ -179,7 +179,7 @@ const size_t menu_scene::find_item(const float x, const float y) const
 }
 
 
-crib::graphics::d3d11_renderer* menu_scene::create_renderer(crib::graphics::d3d11_context& context)
+crib::graphics::dx11::renderer* menu_scene::create_renderer(crib::graphics::dx11::context& context)
 {
 	auto rndr = new menu_d3d11_renderer(context, *this);
 	update_bounding_rect(root_items, rndr);

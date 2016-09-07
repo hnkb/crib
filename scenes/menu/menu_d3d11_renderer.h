@@ -12,10 +12,10 @@ namespace crib_scenes
 
 		class menu_scene;
 
-		class menu_d3d11_renderer : public crib::graphics::d3d11_renderer
+		class menu_d3d11_renderer : public crib::graphics::dx11::renderer
 		{
 		public:
-			menu_d3d11_renderer(crib::graphics::d3d11_context& context, menu_scene& hello_scene);
+			menu_d3d11_renderer(crib::graphics::dx11::context& context, menu_scene& hello_scene);
 
 			virtual void resize(const float w, const float h) override;
 			virtual void render() override;

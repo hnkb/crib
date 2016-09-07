@@ -11,10 +11,10 @@ namespace crib_scenes
 
 		class hello_scene;
 
-		class hello_d3d12_renderer : public crib::graphics::d3d12_renderer
+		class hello_d3d12_renderer : public crib::graphics::dx12::renderer
 		{
 		public:
-			hello_d3d12_renderer(crib::graphics::d3d12_context& context, hello_scene& hello_scene);
+			hello_d3d12_renderer(crib::graphics::dx12::context& context, hello_scene& hello_scene);
 
 			virtual void render() override;
 

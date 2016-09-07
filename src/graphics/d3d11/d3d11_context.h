@@ -13,34 +13,37 @@ namespace crib
 {
 	namespace graphics
 	{
-
-		class d3d11_context : public context
+		namespace dx11
 		{
-		public:
-			d3d11_context(const HWND handle, core::settings& setting);
 
-			virtual ~d3d11_context();
+			class context : public base::context
+			{
+			public:
+				context(const HWND handle, core::settings& setting);
 
-			virtual void draw() override;
-			virtual void resize() override;
-			virtual void attach_renderer(graphics::renderer* rndr) override;
+				virtual ~context() {}
 
-			void clear(const FLOAT rgba[4]);
+				virtual void draw() override;
+				virtual void resize() override;
+				virtual void attach_renderer(base::renderer* rndr) override;
 
-			CComPtr<ID3D11Device2> device;
-			CComPtr<ID3D11DeviceContext2> context3d;
-			CComPtr<ID2D1DeviceContext> context2d;
-			CComPtr<IDWriteFactory> write;
+				void clear(const FLOAT rgba[4]);
 
-		protected:
-			void create_size_dependent_resources();
+				CComPtr<ID3D11Device2> device;
+				CComPtr<ID3D11DeviceContext2> context3d;
+				CComPtr<ID2D1DeviceContext> context2d;
+				CComPtr<IDWriteFactory> write;
 
-			core::utility::com_initialize com_init;
+			protected:
+				void create_size_dependent_resources();
 
-			CComPtr<IDXGISwapChain1> swapchain;
-			CComPtr<ID3D11RenderTargetView> rtv;
-			CComPtr<ID3D11DepthStencilView> dsv;
-		};
+				core::utility::com_initialize com_init;
 
+				CComPtr<IDXGISwapChain1> swapchain;
+				CComPtr<ID3D11RenderTargetView> rtv;
+				CComPtr<ID3D11DepthStencilView> dsv;
+			};
+
+		}
 	}
 }

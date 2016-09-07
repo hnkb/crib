@@ -6,15 +6,18 @@ namespace crib
 {
 	namespace graphics
 	{
-
-		class renderer
+		namespace base
 		{
-		public:
-			virtual ~renderer() {}
 
-			virtual void render() = 0;
-			virtual void resize(const float width, const float height) {}
-		};
+			class renderer
+			{
+			public:
+				virtual ~renderer() {}
 
+				virtual void render() = 0;
+				virtual void resize(const float width, const float height) {}
+			};
+
+		}
 	}
 }

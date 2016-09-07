@@ -7,7 +7,7 @@ using crib_scenes::tetris::renderer;
 using crib::core::utility::throw_if_failed;
 
 
-renderer::renderer(crib::graphics::d3d11_context& context, crib_scenes::tetris::scene& tetris) : d3d11_renderer(context), scene(tetris)
+renderer::renderer(crib::graphics::dx11::context& context, crib_scenes::tetris::scene& tetris) : crib::graphics::dx11::renderer(context), scene(tetris)
 {
 	throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 28.f, L"", &text_format));
 	throw_if_failed(ctx.context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &brush));

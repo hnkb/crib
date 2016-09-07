@@ -34,7 +34,7 @@ namespace crib_scenes
 			const std::wstring get_hit_test_result() const { return hit_test_result; }
 
 		protected:
-			virtual crib::graphics::d3d11_renderer* create_renderer(crib::graphics::d3d11_context& context) override { return new hello3d_d3d11_renderer(context, *this); }
+			virtual crib::graphics::dx11::renderer* create_renderer(crib::graphics::dx11::context& context) override { return new hello3d_d3d11_renderer(context, *this); }
 
 			void hit_testing(const float x, const float y);
 			const DirectX::XMVECTOR screen_to_world(const float x, const float y) const;

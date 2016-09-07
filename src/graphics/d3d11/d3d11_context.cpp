@@ -7,11 +7,11 @@
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "dwrite.lib")
 
-using crib::graphics::d3d11_context;
+using crib::graphics::dx11::context;
 using crib::core::utility::throw_if_failed;
 
 
-d3d11_context::d3d11_context(const HWND handle, crib::core::settings& setting)
+context::context(const HWND handle, crib::core::settings& setting)
 {
 	// Create D3D11 device
 	{
@@ -74,15 +74,9 @@ d3d11_context::d3d11_context(const HWND handle, crib::core::settings& setting)
 }
 
 
-d3d11_context::~d3d11_context()
+void context::attach_renderer(crib::graphics::base::renderer* rndr)
 {
-
-}
-
-
-void d3d11_context::attach_renderer(crib::graphics::renderer* rndr)
-{
-	context::attach_renderer(rndr);
+	base::context::attach_renderer(rndr);
 
 	if (swapchain)
 	{
@@ -99,7 +93,7 @@ void d3d11_context::attach_renderer(crib::graphics::renderer* rndr)
 }
 
 
-void d3d11_context::create_size_dependent_resources()
+void context::create_size_dependent_resources()
 {
 	CComPtr<ID3D11Texture2D> backBuffer;
 	D3D11_TEXTURE2D_DESC backBufferDesc;
@@ -144,7 +138,7 @@ void d3d11_context::create_size_dependent_resources()
 }
 
 
-void d3d11_context::resize()
+void context::resize()
 {
 	rtv = nullptr;
 	dsv = nullptr;
@@ -152,16 +146,16 @@ void d3d11_context::resize()
 
 	HRESULT hr;
 	
-	if (!swapchain || (hr = swapchain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0)) == DXGI_ERROR_DEVICE_REMOVED) throw context_invalid();
+	if (!swapchain || (hr = swapchain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0)) == DXGI_ERROR_DEVICE_REMOVED) throw base::context_invalid();
 	throw_if_failed(hr, "Buffer resize");
 
 	create_size_dependent_resources();
 }
 
 
-void d3d11_context::draw()
+void context::draw()
 {
-	if (!swapchain || !context3d) throw context_invalid();
+	if (!swapchain || !context3d) throw base::context_invalid();
 
 	context3d->OMSetRenderTargets(1, &rtv.p, dsv);
 
@@ -172,12 +166,12 @@ void d3d11_context::draw()
 	context3d->DiscardView(rtv);
 	context3d->DiscardView(dsv);
 
-	if (hr == DXGI_ERROR_DEVICE_REMOVED) throw context_invalid();
+	if (hr == DXGI_ERROR_DEVICE_REMOVED) throw base::context_invalid();
 	throw_if_failed(hr, "Rendernig");
 }
 
 
-void d3d11_context::clear(const FLOAT rgba[4])
+void context::clear(const FLOAT rgba[4])
 {
 	context3d->ClearRenderTargetView(rtv, rgba);
 	context3d->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH, 1.f, 0);

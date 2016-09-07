@@ -11,10 +11,10 @@ namespace crib_scenes
 
 		class hello_scene;
 
-		class hello_d3d11_renderer : public crib::graphics::d3d11_renderer
+		class hello_d3d11_renderer : public crib::graphics::dx11::renderer
 		{
 		public:
-			hello_d3d11_renderer(crib::graphics::d3d11_context& context, hello_scene& hello_scene);
+			hello_d3d11_renderer(crib::graphics::dx11::context& context, hello_scene& hello_scene);
 
 			virtual void render() override;
 			virtual void resize(const float width, const float height) override;

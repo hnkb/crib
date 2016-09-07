@@ -10,7 +10,7 @@ using crib_scenes::hello3d::hello3d_d3d11_renderer;
 using crib::core::utility::throw_if_failed;
 
 
-hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::d3d11_context& context, crib_scenes::hello3d::hello3d_scene& hello_scene) : d3d11_renderer(context), scene(hello_scene)
+hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::dx11::context& context, crib_scenes::hello3d::hello3d_scene& hello_scene) : renderer(context), scene(hello_scene)
 {
 	// Set up pipeline
 	{

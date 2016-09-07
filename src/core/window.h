@@ -44,7 +44,7 @@ namespace crib
 			HWND handle;
 			settings& settings;
 			std::unique_ptr<scene::scene> scene;
-			std::unique_ptr<graphics::context> graphics;
+			std::unique_ptr<graphics::base::context> graphics;
 			input::buffer input;
 			timer timer;
 		};

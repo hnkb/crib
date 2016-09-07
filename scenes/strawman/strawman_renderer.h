@@ -12,10 +12,10 @@ namespace crib_scenes
 		class scene;
 
 
-		class renderer : public crib::graphics::d3d11_renderer
+		class renderer : public crib::graphics::dx11::renderer
 		{
 		public:
-			renderer(crib::graphics::d3d11_context& context, scene& tetris);
+			renderer(crib::graphics::dx11::context& context, scene& tetris);
 
 			virtual void resize(const float w, const float h) override { height = h, width = w; }
 			virtual void render() override;

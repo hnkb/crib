@@ -74,7 +74,7 @@ void window::frame()
 			{
 				graphics->draw();
 			}
-			catch (graphics::context_invalid e)
+			catch (graphics::base::context_invalid e)
 			{
 				create_graphics_context();
 			}
@@ -119,7 +119,7 @@ LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lPara
 			{
 				graphics->resize();
 			}
-			catch (graphics::context_invalid e)
+			catch (graphics::base::context_invalid e)
 			{
 				create_graphics_context();
 			}
@@ -176,6 +176,6 @@ void window::create_scene(const std::wstring name)
 
 void window::create_graphics_context()
 {
-	graphics = graphics::context::create(settings, handle);
+	graphics = graphics::base::context::create(settings, handle);
 	if (scene) scene->attach_renderer(*graphics);
 }

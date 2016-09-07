@@ -12,43 +12,46 @@ namespace crib
 {
 	namespace graphics
 	{
-
-		class d3d12_context : public context
+		namespace dx12
 		{
-		public:
-			d3d12_context(const HWND handle);
 
-			virtual ~d3d12_context();
+			class context : public base::context
+			{
+			public:
+				context(const HWND handle);
 
-			virtual void draw() override;
-			virtual void resize() override;
+				virtual ~context();
 
-			CComPtr<ID3D12GraphicsCommandList> cmdlist;
-			D3D12_CPU_DESCRIPTOR_HANDLE rtvhandle;
+				virtual void draw() override;
+				virtual void resize() override;
 
-		protected:
-			void create_size_dependent_resources();
-			void wait_for_previous_frame();
+				CComPtr<ID3D12GraphicsCommandList> cmdlist;
+				D3D12_CPU_DESCRIPTOR_HANDLE rtvhandle;
 
-			core::utility::com_initialize com_init;
+			protected:
+				void create_size_dependent_resources();
+				void wait_for_previous_frame();
+
+				core::utility::com_initialize com_init;
 
 
-			// Pipeline objects.
-			CComPtr<IDXGISwapChain3> swapchain;
-			CComPtr<ID3D12Device> device;
-			CComPtr<ID3D12Resource> rendertargets[2];
-			CComPtr<ID3D12CommandQueue> cmdqueue;
-			CComPtr<ID3D12CommandAllocator> cmdalloc;
-			CComPtr<ID3D12PipelineState> pipelinestate;
-			CComPtr<ID3D12DescriptorHeap> rtvheap;
-			UINT rtvdescsize;
+				// Pipeline objects.
+				CComPtr<IDXGISwapChain3> swapchain;
+				CComPtr<ID3D12Device> device;
+				CComPtr<ID3D12Resource> rendertargets[2];
+				CComPtr<ID3D12CommandQueue> cmdqueue;
+				CComPtr<ID3D12CommandAllocator> cmdalloc;
+				CComPtr<ID3D12PipelineState> pipelinestate;
+				CComPtr<ID3D12DescriptorHeap> rtvheap;
+				UINT rtvdescsize;
 
-			// Synchronization objects.
-			UINT frameidx;
-			HANDLE fenceevt;
-			CComPtr<ID3D12Fence> fence;
-			UINT64 fenceval;
-		};
+				// Synchronization objects.
+				UINT frameidx;
+				HANDLE fenceevt;
+				CComPtr<ID3D12Fence> fence;
+				UINT64 fenceval;
+			};
 
+		}
 	}
 }

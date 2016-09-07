@@ -8,19 +8,22 @@ namespace crib
 {
 	namespace graphics
 	{
-
-		class d3d12_context;
-
-		class d3d12_renderer : public renderer
+		namespace dx12
 		{
-		public:
-			d3d12_renderer(d3d12_context& context) : ctx(context) {}
 
-			virtual ~d3d12_renderer() {}
+			class context;
 
-		protected:
-			d3d12_context& ctx;
-		};
+			class renderer : public base::renderer
+			{
+			public:
+				renderer(context& context) : ctx(context) {}
 
+				virtual ~renderer() {}
+
+			protected:
+				context& ctx;
+			};
+
+		}
 	}
 }

@@ -7,11 +7,11 @@
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
 
-using crib::graphics::d3d12_context;
+using crib::graphics::dx12::context;
 using crib::core::utility::throw_if_failed;
 
 
-d3d12_context::d3d12_context(const HWND handle)
+context::context(const HWND handle)
 {
 	throw_if_failed(D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device)), "Create Direct3D 12 device");
 
@@ -85,26 +85,26 @@ d3d12_context::d3d12_context(const HWND handle)
 }
 
 
-d3d12_context::~d3d12_context()
+context::~context()
 {
 	wait_for_previous_frame();
 	CloseHandle(fenceevt);
 }
 
 
-void d3d12_context::create_size_dependent_resources()
+void context::create_size_dependent_resources()
 {
 
 }
 
 
-void d3d12_context::resize()
+void context::resize()
 {
 
 }
 
 
-void d3d12_context::draw()
+void context::draw()
 {
 	{
 		throw_if_failed(cmdalloc->Reset(), "Unable to reset CommandAllocator");
@@ -135,7 +135,7 @@ void d3d12_context::draw()
 }
 
 
-void d3d12_context::wait_for_previous_frame()
+void context::wait_for_previous_frame()
 {
 	// WAITING FOR THE FRAME TO COMPLETE BEFORE CONTINUING IS NOT BEST PRACTICE.
 	// This is code implemented as such for simplicity.

@@ -6,7 +6,7 @@
 using crib_scenes::hello::hello_d3d12_renderer;
 
 
-hello_d3d12_renderer::hello_d3d12_renderer(crib::graphics::d3d12_context& context, crib_scenes::hello::hello_scene& hello_scene) : d3d12_renderer(context), scene(hello_scene)
+hello_d3d12_renderer::hello_d3d12_renderer(crib::graphics::dx12::context& context, crib_scenes::hello::hello_scene& hello_scene) : renderer(context), scene(hello_scene)
 {
 
 }

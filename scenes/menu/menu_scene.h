@@ -23,7 +23,7 @@ namespace crib_scenes
 			const bool is_active(const menu_item item) { return settings.get(item.setting_key, L"") == item.setting_value; }
 
 		protected:
-			virtual crib::graphics::d3d11_renderer* create_renderer(crib::graphics::d3d11_context& context) override;
+			virtual crib::graphics::dx11::renderer* create_renderer(crib::graphics::dx11::context& context) override;
 
 
 			std::wstring handle_event(const crib::input::event& e);
