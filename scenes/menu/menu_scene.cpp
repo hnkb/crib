@@ -7,6 +7,7 @@ using crib_scenes::menu::menu_scene;
 
 menu_scene::menu_scene(crib::core::settings& setting) : settings(setting), root_sel(0), root_items({
 	menu_item(L"Tetris", L"scene tetris"),
+	menu_item(L"House", L"scene house"),
 	menu_item(L"Straw man", L"scene strawman"),
 	menu_item(L"2D test scene", L"scene hello", true),
 	menu_item(L"3D test scene", L"scene hello3d"),
@@ -23,6 +24,7 @@ menu_scene::menu_scene(crib::core::settings& setting) : settings(setting), root_
 		menu_item(L"Startup", std::vector<menu_item>({
 			menu_item(L"Menu", L"startup", L"menu", L"", false),
 			menu_item(L"Tetris", L"startup", L"tetris", L"", true),
+			menu_item(L"House", L"startup", L"house", L"", false),
 			menu_item(L"Straw man", L"startup", L"strawman", L"", false),
 			menu_item(L"2d test scene", L"startup", L"hello", L"", true),
 			menu_item(L"3d test scene", L"startup", L"hello3d", L"", false),
