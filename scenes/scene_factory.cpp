@@ -1,9 +1,9 @@
 
 #include "stdafx.h"
 
-#include "../scene/menu/menu_scene.h"
-#include "../scene/hello/hello_scene.h"
-#include "../scene/hello3d/hello3d_scene.h"
+#include "menu/menu_scene.h"
+#include "hello/hello_scene.h"
+#include "hello3d/hello3d_scene.h"
 #include "tetris/tetris_scene.h"
 #include "strawman/strawman_scene.h"
 
