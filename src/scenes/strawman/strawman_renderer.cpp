@@ -28,7 +28,7 @@ void renderer::render()
 
 	// assuming leg is never lifted and y for both legs is 0
 	const auto torso_base = D2D1::Point2F(
-		(scene.leg[0].x + scene.leg[1].x) * .5,
+		(scene.leg[0].x + scene.leg[1].x) * .5f,
 		y0 - std::sqrtf(leg_length * leg_length - (scene.leg[0].x - scene.leg[1].x) * (scene.leg[0].x - scene.leg[1].x) * .25f)
 	);
 

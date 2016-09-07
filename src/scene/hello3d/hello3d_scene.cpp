@@ -34,6 +34,8 @@ std::wstring hello3d_scene::update(const double delta, const crib::input::buffer
 		if (e.message == WM_RBUTTONDOWN || (e.message == WM_KEYDOWN && (e.wParam == VK_ESCAPE || e.wParam == VK_BACK)))
 			return L"quit";
 
+		// Note: because object in the seen are animated and may move, even when mouse is stationary the result
+		// of hit test might change. So, only calling hit_testing on mouse move is not enough.
 		if (e.message == WM_MOUSEMOVE)
 			hit_testing(short(LOWORD(e.lParam)), short(HIWORD(e.lParam)));
 

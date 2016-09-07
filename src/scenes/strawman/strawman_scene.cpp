@@ -23,14 +23,14 @@ std::wstring scene::update(const double delta, const crib::input::buffer& input)
 	{
 		if ((leg[active_leg].x - leg[1 - active_leg].x) >= max_dist)
 			active_leg = 1 - active_leg;
-		leg[active_leg].x += 50.f * float(delta);
+		leg[active_leg].x += 75.f * float(delta);
 	}
 
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 	{
 		if ((leg[active_leg].x - leg[1 - active_leg].x) <= -max_dist)
 			active_leg = 1 - active_leg;
-		leg[active_leg].x -= 50.f * float(delta);
+		leg[active_leg].x -= 75.f * float(delta);
 	}
 
 	return L"";
