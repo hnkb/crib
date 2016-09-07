@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
-#include "d3d11_context.h"
-#include "d3d11_renderer.h"
+#include "context.h"
+#include "renderer.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d2d1.lib")

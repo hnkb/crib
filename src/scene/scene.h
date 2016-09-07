@@ -3,10 +3,10 @@
 
 #include "../core/settings.h"
 #include "../input/buffer.h"
-#include "../graphics/d3d11/d3d11_context.h"
-#include "../graphics/d3d11/d3d11_renderer.h"
-#include "../graphics/d3d12/d3d12_context.h"
-#include "../graphics/d3d12/d3d12_renderer.h"
+#include "../graphics/dx11/context.h"
+#include "../graphics/dx11/renderer.h"
+#include "../graphics/dx12/context.h"
+#include "../graphics/dx12/renderer.h"
 #include <memory>
 
 

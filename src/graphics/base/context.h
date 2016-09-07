@@ -2,7 +2,7 @@
 #pragma once
 
 #include "renderer.h"
-#include "../core/settings.h"
+#include "../../core/settings.h"
 #include <memory>
 #include <stdexcept>
 #include <Windows.h>

@@ -162,13 +162,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\core\settings.cpp" />
-    <ClCompile Include="src\graphics\d3d12\d3d12_context.cpp" />
+    <ClCompile Include="src\graphics\dx12\context_dx12.cpp" />
     <ClCompile Include="src\input\buffer.cpp" />
     <ClCompile Include="src\core\application.cpp" />
     <ClCompile Include="src\core\timer.cpp" />
     <ClCompile Include="src\core\window.cpp" />
-    <ClCompile Include="src\graphics\context.cpp" />
-    <ClCompile Include="src\graphics\d3d11\d3d11_context.cpp" />
+    <ClCompile Include="src\graphics\base\context.cpp" />
+    <ClCompile Include="src\graphics\dx11\context_dx11.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="scenes\scene_factory.cpp" />
     <ClCompile Include="scenes\strawman\strawman_renderer.cpp" />
@@ -192,9 +192,9 @@
   <ItemGroup>
     <ClInclude Include="src\core\settings.h" />
     <ClInclude Include="src\core\utility\redirect_stdout.h" />
-    <ClInclude Include="src\graphics\d3d12\d3d12_context.h" />
-    <ClInclude Include="src\graphics\d3d12\d3d12_renderer.h" />
-    <ClInclude Include="src\graphics\d3d12\d3dx12.h" />
+    <ClInclude Include="src\graphics\dx12\context.h" />
+    <ClInclude Include="src\graphics\dx12\renderer.h" />
+    <ClInclude Include="src\graphics\dx12\d3dx12.h" />
     <ClInclude Include="src\input\buffer.h" />
     <ClInclude Include="src\core\application.h" />
     <ClInclude Include="src\core\timer.h" />
@@ -202,10 +202,10 @@
     <ClInclude Include="src\core\utility\com_initialize.h" />
     <ClInclude Include="src\core\utility\windows_error.h" />
     <ClInclude Include="src\core\window.h" />
-    <ClInclude Include="src\graphics\context.h" />
-    <ClInclude Include="src\graphics\d3d11\d3d11_context.h" />
-    <ClInclude Include="src\graphics\d3d11\d3d11_renderer.h" />
-    <ClInclude Include="src\graphics\renderer.h" />
+    <ClInclude Include="src\graphics\base\context.h" />
+    <ClInclude Include="src\graphics\dx11\context.h" />
+    <ClInclude Include="src\graphics\dx11\renderer.h" />
+    <ClInclude Include="src\graphics\base\renderer.h" />
     <ClInclude Include="src\input\event.h" />
     <ClInclude Include="scenes\strawman\strawman_renderer.h" />
     <ClInclude Include="scenes\strawman\strawman_scene.h" />
