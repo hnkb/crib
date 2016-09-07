@@ -13,17 +13,21 @@
 #include "input/buffer.h"
 
 
+#include "graphics/camera_3d.h"
+
 #include "graphics/base/renderer.h"
 #include "graphics/base/context.h"
 
 #include "graphics/dx11/context.h"
 #include "graphics/dx11/renderer.h"
+#include "graphics/dx11/renderer_3d.h"
 
 #include "graphics/dx12/context.h"
 #include "graphics/dx12/renderer.h"
 
 
 #include "scene/scene.h"
+#include "scene/scene_3d.h"
 
 
 #include "core/window.h"

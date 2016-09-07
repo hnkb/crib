@@ -9,7 +9,7 @@ namespace crib_scenes
 	namespace house
 	{
 
-		class scene : public crib::scene::scene
+		class scene : public crib::scene::scene_3d
 		{
 		public:
 			scene();
@@ -18,6 +18,8 @@ namespace crib_scenes
 
 		protected:
 			virtual crib::graphics::dx11::renderer* create_renderer(crib::graphics::dx11::context& context) override { return new renderer(context, *this); }
+
+			double time = 0;
 		};
 
 	}

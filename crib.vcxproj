@@ -158,6 +158,7 @@
     <ClCompile Include="src\core\settings.cpp" />
     <ClCompile Include="src\core\timer.cpp" />
     <ClCompile Include="src\core\window.cpp" />
+    <ClCompile Include="src\graphics\camera_3d.cpp" />
     <ClCompile Include="src\graphics\base\context.cpp" />
     <ClCompile Include="src\graphics\dx11\context_dx11.cpp" />
     <ClCompile Include="src\graphics\dx12\context_dx12.cpp" />
@@ -192,14 +193,17 @@
     <ClInclude Include="src\core\timer.h" />
     <ClInclude Include="src\input\event.h" />
     <ClInclude Include="src\input\buffer.h" />
+    <ClInclude Include="src\graphics\camera_3d.h" />
     <ClInclude Include="src\graphics\base\context.h" />
     <ClInclude Include="src\graphics\base\renderer.h" />
     <ClInclude Include="src\graphics\dx11\context.h" />
     <ClInclude Include="src\graphics\dx11\renderer.h" />
+    <ClInclude Include="src\graphics\dx11\renderer_3d.h" />
     <ClInclude Include="src\graphics\dx12\context.h" />
     <ClInclude Include="src\graphics\dx12\renderer.h" />
     <ClInclude Include="src\graphics\dx12\d3dx12.h" />
     <ClInclude Include="src\scene\scene.h" />
+    <ClInclude Include="src\scene\scene_3d.h" />
     <ClInclude Include="src\core\window.h" />
     <ClInclude Include="src\core\application.h" />
     <ClInclude Include="scenes\hello\hello_d3d11_renderer.h" />

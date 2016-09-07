@@ -21,6 +21,7 @@ namespace crib
 			virtual ~scene() {}
 
 			virtual std::wstring update(const double delta, const input::buffer& input) = 0;
+			virtual void screen_resize(const float width, const float height) {}
 
 			void attach_renderer(graphics::base::context& context);
 			static std::unique_ptr<scene> create(const std::wstring name, core::settings& setting);
