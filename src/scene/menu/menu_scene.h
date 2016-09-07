@@ -1,10 +1,8 @@
 
 #pragma once
 
-#include "scene/scene.h"
 #include "menu_item.h"
 #include "menu_d3d11_renderer.h"
-#include <utility>
 
 
 namespace crib

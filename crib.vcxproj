@@ -197,7 +197,7 @@
     <ClInclude Include="src\input\buffer.h" />
     <ClInclude Include="src\core\application.h" />
     <ClInclude Include="src\core\timer.h" />
-    <ClInclude Include="src\core\utility.h" />
+    <ClInclude Include="src\crib.h" />
     <ClInclude Include="src\core\utility\com_initialize.h" />
     <ClInclude Include="src\core\utility\windows_error.h" />
     <ClInclude Include="src\core\window.h" />

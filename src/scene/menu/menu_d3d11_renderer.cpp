@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "menu_d3d11_renderer.h"
 #include "menu_scene.h"
-#include "graphics/d3d11/d3d11_context.h"
 
 using crib::scene::menu::menu_d3d11_renderer;
 using crib::core::utility::throw_if_failed;
@@ -24,8 +23,8 @@ void menu_d3d11_renderer::resize(const float w, const float h)
 
 void menu_d3d11_renderer::render()
 {
-	ctx.clear((FLOAT*)&DirectX::XMFLOAT4(0.f, .2f, .4f, 1.f));
 	ctx.context2d->BeginDraw();
+	ctx.context2d->Clear(D2D1::ColorF(0.f, .2f, .4f, 1.f));
 
 
 	auto items = scene.get_items();

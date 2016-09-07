@@ -1,9 +1,7 @@
 
 #pragma once
 
-#include "scene/scene.h"
 #include "strawman_renderer.h"
-#include <utility>
 
 
 namespace crib_scenes

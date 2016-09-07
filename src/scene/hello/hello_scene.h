@@ -1,9 +1,10 @@
 
 #pragma once
 
-#include "scene/scene.h"
+#include "crib.h"
 #include "hello_d3d11_renderer.h"
 #include "hello_d3d12_renderer.h"
+#include <DirectXMath.h>
 
 
 namespace crib

@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "hello_d3d12_renderer.h"
 #include "hello_scene.h"
-#include "graphics/d3d12/d3d12_context.h"
 
 using crib::scene::hello::hello_d3d12_renderer;
 

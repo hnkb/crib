@@ -2,8 +2,7 @@
 #pragma once
 
 #include "window.h"
-#include "settings.h"
-#include "utility.h"
+#include "utility/com_initialize.h"
 
 
 namespace crib

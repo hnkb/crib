@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "graphics/renderer.h"
+#include "../renderer.h"
 
 
 namespace crib

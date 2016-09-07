@@ -1,9 +1,8 @@
 
 #pragma once
 
-#include "input/buffer.h"
-#include "graphics/renderer.h"
-#include "core/settings.h"
+#include "../core/settings.h"
+#include "../input/buffer.h"
 #include <memory>
 
 

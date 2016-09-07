@@ -1,10 +1,8 @@
 
 #pragma once
 
-#include "graphics/context.h"
-#include "core/utility.h"
-#include <memory>
-#include <Windows.h>
+#include "../context.h"
+#include "../../core/utility/com_initialize.h"
 #include <atlbase.h>
 #include <d3d12.h>
 #include <dxgi1_4.h>

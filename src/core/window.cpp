@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
 #include "window.h"
-#include "utility.h"
+#include "utility/windows_error.h"
 
 using crib::core::window;
 

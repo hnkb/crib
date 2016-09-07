@@ -1,8 +1,7 @@
 
 #pragma once
 
-
-#include "graphics/d3d12/d3d12_renderer.h"
+#include "crib.h"
 
 
 namespace crib

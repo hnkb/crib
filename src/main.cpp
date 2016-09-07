@@ -1,6 +1,6 @@
 
 #include "stdafx.h"
-#include "core/application.h"
+#include "crib.h"
 
 
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow)

@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "scene/scene.h"
+#include "crib.h"
 #include "hello3d_d3d11_renderer.h"
 #include "mesh.h"
 #include "object.h"

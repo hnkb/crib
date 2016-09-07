@@ -1,14 +1,14 @@
 
 #include "stdafx.h"
 #include "scene.h"
-#include "graphics/d3d11/d3d11_context.h"
-#include "graphics/d3d12/d3d12_context.h"
+#include "../graphics/d3d11/d3d11_context.h"
+#include "../graphics/d3d12/d3d12_context.h"
 
 #include "menu/menu_scene.h"
 #include "hello/hello_scene.h"
 #include "hello3d/hello3d_scene.h"
-#include "scenes/tetris/tetris_scene.h"
-#include "scenes/strawman/strawman_scene.h"
+#include "../scenes/tetris/tetris_scene.h"
+#include "../scenes/strawman/strawman_scene.h"
 
 using crib::scene::scene;
 

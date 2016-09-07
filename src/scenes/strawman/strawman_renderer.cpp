@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "strawman_renderer.h"
 #include "strawman_scene.h"
-#include "graphics/d3d11/d3d11_context.h"
 
 using crib_scenes::strawman::renderer;
 using crib::core::utility::throw_if_failed;

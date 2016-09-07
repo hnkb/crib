@@ -1,7 +1,8 @@
 
 #pragma once
 
-#include "input/buffer.h"
+#include "crib.h"
+#include <algorithm>
 #include <string>
 
 

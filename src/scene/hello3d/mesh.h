@@ -3,6 +3,7 @@
 
 #include "pipeline.h"
 #include <vector>
+#include <Windows.h>
 
 
 namespace crib

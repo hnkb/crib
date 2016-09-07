@@ -1,13 +1,12 @@
 
 #pragma once
 
-#include "scene/scene.h"
-#include "graphics/context.h"
-#include "input/buffer.h"
-#include "timer.h"
 #include "settings.h"
+#include "timer.h"
+#include "../input/buffer.h"
+#include "../graphics/context.h"
+#include "../scene/scene.h"
 #include <memory>
-#include <stdexcept>
 #include <string>
 #include <Windows.h>
 

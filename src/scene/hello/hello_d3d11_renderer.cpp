@@ -2,9 +2,9 @@
 #include "stdafx.h"
 #include "hello_d3d11_renderer.h"
 #include "hello_scene.h"
-#include "graphics/d3d11/d3d11_context.h"
 #include "shaders/pixel_fxc.h"
 #include "shaders/vertex_fxc.h"
+#include <strsafe.h>
 
 using crib::scene::hello::hello_d3d11_renderer;
 using crib::core::utility::throw_if_failed;

@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "graphics/d3d11/d3d11_renderer.h"
+#include "crib.h"
 #include "pipeline.h"
 
 

@@ -1,6 +1,8 @@
 
 #include "stdafx.h"
 #include "camera.h"
+#include <algorithm>
+#include <strsafe.h>
 
 using crib::scene::hello3d::camera;
 using namespace DirectX;

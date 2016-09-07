@@ -1,7 +1,6 @@
 
 #include "stdafx.h"
 #include "context.h"
-#include "renderer.h"
 #include "d3d11/d3d11_context.h"
 #include "d3d12/d3d12_context.h"
 

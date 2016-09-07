@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "hello_scene.h"
+#include <algorithm>
 
 using crib::scene::hello::hello_scene;
 

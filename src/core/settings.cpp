@@ -1,7 +1,8 @@
 
 #include "stdafx.h"
 #include "settings.h"
-#include "utility.h"
+#include "utility/windows_error.h"
+#include <vector>
 
 using crib::core::settings;
 
