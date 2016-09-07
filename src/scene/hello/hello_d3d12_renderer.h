@@ -4,26 +4,23 @@
 #include "crib.h"
 
 
-namespace crib
+namespace crib_scenes
 {
-	namespace scene
+	namespace hello
 	{
-		namespace hello
+
+		class hello_scene;
+
+		class hello_d3d12_renderer : public crib::graphics::d3d12_renderer
 		{
+		public:
+			hello_d3d12_renderer(crib::graphics::d3d12_context& context, hello_scene& hello_scene);
 
-			class hello_scene;
+			virtual void render() override;
 
-			class hello_d3d12_renderer : public graphics::d3d12_renderer
-			{
-			public:
-				hello_d3d12_renderer(graphics::d3d12_context& context, hello_scene& hello_scene);
+		protected:
+			hello_scene& scene;
+		};
 
-				virtual void render() override;
-
-			protected:
-				hello_scene& scene;
-			};
-
-		}
 	}
 }

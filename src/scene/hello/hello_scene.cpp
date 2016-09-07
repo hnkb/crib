@@ -3,7 +3,7 @@
 #include "hello_scene.h"
 #include <algorithm>
 
-using crib::scene::hello::hello_scene;
+using crib_scenes::hello::hello_scene;
 
 
 hello_scene::hello_scene()

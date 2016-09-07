@@ -170,6 +170,7 @@
     <ClCompile Include="src\graphics\context.cpp" />
     <ClCompile Include="src\graphics\d3d11\d3d11_context.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\scenes\scene_factory.cpp" />
     <ClCompile Include="src\scenes\strawman\strawman_renderer.cpp" />
     <ClCompile Include="src\scenes\strawman\strawman_scene.cpp" />
     <ClCompile Include="src\scenes\tetris\tetris_renderer.cpp" />

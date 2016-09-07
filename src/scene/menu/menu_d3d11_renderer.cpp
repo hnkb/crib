@@ -3,11 +3,11 @@
 #include "menu_d3d11_renderer.h"
 #include "menu_scene.h"
 
-using crib::scene::menu::menu_d3d11_renderer;
+using crib_scenes::menu::menu_d3d11_renderer;
 using crib::core::utility::throw_if_failed;
 
 
-menu_d3d11_renderer::menu_d3d11_renderer(crib::graphics::d3d11_context& context, crib::scene::menu::menu_scene& hello_scene) : d3d11_renderer(context), scene(hello_scene)
+menu_d3d11_renderer::menu_d3d11_renderer(crib::graphics::d3d11_context& context, crib_scenes::menu::menu_scene& hello_scene) : d3d11_renderer(context), scene(hello_scene)
 {
 	throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 28.f, L"", &tf_normal));
 	throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 28.f, L"", &tf_selected));
@@ -64,7 +64,7 @@ void menu_d3d11_renderer::render()
 }
 
 
-void menu_d3d11_renderer::update_bounding_rect(crib::scene::menu::menu_item& item) const
+void menu_d3d11_renderer::update_bounding_rect(crib_scenes::menu::menu_item& item) const
 {
 	CComPtr<IDWriteTextLayout> layout;
 	DWRITE_TEXT_METRICS metrics;

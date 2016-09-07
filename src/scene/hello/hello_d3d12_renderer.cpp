@@ -3,10 +3,10 @@
 #include "hello_d3d12_renderer.h"
 #include "hello_scene.h"
 
-using crib::scene::hello::hello_d3d12_renderer;
+using crib_scenes::hello::hello_d3d12_renderer;
 
 
-hello_d3d12_renderer::hello_d3d12_renderer(crib::graphics::d3d12_context& context, crib::scene::hello::hello_scene& hello_scene) : d3d12_renderer(context), scene(hello_scene)
+hello_d3d12_renderer::hello_d3d12_renderer(crib::graphics::d3d12_context& context, crib_scenes::hello::hello_scene& hello_scene) : d3d12_renderer(context), scene(hello_scene)
 {
 
 }

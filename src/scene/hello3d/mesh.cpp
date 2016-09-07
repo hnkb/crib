@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "mesh.h"
 
-using crib::scene::hello3d::mesh;
+using crib_scenes::hello3d::mesh;
 using namespace DirectX;
 
 

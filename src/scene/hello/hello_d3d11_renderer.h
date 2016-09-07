@@ -4,40 +4,37 @@
 #include "crib.h"
 
 
-namespace crib
+namespace crib_scenes
 {
-	namespace scene
+	namespace hello
 	{
-		namespace hello
+
+		class hello_scene;
+
+		class hello_d3d11_renderer : public crib::graphics::d3d11_renderer
 		{
+		public:
+			hello_d3d11_renderer(crib::graphics::d3d11_context& context, hello_scene& hello_scene);
 
-			class hello_scene;
+			virtual void render() override;
+			virtual void resize(const float width, const float height) override;
 
-			class hello_d3d11_renderer : public graphics::d3d11_renderer
-			{
-			public:
-				hello_d3d11_renderer(graphics::d3d11_context& context, hello_scene& hello_scene);
+		protected:
+			void draw_stat(std::wstring title, std::wstring value, float top);
 
-				virtual void render() override;
-				virtual void resize(const float width, const float height) override;
+			hello_scene& scene;
 
-			protected:
-				void draw_stat(std::wstring title, std::wstring value, float top);
+			CComPtr<ID3D11VertexShader> vs;
+			CComPtr<ID3D11PixelShader> ps;
+			CComPtr<ID3D11Buffer> vb;
 
-				hello_scene& scene;
+			CComPtr<IDWriteTextFormat> tf_value;
+			CComPtr<IDWriteTextFormat> tf_title;
+			CComPtr<ID2D1SolidColorBrush> brush;
 
-				CComPtr<ID3D11VertexShader> vs;
-				CComPtr<ID3D11PixelShader> ps;
-				CComPtr<ID3D11Buffer> vb;
+			float width;
+			float height;
+		};
 
-				CComPtr<IDWriteTextFormat> tf_value;
-				CComPtr<IDWriteTextFormat> tf_title;
-				CComPtr<ID2D1SolidColorBrush> brush;
-				
-				float width;
-				float height;
-			};
-
-		}
 	}
 }

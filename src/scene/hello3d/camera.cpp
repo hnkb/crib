@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <strsafe.h>
 
-using crib::scene::hello3d::camera;
+using crib_scenes::hello3d::camera;
 using namespace DirectX;
 
 

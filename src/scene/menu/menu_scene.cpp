@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "menu_scene.h"
 
-using crib::scene::menu::menu_scene;
+using crib_scenes::menu::menu_scene;
 
 
 menu_scene::menu_scene(crib::core::settings& setting) : settings(setting), root_sel(0), root_items({
@@ -135,7 +135,7 @@ std::wstring menu_scene::handle_event(const crib::input::event& e)
 	return L"";
 }
 
-std::wstring menu_scene::navigate_to(crib::scene::menu::menu_item& item)
+std::wstring menu_scene::navigate_to(crib_scenes::menu::menu_item& item)
 {
 	if (item.setting_key.size())
 		settings.set(item.setting_key, item.setting_value);
@@ -186,7 +186,7 @@ crib::graphics::d3d11_renderer* menu_scene::create_renderer(crib::graphics::d3d1
 	return rndr;
 }
 
-void menu_scene::update_bounding_rect(std::vector<crib::scene::menu::menu_item>& items, const crib::scene::menu::menu_d3d11_renderer* rndr)
+void menu_scene::update_bounding_rect(std::vector<crib_scenes::menu::menu_item>& items, const crib_scenes::menu::menu_d3d11_renderer* rndr)
 {
 	float top = 0;
 

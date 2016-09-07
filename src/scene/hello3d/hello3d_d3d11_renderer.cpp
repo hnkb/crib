@@ -6,11 +6,11 @@
 #include "shaders/vertex_fxc.h"
 #include <strsafe.h>
 
-using crib::scene::hello3d::hello3d_d3d11_renderer;
+using crib_scenes::hello3d::hello3d_d3d11_renderer;
 using crib::core::utility::throw_if_failed;
 
 
-hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::d3d11_context& context, crib::scene::hello3d::hello3d_scene& hello_scene) : d3d11_renderer(context), scene(hello_scene)
+hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::d3d11_context& context, crib_scenes::hello3d::hello3d_scene& hello_scene) : d3d11_renderer(context), scene(hello_scene)
 {
 	// Set up pipeline
 	{
@@ -100,7 +100,7 @@ void hello3d_d3d11_renderer::render()
 }
 
 
-void hello3d_d3d11_renderer::create_model_assets(const crib::scene::hello3d::mesh& model, model_assets& buffers)
+void hello3d_d3d11_renderer::create_model_assets(const crib_scenes::hello3d::mesh& model, model_assets& buffers)
 {
 	D3D11_SUBRESOURCE_DATA initData = {};
 
