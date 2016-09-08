@@ -3,6 +3,7 @@
 
 #include "scene.h"
 #include "../graphics/camera_3d.h"
+#include "../graphics/light.h"
 
 
 namespace crib
@@ -19,9 +20,11 @@ namespace crib
 
 			const DirectX::XMMATRIX get_view_matrix() const { return camera.get_view_matrix(); }
 			const DirectX::XMMATRIX get_projection_matrix() const { return camera.get_projection_matrix(); }
+			const graphics::directional_light& get_light() const { return light; }
 
 		protected:
 			graphics::camera_3d camera;
+			graphics::directional_light light;
 		};
 
 	}

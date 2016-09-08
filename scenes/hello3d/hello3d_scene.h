@@ -22,7 +22,6 @@ namespace crib_scenes
 
 			const std::map<std::wstring, mesh>& get_models() const { return models; }
 			const std::vector<object>& get_objects() const { return objects; }
-			const pipeline::directional_light& get_light() const { return light; }
 
 			const stats& get_stats() const { return stats; }
 			const std::wstring get_hit_test_result() const { return hit_test_result; }
@@ -35,7 +34,6 @@ namespace crib_scenes
 			std::map<std::wstring, mesh> models;
 			std::vector<object> objects;
 			crib::input::camera_control_third_person camera_control;
-			pipeline::directional_light light;
 
 			double time = 0;
 

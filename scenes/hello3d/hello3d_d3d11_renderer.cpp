@@ -43,12 +43,6 @@ hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::dx11::context& co
 
 	// Create buffers
 	{
-		throw_if_failed(ctx.device->CreateBuffer(&CD3D11_BUFFER_DESC(sizeof(pipeline::cb_vs_perobject_layout), D3D11_BIND_CONSTANT_BUFFER), nullptr, &cb_vs_perobject), "Create constant buffer");
-		ctx.context3d->VSSetConstantBuffers(0, 1, &cb_vs_perobject);
-
-		throw_if_failed(ctx.device->CreateBuffer(&CD3D11_BUFFER_DESC(sizeof(pipeline::cb_ps_perframe_layout), D3D11_BIND_CONSTANT_BUFFER), nullptr, &cb_ps_perframe), "Create constant buffer");
-		ctx.context3d->PSSetConstantBuffers(0, 1, &cb_ps_perframe);
-
 		for (const auto& model : scene.get_models())
 		{
 			models.emplace(model.first, model_assets());
@@ -72,18 +66,16 @@ void hello3d_d3d11_renderer::render()
 {
 	ctx.clear(DirectX::XMVectorSet(0.f, .2f, .4f, 1.f).m128_f32);
 
+	cb_frame.data.light = scene.get_light();
+	cb_frame.update(ctx.context3d);
 
-	pipeline::cb_vs_perobject_layout vs_perobject;
-	pipeline::cb_ps_perframe_layout ps_perframe;
-	
-	ps_perframe.light = scene.get_light();
-	ctx.context3d->UpdateSubresource(cb_ps_perframe, 0, nullptr, &ps_perframe, 0, 0);
+	const auto view_proj = scene.get_view_matrix() * scene.get_projection_matrix();
 
 	for (const auto& obj : scene.get_objects())
 	{
-		vs_perobject.world = DirectX::XMMatrixTranspose(obj.world_transform);
-		vs_perobject.wvp = DirectX::XMMatrixTranspose(obj.world_transform * scene.get_view_matrix() * scene.get_projection_matrix());
-		ctx.context3d->UpdateSubresource(cb_vs_perobject, 0, nullptr, &vs_perobject, 0, 0);
+		cb_object.data.world = DirectX::XMMatrixTranspose(obj.world_transform);
+		cb_object.data.world_view_proj = DirectX::XMMatrixTranspose(obj.world_transform * view_proj);
+		cb_object.update(ctx.context3d);
 
 		draw_model(models[obj.model]);
 	}

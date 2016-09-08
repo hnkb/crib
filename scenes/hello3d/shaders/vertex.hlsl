@@ -2,7 +2,7 @@
 #include "shared.hlsli"
 
 
-cbuffer CB_VS_PEROBJECT : register(b0)
+cbuffer CB_VS_PEROBJECT : register(b1)
 {
     matrix world;
     matrix wvp; // world * view * projection

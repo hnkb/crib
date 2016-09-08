@@ -2,7 +2,6 @@
 #pragma once
 
 #include "crib.h"
-#include "pipeline.h"
 
 
 namespace crib_scenes
@@ -34,8 +33,6 @@ namespace crib_scenes
 			void draw_model(model_assets& model);
 
 			std::map<std::wstring, model_assets> models;
-			CComPtr<ID3D11Buffer> cb_vs_perobject;
-			CComPtr<ID3D11Buffer> cb_ps_perframe;
 
 
 			void draw_stats();

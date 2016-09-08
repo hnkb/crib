@@ -192,10 +192,13 @@
     <ClInclude Include="src\core\settings.h" />
     <ClInclude Include="src\core\timer.h" />
     <ClInclude Include="src\graphics\camera_3d.h" />
+    <ClInclude Include="src\graphics\constant_buffers.h" />
+    <ClInclude Include="src\graphics\light.h" />
     <ClInclude Include="src\graphics\base\context.h" />
     <ClInclude Include="src\graphics\base\renderer.h" />
     <ClInclude Include="src\graphics\dx11\context.h" />
     <ClInclude Include="src\graphics\dx11\renderer.h" />
+    <ClInclude Include="src\graphics\dx11\constant_buffer.h" />
     <ClInclude Include="src\graphics\dx11\renderer_3d.h" />
     <ClInclude Include="src\graphics\dx12\context.h" />
     <ClInclude Include="src\graphics\dx12\renderer.h" />

@@ -2,7 +2,7 @@
 #include "shared.hlsli"
 
 
-cbuffer CB_PS_PERFRAME
+cbuffer CB_PS_PERFRAME : register(b0)
 {
 	DIRECTIONAL_LIGHT light;
 };
