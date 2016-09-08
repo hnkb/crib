@@ -24,26 +24,7 @@ hello3d_renderer_3d::hello3d_renderer_3d(crib::graphics::dx11::context& context,
 
 void hello3d_renderer_3d::render()
 {
-	ctx.clear(DirectX::XMVectorSet(0.f, .2f, .4f, 1.f).m128_f32);
-
-	constants.frame.data.light = scene.get_light();
-	constants.frame.update(ctx.context3d);
-
-	const auto view_proj = scene.get_view_matrix() * scene.get_projection_matrix();
-
-	for (const auto& e : scene.get_entities())
-	{
-		assets.effects[e.effect].bind(ctx.context3d);
-
-		constants.object.data.world = DirectX::XMMatrixTranspose(e.world_transform);
-		constants.object.data.world_view_proj = DirectX::XMMatrixTranspose(e.world_transform * view_proj);
-		constants.object.update(ctx.context3d);
-
-		assets.vertex_buffers[e.mesh].draw(ctx.context3d);
-	}
-
-	
-	// Draw 2D stats over 3D scene
+	renderer_3d::render();
 	draw_stats();
 }
 

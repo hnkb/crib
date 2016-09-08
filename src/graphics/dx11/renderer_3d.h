@@ -21,6 +21,7 @@ namespace crib
 			public:
 				virtual ~renderer_3d() {}
 
+				virtual void render() override { default_render(DirectX::XMVectorSet(0.f, .2f, .4f, 1.f).m128_f32); }
 				virtual void resize(const float width, const float height) { scene.screen_resize(width, height); }
 
 			protected:
@@ -38,6 +39,27 @@ namespace crib
 					constants.frame.bind(context.context3d, 0);
 					constants.object.bind(context.context3d, 1);
 				}
+
+				void default_render(const FLOAT rgba[4])
+				{
+					ctx.clear(rgba);
+
+					constants.frame.data.light = scene.get_light();
+					constants.frame.update(ctx.context3d);
+
+					const auto view_proj = scene.get_view_matrix() * scene.get_projection_matrix();
+
+					for (const auto& e : scene.get_entities())
+					{
+						constants.object.data.world = DirectX::XMMatrixTranspose(e.world_transform);
+						constants.object.data.world_view_proj = DirectX::XMMatrixTranspose(e.world_transform * view_proj);
+						constants.object.update(ctx.context3d);
+
+						assets.effects[e.effect].bind(ctx.context3d);
+						assets.vertex_buffers[e.mesh].draw(ctx.context3d);
+					}
+				}
+
 
 				scene_type& scene;
 
