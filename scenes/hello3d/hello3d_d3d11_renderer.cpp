@@ -2,8 +2,6 @@
 #include "stdafx.h"
 #include "hello3d_d3d11_renderer.h"
 #include "hello3d_scene.h"
-#include "graphics/dx11/shaders/compiled/ps_basic_pcn.h"
-#include "graphics/dx11/shaders/compiled/vs_basic_pcn.h"
 #include <strsafe.h>
 
 using crib_scenes::hello3d::hello3d_d3d11_renderer;
@@ -12,35 +10,6 @@ using crib::core::utility::throw_if_failed;
 
 hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::dx11::context& context, crib_scenes::hello3d::hello3d_scene& scene) : renderer_3d(context, scene)
 {
-	// Set up pipeline
-	{
-		CComPtr<ID3D11VertexShader> vs;
-		CComPtr<ID3D11PixelShader> ps;
-		CComPtr<ID3D11InputLayout> layout;
-
-
-		throw_if_failed(ctx.device->CreateVertexShader(vs_basic_pcn, sizeof(vs_basic_pcn), nullptr, &vs), "Create vertex shader");
-		throw_if_failed(ctx.device->CreatePixelShader(ps_basic_pcn, sizeof(ps_basic_pcn), nullptr, &ps), "Create pixel shader");
-
-
-		D3D11_INPUT_ELEMENT_DESC ld[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "COLOR",    0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-		};
-
-		throw_if_failed(ctx.device->CreateInputLayout(ld, _countof(ld), vs_basic_pcn, sizeof(vs_basic_pcn), &layout), "Register vertex layout");
-		
-		
-		// if there are more than one set of pipeline states (shaders), these calls must be made during drawing
-		ctx.context3d->VSSetShader(vs, nullptr, 0);
-		ctx.context3d->PSSetShader(ps, nullptr, 0);
-		ctx.context3d->IASetInputLayout(layout);
-
-		ctx.context3d->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	}
-
 	// Create buffers
 	{
 		for (const auto& model : scene.get_models())
@@ -73,6 +42,8 @@ void hello3d_d3d11_renderer::render()
 
 	for (const auto& e : scene.get_entities())
 	{
+		assets.effects[e.effect].bind(ctx.context3d);
+
 		cb_object.data.world = DirectX::XMMatrixTranspose(e.world_transform);
 		cb_object.data.world_view_proj = DirectX::XMMatrixTranspose(e.world_transform * view_proj);
 		cb_object.update(ctx.context3d);
@@ -107,6 +78,8 @@ void hello3d_d3d11_renderer::draw_model(hello3d_d3d11_renderer::model_assets& mo
 	ctx.context3d->IASetVertexBuffers(0, 1, &model.vertex, &stride, &offset);
 
 	ctx.context3d->IASetIndexBuffer(model.index, DXGI_FORMAT_R16_UINT, 0);
+
+	ctx.context3d->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	ctx.context3d->DrawIndexed(model.idx_count, 0, 0);
 }
