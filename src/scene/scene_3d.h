@@ -2,10 +2,10 @@
 #pragma once
 
 #include "scene.h"
+#include "entity.h"
 #include "../graphics/camera_3d.h"
 #include "../graphics/light.h"
 #include "../core/settings.h"
-#include "../../scenes/hello3d/object.h"
 #include <vector>
 
 
