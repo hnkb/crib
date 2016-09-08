@@ -19,9 +19,11 @@ namespace crib
 			virtual const DirectX::XMMATRIX get_view_matrix() const;
 			virtual const DirectX::XMMATRIX get_projection_matrix() const;
 
+			virtual const DirectX::XMVECTOR screen_to_world(const float x, const float y) const;
+
 			DirectX::XMVECTOR look_at = DirectX::XMVectorSet(0, 0, 0, 1.f);
 			DirectX::XMVECTOR up_direction = DirectX::XMVectorSet(0, 1.f, 0, 1.f);
-			DirectX::XMVECTOR camera_position = DirectX::XMVectorSet(4.f, 4.f, 4.f, 1.f);
+			DirectX::XMVECTOR position = DirectX::XMVectorSet(0, 0, -4.f, 1.f);
 
 			float fov_angle = DirectX::XM_PIDIV2;
 			float z_near = 1.f;

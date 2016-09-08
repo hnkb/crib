@@ -1,37 +1,36 @@
 
 #pragma once
 
-#include "crib.h"
-#include <string>
-#include <DirectXMath.h>
+#include "../src/input/buffer.h"
+#include "../src/graphics/camera_3d.h"
 
 
-namespace crib_scenes
+namespace crib
 {
-	namespace hello3d
+	namespace input
 	{
 
-		class camera
+		class camera_control_third_person
 		{
 		public:
-			void update(const float delta, const crib::input::event& input);
+			camera_control_third_person(crib::graphics::camera_3d& camera) : camera(camera) { update_camera(); }
 
-			const DirectX::XMVECTOR get_focus() const;
-			const DirectX::XMVECTOR get_up() const;
-			const DirectX::XMVECTOR get_position() const;
-			const DirectX::XMMATRIX get_view_matrix() const;
+			void update(const double delta, const buffer& buffer);
 
-			const std::wstring print_params() const;
+			float min_radius = 3.f;
+			float max_radius = 99.f;
+			float min_phi = -.5f;
+			float max_phi = 1.5f; // slightly less than PI/2
 
 		protected:
-			float radius = 4.f;
-			float theta = .7f;
-			float phi = 1.5f;
+			void update_camera();
+			void process_message(const float delta, const event& event);
 
-			static constexpr float min_radius = 3.f;
-			static constexpr float max_radius = 99.f;
-			static constexpr float min_phi = .3f;
-			static constexpr float max_phi = 2.f;
+			graphics::camera_3d& camera;
+
+			float radius = 4.f;
+			float theta = 0;
+			float phi = 0;
 
 			// for handling dragging camera with mouse
 			POINT origin_cursor;

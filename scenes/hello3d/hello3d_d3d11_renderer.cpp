@@ -10,7 +10,7 @@ using crib_scenes::hello3d::hello3d_d3d11_renderer;
 using crib::core::utility::throw_if_failed;
 
 
-hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::dx11::context& context, crib_scenes::hello3d::hello3d_scene& hello_scene) : renderer(context), scene(hello_scene)
+hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::dx11::context& context, crib_scenes::hello3d::hello3d_scene& scene) : renderer_3d(context, scene)
 {
 	// Set up pipeline
 	{
@@ -65,12 +65,6 @@ hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::dx11::context& co
 
 		throw_if_failed(ctx.context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &brush));
 	}
-}
-
-void hello3d_d3d11_renderer::resize(const float w, const float h)
-{
-	height = h, width = w;
-	scene.resize(w, h);
 }
 
 
@@ -139,8 +133,7 @@ void hello3d_d3d11_renderer::draw_stats()
 
 	draw_stat(L"input buffer", std::to_wstring(scene.get_stats().buffer_size), 280);
 
-	draw_stat(L"camera", scene.print_camera_params(), height - 160, 660);
-	if (scene.get_hit_test_result().size()) draw_stat(L"hit test", scene.get_hit_test_result(), height - 280, 500);
+	if (scene.get_hit_test_result().size()) draw_stat(L"hit test", scene.get_hit_test_result(), height - 160, 500);
 
 	throw_if_failed(ctx.context2d->EndDraw());
 }

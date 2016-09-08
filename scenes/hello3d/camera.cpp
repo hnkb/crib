@@ -2,46 +2,32 @@
 #include "stdafx.h"
 #include "camera.h"
 #include <algorithm>
-#include <strsafe.h>
 
-using crib_scenes::hello3d::camera;
-using namespace DirectX;
+using crib::input::camera_control_third_person;
 
 
-// In 1st-person camera, eye is fixed (to player position), focus rotates around it.
-// In 3rd-person, focus is fixed (to player position), eye rotates around it.
-
-
-const XMVECTOR camera::get_focus() const
+void camera_control_third_person::update(const double delta, const crib::input::buffer& buffer)
 {
-	return XMVectorSet(0, 0, 0, 1.f);
+	for (const auto& evt : buffer)
+		process_message(float(delta), evt);
+
+	update_camera();
 }
 
-const XMVECTOR camera::get_up() const
+void camera_control_third_person::update_camera()
 {
-	// If phi is not clamped to 0-PI, we can calculate correct up vector like this:
-	// return XMVectorSet(0, (phi > 0 ? 1.f : -1.f) * (1.f - 2.f*float(abs(int(phi / XM_PI) % 2))), 0, 1.f);
+	// In 3rd-person, focus is fixed (to player position), eye rotates around it.
 
-	return XMVectorSet(0, 1.f, 0, 1.f);
+	// If phi is not clamped, we can calculate correct up vector like this:
+	// up = XMVectorSet(0, (phi > 0 ? 1.f : -1.f) * (1.f - 2.f*float(abs(int(phi / XM_PI) % 2))), 0, 1.f);
+
+	// Note: phi is different from math convention, instead of rotating around Z it rotates around Y
+
+	const auto unit = DirectX::XMVectorSet(0, 0, -radius, 1.f); // for left-hand, use +radius
+	camera.position = DirectX::XMVectorAdd(camera.look_at, DirectX::XMVector4Transform(unit, DirectX::XMMatrixRotationX(phi) * DirectX::XMMatrixRotationY(theta)));
 }
 
-const XMVECTOR camera::get_position() const
-{
-	// A simple non-rotating setup would be:
-	// return XMVectorSet(radius, 0, radius, 1.f);
-
-	// for left-hand, use -theta
-
-	return XMVectorAdd(get_focus(), XMVectorScale(XMVectorSet(XMScalarSin(phi)*XMScalarCos(theta), XMScalarCos(phi), XMScalarSin(phi)*XMScalarSin(theta), 1.f), radius));
-}
-
-const XMMATRIX camera::get_view_matrix() const
-{
-	return XMMatrixLookAtRH(get_position(), get_focus(), get_up());
-}
-
-
-void camera::update(const float delta, const crib::input::event& e)
+void camera_control_third_person::process_message(const float delta, const crib::input::event& e)
 {
 	switch (e.message)
 	{
@@ -63,8 +49,8 @@ void camera::update(const float delta, const crib::input::event& e)
 			POINT current;
 			GetCursorPos(&current);
 
-			phi = std::min(max_phi, std::max(min_phi, origin_phi + (origin_cursor.y - current.y) / 200.0f));
-			theta = origin_theta - (origin_cursor.x - current.x) / 200.0f;
+			phi = std::min(max_phi, std::max(min_phi, origin_phi - (origin_cursor.y - current.y) / 200.0f));
+			theta = origin_theta + (origin_cursor.x - current.x) / 200.0f;
 
 			// Cursor won't change as long as mouse capture is set, so no need for this,
 			// unless on rare occasions when capture is lost unexpectedly (ALT+TAB)
@@ -77,22 +63,22 @@ void camera::update(const float delta, const crib::input::event& e)
 		{
 		case VK_NUMPAD4:
 		case VK_LEFT:
-			theta += 3.f * delta;
+			theta -= 3.f * delta;
 			break;
 
 		case VK_NUMPAD6:
 		case VK_RIGHT:
-			theta -= 3.f * delta;
+			theta += 3.f * delta;
 			break;
 
 		case VK_NUMPAD8:
 		case VK_UP:
-			phi = std::max(min_phi, phi - 3.f * delta);
+			phi = std::min(max_phi, phi + 3.f * delta);
 			break;
 
 		case VK_NUMPAD2:
 		case VK_DOWN:
-			phi = std::min(max_phi, phi + 3.f * delta);
+			phi = std::max(min_phi, phi - 3.f * delta);
 			break;
 
 		case VK_ADD:
@@ -105,12 +91,4 @@ void camera::update(const float delta, const crib::input::event& e)
 		}
 		break;
 	}
-}
-
-
-const std::wstring camera::print_params() const
-{
-	wchar_t buffer[24];
-	StringCchPrintfW(buffer, 24, L"r=%.1f \u03c6=%.1f\u03c0 \u03b8=%.1f\u03c0", radius, phi / XM_PI, theta / XM_PI);
-	return buffer;
 }

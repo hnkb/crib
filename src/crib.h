@@ -11,6 +11,7 @@
 
 #include "input/event.h"
 #include "input/buffer.h"
+#include "../scenes/hello3d/camera.h"
 
 
 #include "graphics/camera_3d.h"
