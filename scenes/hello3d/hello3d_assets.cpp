@@ -1,6 +1,6 @@
 
 #include "stdafx.h"
-#include "mesh.h"
+#include "hello3d_assets.h"
 #include "crib.h"
 
 

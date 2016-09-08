@@ -1,14 +1,14 @@
 
 #include "stdafx.h"
-#include "hello3d_d3d11_renderer.h"
+#include "hello3d_renderer_3d.h"
 #include "hello3d_scene.h"
 #include <strsafe.h>
 
-using crib_scenes::hello3d::hello3d_d3d11_renderer;
+using crib_scenes::hello3d::hello3d_renderer_3d;
 using crib::core::utility::throw_if_failed;
 
 
-hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::dx11::context& context, crib_scenes::hello3d::hello3d_scene& scene) : renderer_3d(context, scene)
+hello3d_renderer_3d::hello3d_renderer_3d(crib::graphics::dx11::context& context, crib_scenes::hello3d::hello3d_scene& scene) : renderer_3d(context, scene)
 {
 	// D2D objects (for stats display)
 	{
@@ -22,7 +22,7 @@ hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::dx11::context& co
 }
 
 
-void hello3d_d3d11_renderer::render()
+void hello3d_renderer_3d::render()
 {
 	ctx.clear(DirectX::XMVectorSet(0.f, .2f, .4f, 1.f).m128_f32);
 
@@ -48,7 +48,7 @@ void hello3d_d3d11_renderer::render()
 }
 
 
-void hello3d_d3d11_renderer::draw_stats()
+void hello3d_renderer_3d::draw_stats()
 {
 	ctx.context2d->BeginDraw();
 
@@ -66,7 +66,7 @@ void hello3d_d3d11_renderer::draw_stats()
 	throw_if_failed(ctx.context2d->EndDraw());
 }
 
-void hello3d_d3d11_renderer::draw_stat(std::wstring title, std::wstring value, float top, float line_width)
+void hello3d_renderer_3d::draw_stat(std::wstring title, std::wstring value, float top, float line_width)
 {
 	ctx.context2d->DrawTextW(value.c_str(), UINT32(value.size()), tf_value, D2D1::RectF(50, top, width - 50, top + 76), brush);
 	ctx.context2d->DrawLine(D2D1::Point2F(width - 50, top + 76), D2D1::Point2F(width - line_width, top + 76), brush);

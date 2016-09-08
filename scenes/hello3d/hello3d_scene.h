@@ -2,7 +2,7 @@
 #pragma once
 
 #include "crib.h"
-#include "hello3d_d3d11_renderer.h"
+#include "hello3d_renderer_3d.h"
 #include "stats.h"
 
 
@@ -22,7 +22,7 @@ namespace crib_scenes
 			const stats& get_stats() const { return stats; }
 
 		protected:
-			virtual crib::graphics::dx11::renderer* create_renderer(crib::graphics::dx11::context& context) override { return new hello3d_d3d11_renderer(context, *this); }
+			virtual crib::graphics::dx11::renderer* create_renderer(crib::graphics::dx11::context& context) override { return new hello3d_renderer_3d(context, *this); }
 
 			crib::input::camera_control_third_person camera_control;
 			double time = 0;
