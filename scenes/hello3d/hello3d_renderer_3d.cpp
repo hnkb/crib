@@ -26,8 +26,8 @@ void hello3d_renderer_3d::render()
 {
 	ctx.clear(DirectX::XMVectorSet(0.f, .2f, .4f, 1.f).m128_f32);
 
-	cb_frame.data.light = scene.get_light();
-	cb_frame.update(ctx.context3d);
+	constants.frame.data.light = scene.get_light();
+	constants.frame.update(ctx.context3d);
 
 	const auto view_proj = scene.get_view_matrix() * scene.get_projection_matrix();
 
@@ -35,9 +35,9 @@ void hello3d_renderer_3d::render()
 	{
 		assets.effects[e.effect].bind(ctx.context3d);
 
-		cb_object.data.world = DirectX::XMMatrixTranspose(e.world_transform);
-		cb_object.data.world_view_proj = DirectX::XMMatrixTranspose(e.world_transform * view_proj);
-		cb_object.update(ctx.context3d);
+		constants.object.data.world = DirectX::XMMatrixTranspose(e.world_transform);
+		constants.object.data.world_view_proj = DirectX::XMMatrixTranspose(e.world_transform * view_proj);
+		constants.object.update(ctx.context3d);
 
 		assets.vertex_buffers[e.mesh].draw(ctx.context3d);
 	}

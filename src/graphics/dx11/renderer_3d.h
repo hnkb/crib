@@ -24,7 +24,7 @@ namespace crib
 				virtual void resize(const float width, const float height) { scene.screen_resize(width, height); }
 
 			protected:
-				renderer_3d(context& context, scene_type& scene) : renderer(context), scene(scene), cb_frame(context.device), cb_object(context.device)
+				renderer_3d(context& context, scene_type& scene) : renderer(context), scene(scene), constants(context.device)
 				{
 					for (const auto& e : scene.get_entities())
 					{
@@ -35,14 +35,19 @@ namespace crib
 							assets.vertex_buffers.emplace(e.mesh, vertex_buffer(geometry::mesh::generate<data_formats::VS_INPUT_PCN>(e.mesh), ctx.device));
 					}
 
-					cb_frame.bind(context.context3d, 0);
-					cb_object.bind(context.context3d, 1);
+					constants.frame.bind(context.context3d, 0);
+					constants.object.bind(context.context3d, 1);
 				}
 
 				scene_type& scene;
 
-				constant_buffer<constant_buffers::per_frame> cb_frame;
-				constant_buffer<constant_buffers::per_object> cb_object;
+				struct renderer_constant_buffers
+				{
+					constant_buffer<constant_buffers::per_frame> frame;
+					constant_buffer<constant_buffers::per_object> object;
+
+					renderer_constant_buffers(ID3D11Device2* dev) : frame(dev), object(dev) {}
+				} constants;
 
 				struct
 				{
