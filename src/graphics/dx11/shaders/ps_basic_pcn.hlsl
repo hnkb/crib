@@ -1,22 +1,15 @@
 
-#include "shared.hlsli"
+#include "common.hlsli"
 
 
-cbuffer CB_PS_PERFRAME : register(b0)
+float4 main(PS_INPUT_PCN input) : SV_TARGET
 {
-	DIRECTIONAL_LIGHT light;
-};
-
-
-float4 main(PS_INPUT input) : SV_TARGET
-{
-	input.normal = normalize(input.normal);
-
-	float4 diffuse = float4(input.color, 1.f);
+	float3 normal = normalize(input.normal_ws);
+	float4 diffuse = float4(input.diffuse, 1.f);
 
 	float4 final_color;
 	final_color = diffuse * light.ambient;
-	final_color += saturate(dot(light.direction, input.normal) * light.diffuse * diffuse);
-	
+	final_color += saturate(dot(light.direction, normal) * light.diffuse * diffuse);
+
 	return float4(final_color.rgb, diffuse.a);
 }

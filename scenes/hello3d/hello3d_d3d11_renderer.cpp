@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "hello3d_d3d11_renderer.h"
 #include "hello3d_scene.h"
-#include "graphics/dx11/shaders/ps_basic_pcn_fxc.h"
-#include "graphics/dx11/shaders/vs_basic_pcn_fxc.h"
+#include "graphics/dx11/shaders/compiled/ps_basic_pcn.h"
+#include "graphics/dx11/shaders/compiled/vs_basic_pcn.h"
 #include <strsafe.h>
 
 using crib_scenes::hello3d::hello3d_d3d11_renderer;

@@ -151,7 +151,7 @@
       <ObjectFileOutput>
       </ObjectFileOutput>
       <VariableName>%(Filename)</VariableName>
-      <HeaderFileOutput>%(RelativeDir)%(Filename)_fxc.h</HeaderFileOutput>
+      <HeaderFileOutput>%(RelativeDir)compiled\%(Filename).h</HeaderFileOutput>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -249,7 +249,9 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\graphics\dx11\shaders\shared.hlsli" />
+    <None Include="src\graphics\dx11\shaders\common.hlsli" />
+    <None Include="src\graphics\dx11\shaders\constant_buffers.hlsli" />
+    <None Include="src\graphics\dx11\shaders\data_formats.hlsli" />
     <None Include="scenes\hello\shaders\common.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
