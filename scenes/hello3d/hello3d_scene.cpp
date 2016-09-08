@@ -10,9 +10,9 @@ hello3d_scene::hello3d_scene(crib::core::settings& settings) : scene_3d(settings
 	models.emplace(std::make_pair(L"cube", mesh::cube()));
 	models.emplace(std::make_pair(L"pyramid", mesh::pyramid()));
 
-	objects.emplace_back(L"cube0", L"cube");
-	objects.emplace_back(L"cube1", L"cube");
-	objects.emplace_back(L"pyramid0", L"pyramid");
+	entities.emplace_back(L"cube0", L"cube", L"basic");
+	entities.emplace_back(L"cube1", L"cube", L"basic");
+	entities.emplace_back(L"pyramid0", L"pyramid", L"basic");
 
 	light.direction = DirectX::XMFLOAT3(DirectX::XMVector3Normalize(DirectX::XMVectorSet(-.2f, 1.f, -.5f, 0.f)).m128_f32);
 	light.ambient = DirectX::XMFLOAT4(.2f, .1f, .1f, 1.f);
@@ -25,9 +25,9 @@ std::wstring hello3d_scene::update(const double delta, const crib::input::buffer
 	time += delta;
 	stats.update(delta, input);
 
-	objects[0].world_transform = DirectX::XMMatrixRotationX(float(time)) * DirectX::XMMatrixTranslation( 1.f, 0, 0);
-	objects[1].world_transform = DirectX::XMMatrixRotationY(float(time)) * DirectX::XMMatrixTranslation(-1.f, 0, 0);
-	objects[2].world_transform = DirectX::XMMatrixRotationZ(float(time)) * DirectX::XMMatrixTranslation(0, 0, 1.5f);
+	entities[0].world_transform = DirectX::XMMatrixRotationX(float(time)) * DirectX::XMMatrixTranslation( 1.f, 0, 0);
+	entities[1].world_transform = DirectX::XMMatrixRotationY(float(time)) * DirectX::XMMatrixTranslation(-1.f, 0, 0);
+	entities[2].world_transform = DirectX::XMMatrixRotationZ(float(time)) * DirectX::XMMatrixTranslation(0, 0, 1.5f);
 
 	for (auto& e : input)
 	{
@@ -55,10 +55,10 @@ void hello3d_scene::hit_testing(const float x, const float y)
 
 	hit_test_result = L"";
 
-	for (const auto& o : objects)
+	for (const auto& e : entities)
 	{
 		// Object's center in world space
-		const auto center = DirectX::XMVector3TransformCoord(DirectX::XMVectorZero(), o.world_transform);
+		const auto center = DirectX::XMVector3TransformCoord(DirectX::XMVectorZero(), e.world_transform);
 
 		const auto distance_from_cam_to_object_center = DirectX::XMVector3Length(DirectX::XMVectorSubtract(center, camera.position));
 		const auto same_distance_in_ray_direction = DirectX::XMVectorAdd(camera.position, DirectX::XMVectorMultiply(ray, distance_from_cam_to_object_center));
@@ -73,7 +73,7 @@ void hello3d_scene::hit_testing(const float x, const float y)
 			// not necessarily hits. We need to test if `ray` hits any of their triangles.
 			// But this approximation is good enough for now.
 
-			hit_test_result = hit_test_result + (hit_test_result.size() ? L", " : L"") + o.name;
+			hit_test_result = hit_test_result + (hit_test_result.size() ? L", " : L"") + e.id;
 		}
 	}
 

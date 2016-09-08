@@ -71,13 +71,13 @@ void hello3d_d3d11_renderer::render()
 
 	const auto view_proj = scene.get_view_matrix() * scene.get_projection_matrix();
 
-	for (const auto& obj : scene.get_objects())
+	for (const auto& e : scene.get_entities())
 	{
-		cb_object.data.world = DirectX::XMMatrixTranspose(obj.world_transform);
-		cb_object.data.world_view_proj = DirectX::XMMatrixTranspose(obj.world_transform * view_proj);
+		cb_object.data.world = DirectX::XMMatrixTranspose(e.world_transform);
+		cb_object.data.world_view_proj = DirectX::XMMatrixTranspose(e.world_transform * view_proj);
 		cb_object.update(ctx.context3d);
 
-		draw_model(models[obj.model]);
+		draw_model(models[e.mesh]);
 	}
 
 	

@@ -29,6 +29,7 @@
 #include "input/camera_control_third_person.h"
 
 
+#include "../scenes/hello3d/object.h"
 #include "scene/scene.h"
 #include "scene/scene_3d.h"
 

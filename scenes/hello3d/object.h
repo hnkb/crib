@@ -5,19 +5,24 @@
 #include <DirectXMath.h>
 
 
-namespace crib_scenes
+namespace crib
 {
-	namespace hello3d
+	namespace scene
 	{
 
-		class object
+		class entity
 		{
 		public:
-			object(const std::wstring& object_name, const std::wstring& model_name) : name(object_name), model(model_name), world_transform(DirectX::XMMatrixIdentity()) {}
+			entity(const std::wstring& id, const std::wstring& mesh, const std::wstring& effect) : id(id), mesh(mesh), effect(effect), world_transform(DirectX::XMMatrixIdentity()) {}
 
-			std::wstring name;
-			std::wstring model;
+			std::wstring id;
+			
+			std::wstring mesh;
+			std::wstring effect;
+			
 			DirectX::XMMATRIX world_transform;
+
+			//std::vector<entity> children;
 		};
 
 	}
