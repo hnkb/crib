@@ -10,15 +10,6 @@ using crib::core::utility::throw_if_failed;
 
 hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::dx11::context& context, crib_scenes::hello3d::hello3d_scene& scene) : renderer_3d(context, scene)
 {
-	// Create buffers
-	{
-		for (const auto& model : scene.get_models())
-		{
-			models.emplace(model.first, model_assets());
-			create_model_assets(model.second, models[model.first]);
-		}
-	}
-
 	// D2D objects (for stats display)
 	{
 		throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 64.f, L"", &tf_value));
@@ -48,40 +39,12 @@ void hello3d_d3d11_renderer::render()
 		cb_object.data.world_view_proj = DirectX::XMMatrixTranspose(e.world_transform * view_proj);
 		cb_object.update(ctx.context3d);
 
-		draw_model(models[e.mesh]);
+		assets.vertex_buffers[e.mesh].draw(ctx.context3d);
 	}
 
 	
 	// Draw 2D stats over 3D scene
 	draw_stats();
-}
-
-
-void hello3d_d3d11_renderer::create_model_assets(const crib_scenes::hello3d::mesh& model, model_assets& buffers)
-{
-	D3D11_SUBRESOURCE_DATA initData = {};
-
-	initData.pSysMem = model.vertex_data();
-	throw_if_failed(ctx.device->CreateBuffer(&CD3D11_BUFFER_DESC(model.vertex_size_bytes(), D3D11_BIND_VERTEX_BUFFER), &initData, &buffers.vertex), "Create vertex buffer");
-
-	initData.pSysMem = model.index_data();
-	throw_if_failed(ctx.device->CreateBuffer(&CD3D11_BUFFER_DESC(model.index_size_bytes(), D3D11_BIND_INDEX_BUFFER), &initData, &buffers.index), "Create index buffer");
-
-	buffers.vertex_stride = model.vertex_stride();
-	buffers.idx_count = model.index_count();
-}
-
-void hello3d_d3d11_renderer::draw_model(hello3d_d3d11_renderer::model_assets& model)
-{
-	UINT stride = model.vertex_stride;
-	UINT offset = 0;
-	ctx.context3d->IASetVertexBuffers(0, 1, &model.vertex, &stride, &offset);
-
-	ctx.context3d->IASetIndexBuffer(model.index, DXGI_FORMAT_R16_UINT, 0);
-
-	ctx.context3d->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	ctx.context3d->DrawIndexed(model.idx_count, 0, 0);
 }
 
 

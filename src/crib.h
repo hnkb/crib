@@ -10,6 +10,10 @@
 #include "core/timer.h"
 
 
+#include "geometry/definition.h"
+#include "geometry/mesh.h"
+
+
 #include "graphics/camera_3d.h"
 #include "graphics/light.h"
 

@@ -2,9 +2,11 @@
 #pragma once
 
 #include "renderer.h"
-#include "constant_buffer.h"
-#include "../constant_buffers.h"
 #include "effect.h"
+#include "constant_buffer.h"
+#include "vertex_buffer.h"
+#include "../constant_buffers.h"
+#include "../data_formats.h"
 
 
 namespace crib
@@ -28,6 +30,9 @@ namespace crib
 					{
 						if (assets.effects.find(e.effect) == assets.effects.end())
 							assets.effects.emplace(e.effect, effect(e.effect, ctx.device));
+
+						if (assets.vertex_buffers.find(e.mesh) == assets.vertex_buffers.end())
+							assets.vertex_buffers.emplace(e.mesh, vertex_buffer(geometry::mesh::generate<data_formats::VS_INPUT_PCN>(e.mesh), ctx.device));
 					}
 
 					cb_frame.bind(context.context3d, 0);
@@ -42,6 +47,7 @@ namespace crib
 				struct
 				{
 					std::map<std::wstring, effect> effects;
+					std::map<std::wstring, vertex_buffer> vertex_buffers;
 				} assets;
 			};
 

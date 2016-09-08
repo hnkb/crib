@@ -3,7 +3,6 @@
 
 #include "crib.h"
 #include "hello3d_d3d11_renderer.h"
-#include "mesh.h"
 #include "stats.h"
 
 
@@ -19,23 +18,18 @@ namespace crib_scenes
 
 			virtual std::wstring update(const double delta, const crib::input::buffer& input) override;
 
-			const std::map<std::wstring, mesh>& get_models() const { return models; }
-
-			const stats& get_stats() const { return stats; }
 			const std::wstring get_hit_test_result() const { return hit_test_result; }
+			const stats& get_stats() const { return stats; }
 
 		protected:
 			virtual crib::graphics::dx11::renderer* create_renderer(crib::graphics::dx11::context& context) override { return new hello3d_d3d11_renderer(context, *this); }
 
-			void hit_testing(const float x, const float y);
-
-			std::map<std::wstring, mesh> models;
 			crib::input::camera_control_third_person camera_control;
-
 			double time = 0;
 
-			stats stats;
+			void hit_testing(const float x, const float y);
 			std::wstring hit_test_result;
+			stats stats;
 		};
 
 	}

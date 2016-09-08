@@ -21,20 +21,6 @@ namespace crib_scenes
 			virtual void resize(const float w, const float h) override { renderer_3d::resize(width = w, height = h); }
 
 		protected:
-			struct model_assets
-			{
-				CComPtr<ID3D11Buffer> vertex;
-				CComPtr<ID3D11Buffer> index;
-				UINT vertex_stride;
-				UINT idx_count;
-			};
-
-			void create_model_assets(const mesh& model, model_assets& buffers);
-			void draw_model(model_assets& model);
-
-			std::map<std::wstring, model_assets> models;
-
-
 			void draw_stats();
 			void draw_stat(std::wstring title, std::wstring value, float top, float line_width = 200);
 
