@@ -11,6 +11,7 @@
 
 
 #include "graphics/camera_3d.h"
+#include "graphics/light.h"
 
 #include "graphics/base/renderer.h"
 #include "graphics/base/context.h"
