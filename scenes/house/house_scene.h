@@ -12,7 +12,7 @@ namespace crib_scenes
 		class scene : public crib::scene::scene_3d
 		{
 		public:
-			scene();
+			scene(crib::core::settings& settings);
 
 			virtual std::wstring update(const double delta, const crib::input::buffer& input) override;
 

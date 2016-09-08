@@ -5,7 +5,7 @@
 using crib_scenes::house::scene;
 
 
-scene::scene()
+scene::scene(crib::core::settings& settings) : scene_3d(settings)
 {
 
 }

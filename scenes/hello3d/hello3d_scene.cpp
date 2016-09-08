@@ -5,7 +5,7 @@
 using crib_scenes::hello3d::hello3d_scene;
 
 
-hello3d_scene::hello3d_scene() : camera_control(camera)
+hello3d_scene::hello3d_scene(crib::core::settings& settings) : scene_3d(settings), camera_control(camera)
 {
 	models.emplace(std::make_pair(L"cube", mesh::cube()));
 	models.emplace(std::make_pair(L"pyramid", mesh::pyramid()));

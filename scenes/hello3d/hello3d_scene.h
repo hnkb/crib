@@ -16,7 +16,7 @@ namespace crib_scenes
 		class hello3d_scene : public crib::scene::scene_3d
 		{
 		public:
-			hello3d_scene();
+			hello3d_scene(crib::core::settings& settings);
 
 			virtual std::wstring update(const double delta, const crib::input::buffer& input) override;
 

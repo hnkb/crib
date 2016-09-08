@@ -4,6 +4,7 @@
 #include "scene.h"
 #include "../graphics/camera_3d.h"
 #include "../graphics/light.h"
+#include "../core/settings.h"
 
 
 namespace crib
@@ -23,6 +24,10 @@ namespace crib
 			const graphics::directional_light& get_light() const { return light; }
 
 		protected:
+			scene_3d(crib::core::settings& settings) : settings(settings) { camera.fov_angle = settings.get(L"camera.fov", 1.f); }
+
+			crib::core::settings& settings;
+
 			graphics::camera_3d camera;
 			graphics::directional_light light;
 		};
