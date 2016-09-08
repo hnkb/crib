@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "hello3d_d3d11_renderer.h"
 #include "hello3d_scene.h"
-#include "shaders/pixel_fxc.h"
-#include "shaders/vertex_fxc.h"
+#include "graphics/dx11/shaders/ps_basic_pcn_fxc.h"
+#include "graphics/dx11/shaders/vs_basic_pcn_fxc.h"
 #include <strsafe.h>
 
 using crib_scenes::hello3d::hello3d_d3d11_renderer;
@@ -19,8 +19,8 @@ hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::dx11::context& co
 		CComPtr<ID3D11InputLayout> layout;
 
 
-		throw_if_failed(ctx.device->CreateVertexShader(hello3d_vs_bytecode, sizeof(hello3d_vs_bytecode), nullptr, &vs), "Create vertex shader");
-		throw_if_failed(ctx.device->CreatePixelShader(hello3d_ps_bytecode, sizeof(hello3d_ps_bytecode), nullptr, &ps), "Create pixel shader");
+		throw_if_failed(ctx.device->CreateVertexShader(vs_basic_pcn, sizeof(vs_basic_pcn), nullptr, &vs), "Create vertex shader");
+		throw_if_failed(ctx.device->CreatePixelShader(ps_basic_pcn, sizeof(ps_basic_pcn), nullptr, &ps), "Create pixel shader");
 
 
 		D3D11_INPUT_ELEMENT_DESC ld[] =
@@ -30,7 +30,7 @@ hello3d_d3d11_renderer::hello3d_d3d11_renderer(crib::graphics::dx11::context& co
 			{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 		};
 
-		throw_if_failed(ctx.device->CreateInputLayout(ld, _countof(ld), hello3d_vs_bytecode, sizeof(hello3d_vs_bytecode), &layout), "Register vertex layout");
+		throw_if_failed(ctx.device->CreateInputLayout(ld, _countof(ld), vs_basic_pcn, sizeof(vs_basic_pcn), &layout), "Register vertex layout");
 		
 		
 		// if there are more than one set of pipeline states (shaders), these calls must be made during drawing

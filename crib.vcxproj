@@ -150,6 +150,7 @@
     <FxCompile>
       <ObjectFileOutput>
       </ObjectFileOutput>
+      <VariableName>%(Filename)</VariableName>
       <HeaderFileOutput>%(RelativeDir)%(Filename)_fxc.h</HeaderFileOutput>
     </FxCompile>
   </ItemDefinitionGroup>
@@ -232,13 +233,11 @@
     <ClInclude Include="src\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="scenes\hello3d\shaders\pixel.hlsl">
+    <FxCompile Include="src\graphics\dx11\shaders\ps_basic_pcn.hlsl">
       <ShaderType>Pixel</ShaderType>
-      <VariableName>hello3d_ps_bytecode</VariableName>
     </FxCompile>
-    <FxCompile Include="scenes\hello3d\shaders\vertex.hlsl">
+    <FxCompile Include="src\graphics\dx11\shaders\vs_basic_pcn.hlsl">
       <ShaderType>Vertex</ShaderType>
-      <VariableName>hello3d_vs_bytecode</VariableName>
     </FxCompile>
     <FxCompile Include="scenes\hello\shaders\pixel.hlsl">
       <ShaderType>Pixel</ShaderType>
@@ -250,7 +249,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="scenes\hello3d\shaders\shared.hlsli" />
+    <None Include="src\graphics\dx11\shaders\shared.hlsli" />
     <None Include="scenes\hello\shaders\common.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
