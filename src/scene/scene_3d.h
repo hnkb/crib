@@ -30,6 +30,9 @@ namespace crib
 		protected:
 			scene_3d(crib::core::settings& settings) : settings(settings) { camera.fov_angle = settings.get(L"camera.fov", 1.f); }
 
+			virtual crib::graphics::dx11::renderer* create_renderer(crib::graphics::dx11::context& context) override { return new crib::graphics::dx11::renderer_3d<scene_3d>(context, *this); }
+
+
 			crib::core::settings& settings;
 
 			std::vector<entity> entities;

@@ -19,12 +19,6 @@ namespace crib
 			template <typename scene_type> class renderer_3d : public renderer
 			{
 			public:
-				virtual ~renderer_3d() {}
-
-				virtual void render() override { default_render(DirectX::XMVectorSet(0.f, .2f, .4f, 1.f).m128_f32); }
-				virtual void resize(const float width, const float height) { scene.screen_resize(width, height); }
-
-			protected:
 				renderer_3d(context& context, scene_type& scene) : renderer(context), scene(scene), constants(context.device)
 				{
 					for (const auto& e : scene.get_entities())
@@ -40,6 +34,12 @@ namespace crib
 					constants.object.bind(context.context3d, 1);
 				}
 
+				virtual ~renderer_3d() {}
+
+				virtual void render() override { default_render(DirectX::XMVectorSet(0.f, .2f, .4f, 1.f).m128_f32); }
+				virtual void resize(const float width, const float height) { scene.screen_resize(width, height); }
+
+			protected:
 				void default_render(const FLOAT rgba[4])
 				{
 					ctx.clear(rgba);
