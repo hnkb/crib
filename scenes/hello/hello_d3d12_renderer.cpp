@@ -14,6 +14,6 @@ hello_d3d12_renderer::hello_d3d12_renderer(crib::graphics::dx12::context& contex
 void hello_d3d12_renderer::render()
 {
 	// Record commands.
-	const float clearColor[] = { 0.0f, 0.2f, 0.4f- std::fabsf(std::sinf(float(scene.time))) * .4f, 1.0f };
+	const float clearColor[] = { 0.0f, 0.2f, 0.4f- std::fabs(std::sin(float(scene.time))) * .4f, 1.0f };
 	ctx.cmdlist->ClearRenderTargetView(ctx.rtvhandle, clearColor, 0, nullptr);
 }

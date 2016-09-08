@@ -4,6 +4,7 @@
 #include "hello_scene.h"
 #include "shaders/pixel_fxc.h"
 #include "shaders/vertex_fxc.h"
+#include <algorithm>
 #include <strsafe.h>
 
 using crib_scenes::hello::hello_d3d11_renderer;
@@ -59,14 +60,14 @@ hello_d3d11_renderer::hello_d3d11_renderer(crib::graphics::dx11::context& contex
 void hello_d3d11_renderer::resize(const float w, const float h)
 {
 	height = h, width = w;
-	const float least = std::fminf(width, height);
+	const float least = std::min(width, height);
 	ctx.context3d->RSSetViewports(1, &CD3D11_VIEWPORT((width - least) * .5f, (height - least) * .5f, least, least));
 }
 
 
 void hello_d3d11_renderer::render()
 {
-	ctx.clear((FLOAT*)&DirectX::XMFLOAT4(std::fabsf(std::sinf(float(scene.time))) * .4f, .2f, .4f, 1.f));
+	ctx.clear((FLOAT*)&DirectX::XMFLOAT4(std::fabs(std::sin(float(scene.time))) * .4f, .2f, .4f, 1.f));
 
 	// Draw with D3D
 	{

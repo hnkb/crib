@@ -2,7 +2,6 @@
 #pragma once
 
 #include <string>
-#include <utility>
 #include <atlbase.h>
 #include <d3d11_2.h>
 

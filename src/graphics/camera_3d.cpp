@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "camera_3d.h"
+#include <cmath>
 
 using crib::graphics::camera_3d;
 
@@ -37,7 +38,7 @@ const DirectX::XMVECTOR camera_3d::screen_to_world(const float x, const float y)
 	auto ray = DirectX::XMVector3Normalize(DirectX::XMVectorSet(
 		2.f * x / screen_width - 1.f,
 		1.f - 2.f * y / screen_height,
-		-1.f / std::tanf(fov_angle / 2.f), // for left-hand, remove minus sign
+		-1.f / std::tan(fov_angle / 2.f), // for left-hand, remove minus sign
 		0));
 
 	// Or, we could use projection matrix, as this is the reverse of the transformation it does.

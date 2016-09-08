@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "effect.h"
 #include "../../core/utility/windows_error.h"
+#include <map>
+#include <vector>
 
 using crib::graphics::dx11::effect;
 using crib::core::utility::throw_if_failed;
