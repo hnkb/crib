@@ -9,10 +9,6 @@
 #include "core/settings.h"
 #include "core/timer.h"
 
-#include "input/event.h"
-#include "input/buffer.h"
-#include "../scenes/hello3d/camera.h"
-
 
 #include "graphics/camera_3d.h"
 
@@ -25,6 +21,11 @@
 
 #include "graphics/dx12/context.h"
 #include "graphics/dx12/renderer.h"
+
+
+#include "input/event.h"
+#include "input/buffer.h"
+#include "input/camera_control_third_person.h"
 
 
 #include "scene/scene.h"

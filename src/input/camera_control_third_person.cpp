@@ -1,6 +1,6 @@
 
 #include "stdafx.h"
-#include "camera.h"
+#include "camera_control_third_person.h"
 #include <algorithm>
 
 using crib::input::camera_control_third_person;

@@ -1,8 +1,8 @@
 
 #pragma once
 
-#include "../src/input/buffer.h"
-#include "../src/graphics/camera_3d.h"
+#include "buffer.h"
+#include "../graphics/camera_3d.h"
 
 
 namespace crib
