@@ -2,10 +2,8 @@
 #include "stdafx.h"
 #include "house_scene.h"
 
-using crib_scenes::house::scene;
 
-
-void scene::add_assets()
+void crib_scenes::house::scene::add_assets()
 {
 	using crib::geometry::definition;
 

@@ -1,10 +1,9 @@
 
 #include "stdafx.h"
-#include "hello3d_assets.h"
-#include "crib.h"
+#include "hello3d_scene.h"
 
 
-void crib_scenes::hello3d::load_assets()
+void crib_scenes::hello3d::hello3d_scene::load_assets()
 {
 	using crib::geometry::definition;
 

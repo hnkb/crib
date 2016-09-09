@@ -1,7 +1,6 @@
 
 #include "stdafx.h"
 #include "hello3d_scene.h"
-#include "hello3d_assets.h"
 
 using crib_scenes::hello3d::hello3d_scene;
 

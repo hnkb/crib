@@ -24,6 +24,8 @@ namespace crib_scenes
 		protected:
 			virtual crib::graphics::dx11::renderer* create_renderer(crib::graphics::dx11::context& context) override { return new hello3d_renderer_3d(context, *this); }
 
+			void load_assets();
+
 			crib::input::camera_control_third_person camera_control;
 			double time = 0;
 
