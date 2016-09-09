@@ -13,7 +13,9 @@ namespace crib
 		class camera_control_first_person
 		{
 		public:
-			camera_control_first_person(crib::graphics::camera_3d& camera) : camera(camera) { update_camera(); }
+			camera_control_first_person(graphics::camera_3d& camera);
+
+			~camera_control_first_person();
 
 			void update(const double delta, const buffer& buffer);
 
@@ -21,18 +23,17 @@ namespace crib
 			float max_phi = 1.5f; // slightly less than PI/2
 
 		protected:
-			void update_camera();
-			void process_message(const float delta, const event& event);
+			void update_camera(const DirectX::XMVECTOR& movement = DirectX::XMVectorZero());
 
 			graphics::camera_3d& camera;
 
 			float theta = 0;
 			float phi = 0;
 
-			// for handling dragging camera with mouse
-			POINT origin_cursor;
-			float origin_theta;
-			float origin_phi;
+			// for handling mouse move
+			// TODO: must update these on window move or resize
+			int center_x;
+			int center_y;
 		};
 
 	}

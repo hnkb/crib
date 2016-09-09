@@ -13,7 +13,7 @@ namespace crib
 		class camera_control_third_person
 		{
 		public:
-			camera_control_third_person(crib::graphics::camera_3d& camera) : camera(camera) { update_camera(); }
+			camera_control_third_person(graphics::camera_3d& camera) : camera(camera) { update_camera(); }
 
 			void update(const double delta, const buffer& buffer);
 
