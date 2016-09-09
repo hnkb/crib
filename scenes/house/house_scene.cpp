@@ -14,9 +14,9 @@ scene::scene(crib::core::settings& settings) : scene_3d(settings), camera_contro
 	entities.emplace_back(L"cube0", L"cube", L"basic");
 	entities.emplace_back(L"cube1", L"cube", L"basic");
 
-	camera.look_at = XMVectorSet(0, 1, 0, 0);
-	entities[1].world_transform = XMMatrixTranslation( 4, .5f, 0);
-	entities[2].world_transform = XMMatrixTranslation(-1, .5f, 3);
+	camera.position = XMVectorSet(0, 1, 0, 0);
+	entities[1].world_transform = XMMatrixTranslation(20, .5f, 40);
+	entities[2].world_transform = XMMatrixTranslation(-10, .5f, 30);
 
 	light.direction = XMFLOAT3(XMVector3Normalize(XMVectorSet(-.2f, 1.f, -.5f, 0.f)).m128_f32);
 	light.ambient = XMFLOAT4(.2f, .1f, .1f, 1.f);

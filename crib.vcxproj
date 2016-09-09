@@ -167,6 +167,7 @@
     <ClCompile Include="src\graphics\dx11\vertex_buffer_dx11.cpp" />
     <ClCompile Include="src\graphics\dx12\context_dx12.cpp" />
     <ClCompile Include="src\input\buffer.cpp" />
+    <ClCompile Include="src\input\camera_control_first_person.cpp" />
     <ClCompile Include="src\input\camera_control_third_person.cpp" />
     <ClCompile Include="src\scene\scene.cpp" />
     <ClCompile Include="scenes\scene_factory.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="src\graphics\dx12\d3dx12.h" />
     <ClInclude Include="src\input\event.h" />
     <ClInclude Include="src\input\buffer.h" />
+    <ClInclude Include="src\input\camera_control_first_person.h" />
     <ClInclude Include="src\input\camera_control_third_person.h" />
     <ClInclude Include="src\scene\entity.h" />
     <ClInclude Include="src\scene\scene.h" />

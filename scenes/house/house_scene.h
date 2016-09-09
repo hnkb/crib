@@ -19,7 +19,7 @@ namespace crib_scenes
 		protected:
 			void add_assets();
 
-			crib::input::camera_control_third_person camera_control;
+			crib::input::camera_control_first_person camera_control;
 			double time = 0;
 		};
 

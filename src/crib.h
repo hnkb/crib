@@ -30,6 +30,7 @@
 
 #include "input/event.h"
 #include "input/buffer.h"
+#include "input/camera_control_first_person.h"
 #include "input/camera_control_third_person.h"
 
 
