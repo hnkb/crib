@@ -124,11 +124,13 @@ std::wstring menu_scene::handle_event(const crib::input::event& e)
 		{
 		case VK_NUMPAD2:
 		case VK_DOWN:
+		case 'S':
 			if (++sel == items.size()) sel = 0;
 			break;
 
 		case VK_NUMPAD8:
 		case VK_UP:
+		case 'W':
 			if (--sel == -1) sel = items.size() - 1;
 			break;
 
