@@ -17,6 +17,9 @@ namespace crib_scenes
 			virtual std::wstring update(const double delta, const crib::input::buffer& input) override;
 
 		protected:
+			void add_assets();
+
+			crib::input::camera_control_third_person camera_control;
 			double time = 0;
 		};
 

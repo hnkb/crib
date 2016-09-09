@@ -173,9 +173,10 @@
     <ClCompile Include="scenes\hello\hello_d3d11_renderer.cpp" />
     <ClCompile Include="scenes\hello\hello_d3d12_renderer.cpp" />
     <ClCompile Include="scenes\hello\hello_scene.cpp" />
+    <ClCompile Include="scenes\hello3d\hello3d_assets.cpp" />
     <ClCompile Include="scenes\hello3d\hello3d_renderer_3d.cpp" />
     <ClCompile Include="scenes\hello3d\hello3d_scene.cpp" />
-    <ClCompile Include="scenes\hello3d\hello3d_assets.cpp" />
+    <ClCompile Include="scenes\house\house_assets.cpp" />
     <ClCompile Include="scenes\house\house_scene.cpp" />
     <ClCompile Include="scenes\menu\menu_d3d11_renderer.cpp" />
     <ClCompile Include="scenes\menu\menu_scene.cpp" />
@@ -222,8 +223,8 @@
     <ClInclude Include="scenes\hello\hello_d3d11_renderer.h" />
     <ClInclude Include="scenes\hello\hello_d3d12_renderer.h" />
     <ClInclude Include="scenes\hello\hello_scene.h" />
-    <ClInclude Include="scenes\hello3d\hello3d_assets.h" />
     <ClInclude Include="scenes\hello3d\stats.h" />
+    <ClInclude Include="scenes\hello3d\hello3d_assets.h" />
     <ClInclude Include="scenes\hello3d\hello3d_renderer_3d.h" />
     <ClInclude Include="scenes\hello3d\hello3d_scene.h" />
     <ClInclude Include="scenes\house\house_scene.h" />
