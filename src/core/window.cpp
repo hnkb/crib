@@ -95,7 +95,7 @@ LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lPara
 		input.push(message, wParam, lParam, timer.now());
 		return 0;
 	}
-	
+
 	switch (message)
 	{
 	case WM_MOVE:
