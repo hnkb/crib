@@ -46,7 +46,7 @@ settings::settings()
 settings::~settings()
 {
 	HKEY key;
-	
+
 	if (RegCreateKeyExW(HKEY_CURRENT_USER, L"SOFTWARE\\crib", 0, NULL, 0, KEY_WRITE, nullptr, &key, nullptr) == ERROR_SUCCESS)
 	{
 		for (const auto& v : values)

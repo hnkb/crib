@@ -67,7 +67,7 @@ void hello3d_scene::hit_testing(const float x, const float y)
 		{
 			// We assume bounding sphere radius is .75f (in current cube and pyramid models, it is, because furthest
 			// vector from center (0,0,0) is something like (.5, .5, .5).
-			
+
 			// Objects who pass this test are candidates, because `ray` hits inside their bounding sphere. They are
 			// not necessarily hits. We need to test if `ray` hits any of their triangles.
 			// But this approximation is good enough for now.

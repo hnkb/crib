@@ -35,7 +35,7 @@ namespace crib
 				: positions(positions), colors(colors), faces(faces) {}
 
 			// TODO: add a constructor that loads from file
-			
+
 			static std::map<std::wstring, definition> assets;
 		};
 

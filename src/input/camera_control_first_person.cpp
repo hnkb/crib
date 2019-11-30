@@ -10,7 +10,7 @@ camera_control_first_person::camera_control_first_person(crib::graphics::camera_
 {
 	RECT r;
 	GetWindowRect(GetForegroundWindow(), &r);
-	
+
 	SetCursorPos(center_x = r.left + (r.right - r.left) / 2, center_y = r.top + (r.bottom - r.top) / 2);
 	ClipCursor(&r);
 

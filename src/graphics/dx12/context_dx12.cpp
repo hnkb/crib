@@ -112,7 +112,7 @@ void context::draw()
 
 		// Indicate that the back buffer will be used as a render target.
 		cmdlist->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(rendertargets[frameidx], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
-		
+
 		rtvhandle = rtvheap->GetCPUDescriptorHandleForHeapStart();
 		rtvhandle.ptr += frameidx*rtvdescsize;
 		cmdlist->OMSetRenderTargets(1, &rtvhandle, FALSE, nullptr);

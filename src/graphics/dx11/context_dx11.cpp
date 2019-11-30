@@ -145,7 +145,7 @@ void context::resize()
 	context2d->SetTarget(nullptr);
 
 	HRESULT hr;
-	
+
 	if (!swapchain || (hr = swapchain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0)) == DXGI_ERROR_DEVICE_REMOVED) throw base::context_invalid();
 	throw_if_failed(hr, "Buffer resize");
 
@@ -162,7 +162,7 @@ void context::draw()
 	if (renderer) renderer->render();
 
 	HRESULT hr = swapchain->Present(1, 0);
-	
+
 	context3d->DiscardView(rtv);
 	context3d->DiscardView(dsv);
 
