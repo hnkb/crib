@@ -17,8 +17,8 @@ namespace crib
 		{
 			namespace effects
 			{
-#include "shaders/compiled/ps_basic_pcn.h"
-#include "shaders/compiled/vs_basic_pcn.h"
+#include "ps_basic_pcn_fxc.h"
+#include "vs_basic_pcn_fxc.h"
 
 
 				const std::vector<std::vector<D3D11_INPUT_ELEMENT_DESC>> input_layout({

@@ -11,6 +11,7 @@
 #include <utility>
 #include <vector>
 
+#define UNICODE
 #define NOMINMAX
 #include <Windows.h>
 

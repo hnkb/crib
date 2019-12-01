@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "hello_d3d11_renderer.h"
 #include "hello_scene.h"
-#include "shaders/pixel_fxc.h"
-#include "shaders/vertex_fxc.h"
+#include "hello_vs_fxc.h"
+#include "hello_ps_fxc.h"
 #include <algorithm>
 #include <strsafe.h>
 
@@ -15,8 +15,8 @@ hello_d3d11_renderer::hello_d3d11_renderer(crib::graphics::dx11::context& contex
 {
 	// Set up pipeline
 	{
-		throw_if_failed(ctx.device->CreateVertexShader(hello_vs_bytecode, sizeof(hello_vs_bytecode), nullptr, &vs), "Create vertex shader");
-		throw_if_failed(ctx.device->CreatePixelShader(hello_ps_bytecode, sizeof(hello_ps_bytecode), nullptr, &ps), "Create pixel shader");
+		throw_if_failed(ctx.device->CreateVertexShader(hello_vs, sizeof(hello_vs), nullptr, &vs), "Create vertex shader");
+		throw_if_failed(ctx.device->CreatePixelShader(hello_ps, sizeof(hello_ps), nullptr, &ps), "Create pixel shader");
 
 		ctx.context3d->VSSetShader(vs, nullptr, 0);
 		ctx.context3d->PSSetShader(ps, nullptr, 0);
@@ -29,7 +29,7 @@ hello_d3d11_renderer::hello_d3d11_renderer(crib::graphics::dx11::context& contex
 		};
 
 		CComPtr< ID3D11InputLayout> layout;
-		throw_if_failed(ctx.device->CreateInputLayout(ld, _countof(ld), hello_vs_bytecode, sizeof(hello_vs_bytecode), &layout), "Register vertex layout");
+		throw_if_failed(ctx.device->CreateInputLayout(ld, _countof(ld), hello_vs, sizeof(hello_vs), &layout), "Register vertex layout");
 		ctx.context3d->IASetInputLayout(layout);
 	}
 
