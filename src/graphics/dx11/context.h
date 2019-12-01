@@ -2,7 +2,7 @@
 #pragma once
 
 #include "../base/context.h"
-#include "../../core/utility/com_initialize.h"
+#include <Crib/Platform/Windows.h>
 #include <atlbase.h>
 #include <d3d11_2.h>
 #include <d2d1_1.h>

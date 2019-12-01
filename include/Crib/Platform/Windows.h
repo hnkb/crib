@@ -3,6 +3,15 @@
 
 #include <stdexcept>
 #include <string>
+
+#ifndef UNICODE
+#define UNICODE
+#endif
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
 #include <Windows.h>
 
 
@@ -56,3 +65,5 @@ namespace crib
 
 	}
 }
+
+#include "../../../src/Platform/Windows/COM.cpp"

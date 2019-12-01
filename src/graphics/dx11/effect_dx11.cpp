@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
 #include "effect.h"
-#include "../../core/utility/windows_error.h"
+#include <Crib/Platform/Windows.h>
 #include <map>
 #include <vector>
 

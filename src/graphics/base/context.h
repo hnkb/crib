@@ -5,7 +5,7 @@
 #include "../../core/settings.h"
 #include <memory>
 #include <stdexcept>
-#include <Windows.h>
+#include <Crib/Platform/Windows.h>
 
 
 namespace crib

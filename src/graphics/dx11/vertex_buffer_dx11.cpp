@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
 #include "vertex_buffer.h"
-#include "../../core/utility/windows_error.h"
+#include <Crib/Platform/Windows.h>
 
 using crib::graphics::dx11::vertex_buffer;
 using crib::core::utility::throw_if_failed;

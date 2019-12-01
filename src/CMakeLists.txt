@@ -3,6 +3,7 @@ add_executable(Crib WIN32 "")
 
 
 target_include_directories(Crib PUBLIC
+	"${PROJECT_SOURCE_DIR}/include"
 	"${PROJECT_SOURCE_DIR}/src"
 )
 
@@ -39,6 +40,7 @@ target_sources(Crib PRIVATE
 	"input/camera_control_third_person.cpp"
 	"scene/scene.cpp"
 	"main.cpp"
+	"Platform/Windows/COM.cpp"
 )
 
 
