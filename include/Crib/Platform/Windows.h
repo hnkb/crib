@@ -61,9 +61,17 @@ namespace crib
 			{
 				if (FAILED(hr)) throw windows_error(hr);
 			}
+
+			class com_initialize
+			{
+			public:
+				com_initialize();
+				~com_initialize();
+
+			private:
+				bool needUninitialize;
+			};
 		}
 
 	}
 }
-
-#include "../../../src/Platform/Windows/COM.cpp"
