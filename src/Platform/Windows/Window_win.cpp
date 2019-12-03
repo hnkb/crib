@@ -35,8 +35,6 @@ window::window(const std::wstring className, const std::wstring title) : setting
 
 	SetWindowLongPtrW(handle, GWLP_USERDATA, LONG_PTR(this));
 	ShowWindow(handle, SW_SHOWDEFAULT);
-
-	create_scene(settings->get(L"startup", L"menu"));
 	create_graphics_context();
 }
 
@@ -51,35 +49,15 @@ window::~window()
 
 void window::frame()
 {
-	if (scene)
+	if (scene && graphics)
 	{
-		auto s = scene->update(timer.next_frame(), input.swap());
-		if (s.size())
+		try
 		{
-			if (s == L"quit")
-			{
-				if (get_title() == L"crib: menu")
-					DestroyWindow(handle);
-				else
-					create_scene(L"menu");
-				return;
-			}
-			else if (s.compare(0, 5, L"scene") == 0)
-				create_scene(s.substr(6));
-			else if (s == L"reset-graphics")
-				create_graphics_context();
+			graphics->draw();
 		}
-
-		if (graphics)
+		catch (graphics::base::context_invalid e)
 		{
-			try
-			{
-				graphics->draw();
-			}
-			catch (graphics::base::context_invalid e)
-			{
-				create_graphics_context();
-			}
+			create_graphics_context();
 		}
 	}
 }
@@ -167,14 +145,6 @@ std::wstring window::get_title() const
 	return std::wstring(buffer.data());
 }
 
-
-void window::create_scene(const std::wstring name)
-{
-	set_title(L"crib: " + name);
-
-	scene = scene::scene::create(name, *settings);
-	if (graphics) scene->attach_renderer(*graphics);
-}
 
 void window::create_graphics_context()
 {

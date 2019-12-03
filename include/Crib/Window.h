@@ -35,11 +35,10 @@ namespace crib
 			HWND get_handle() const { return handle; }
 
 		protected:
-			void frame();
+			virtual void frame();
 			virtual LRESULT proc(const UINT message, const WPARAM wParam, const LPARAM lParam);
 			static LRESULT CALLBACK proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-			void create_scene(std::wstring name);
 			void create_graphics_context();
 
 			HWND handle;

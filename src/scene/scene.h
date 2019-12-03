@@ -22,7 +22,6 @@ namespace crib
 			virtual void screen_resize(const float width, const float height) {}
 
 			void attach_renderer(graphics::base::context& context);
-			static std::unique_ptr<scene> create(const std::wstring name, core::settings& setting);
 
 		protected:
 			virtual graphics::dx11::renderer* create_renderer(graphics::dx11::context& context) { return nullptr; }
