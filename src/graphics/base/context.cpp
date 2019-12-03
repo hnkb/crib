@@ -1,8 +1,6 @@
 
-#include "stdafx.h"
-#include "context.h"
-#include "../dx11/context.h"
-#include "../dx12/context.h"
+#include <Crib/Graphics/Direct3D11.h>
+#include <Crib/Graphics/Direct3D12.h>
 
 using crib::graphics::base::context;
 

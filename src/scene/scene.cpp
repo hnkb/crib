@@ -1,5 +1,5 @@
 
-#include "stdafx.h"
+#include <Crib/Graphics/Direct3D12.h>
 #include "scene.h"
 
 using crib::scene::scene;

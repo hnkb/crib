@@ -10,3 +10,4 @@ project(Crib
 
 
 add_subdirectory("src")
+add_subdirectory("examples/demo")

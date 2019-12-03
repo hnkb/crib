@@ -5,7 +5,7 @@
 #include "effect.h"
 #include "constant_buffer.h"
 #include "vertex_buffer.h"
-#include "../constant_buffers.h"
+#include "../ConstantBuffers.h"
 #include "../data_formats.h"
 
 

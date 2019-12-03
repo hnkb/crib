@@ -1,5 +1,4 @@
 
-#include "stdafx.h"
 #include "settings.h"
 #include <Crib/Platform/Windows.h>
 #include <vector>

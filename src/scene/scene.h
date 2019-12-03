@@ -3,10 +3,8 @@
 
 #include "../core/settings.h"
 #include "../input/buffer.h"
-#include "../graphics/dx11/context.h"
-#include "../graphics/dx11/renderer.h"
-#include "../graphics/dx12/context.h"
-#include "../graphics/dx12/renderer.h"
+#include <Crib/Graphics/Direct3D11.h>
+#include <Crib/Graphics/Direct3D12.h>
 #include <memory>
 
 
