@@ -20,8 +20,8 @@ namespace crib
 		class window
 		{
 		public:
-			window(settings& setting) : window(setting, L"crib", L"crib") {}
-			window(settings& setting, const std::wstring className, const std::wstring title);
+			window() : window(L"crib", L"crib") {}
+			window(const std::wstring className, const std::wstring title);
 
 			window(const window& other) = delete;
 			window(window&& other) = delete;
@@ -43,17 +43,12 @@ namespace crib
 			void create_graphics_context();
 
 			HWND handle;
-			settings& settings;
+			std::unique_ptr<settings> settings;
 			std::unique_ptr<scene::scene> scene;
 			std::unique_ptr<graphics::base::context> graphics;
 			input::buffer input;
 			timer timer;
 		};
 
-
-		namespace constants
-		{
-			constexpr UINT wm_app_windowclosed = (WM_APP + 1);
-		}
 	}
 }

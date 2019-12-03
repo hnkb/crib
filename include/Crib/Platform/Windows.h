@@ -73,5 +73,10 @@ namespace crib
 			};
 		}
 
+		namespace constants
+		{
+			constexpr UINT wm_app_windowclosed = (WM_APP + 1);
+		}
+
 	}
 }

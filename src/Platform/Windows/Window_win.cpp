@@ -8,12 +8,12 @@
 using crib::core::window;
 
 
-window::window(crib::core::settings& setting, const std::wstring className, const std::wstring title) : settings(setting), handle(nullptr), graphics(nullptr)
+window::window(const std::wstring className, const std::wstring title) : settings(new core::settings), handle(nullptr), graphics(nullptr)
 {
-	int width = settings.get(L"window.width", CW_USEDEFAULT),
-		height = settings.get(L"window.height", 0),
-		left = settings.get(L"window.left", CW_USEDEFAULT),
-		top = settings.get(L"window.top", 0);
+	int width = settings->get(L"window.width", CW_USEDEFAULT),
+		height = settings->get(L"window.height", 0),
+		left = settings->get(L"window.left", CW_USEDEFAULT),
+		top = settings->get(L"window.top", 0);
 	if (width != CW_USEDEFAULT)
 	{
 		RECT rect { 0, 0, width, height };
@@ -36,7 +36,7 @@ window::window(crib::core::settings& setting, const std::wstring className, cons
 	SetWindowLongPtrW(handle, GWLP_USERDATA, LONG_PTR(this));
 	ShowWindow(handle, SW_SHOWDEFAULT);
 
-	create_scene(settings.get(L"startup", L"menu"));
+	create_scene(settings->get(L"startup", L"menu"));
 	create_graphics_context();
 }
 
@@ -104,16 +104,16 @@ LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lPara
 	{
 		RECT rect;
 		GetWindowRect(handle, &rect);
-		settings.set(L"window.left", rect.left);
-		settings.set(L"window.top", rect.top);
+		settings->set(L"window.left", rect.left);
+		settings->set(L"window.top", rect.top);
 		break;
 	}
 
 	case WM_SIZE:
 		if (wParam == SIZE_RESTORED)
 		{
-			settings.set(L"window.width", LOWORD(lParam));
-			settings.set(L"window.height", HIWORD(lParam));
+			settings->set(L"window.width", LOWORD(lParam));
+			settings->set(L"window.height", HIWORD(lParam));
 		}
 		if (graphics)
 		{
@@ -172,12 +172,12 @@ void window::create_scene(const std::wstring name)
 {
 	set_title(L"crib: " + name);
 
-	scene = scene::scene::create(name, settings);
+	scene = scene::scene::create(name, *settings);
 	if (graphics) scene->attach_renderer(*graphics);
 }
 
 void window::create_graphics_context()
 {
-	graphics = graphics::base::context::create(settings, handle);
+	graphics = graphics::base::context::create(*settings, handle);
 	if (scene) scene->attach_renderer(*graphics);
 }

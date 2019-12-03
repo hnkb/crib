@@ -2,10 +2,8 @@
 #include <Crib/Application.h>
 #include <Crib/Platform/Windows.h>
 
-using crib::core::application;
 
-
-int application::run()
+int crib::core::application::messageLoop()
 {
 	MSG msg;
 
