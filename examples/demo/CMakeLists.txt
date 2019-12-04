@@ -5,7 +5,6 @@ target_link_libraries(crib-demo Crib)
 
 target_sources(crib-demo PRIVATE
 	"hello/Hello.cpp"
-	"hello/hello_d3d12_renderer.cpp"
 	"hello/hello_scene.cpp"
 	"hello3d/hello3d_assets.cpp"
 	"hello3d/Hello3D.cpp"

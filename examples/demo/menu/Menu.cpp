@@ -12,15 +12,13 @@ menu_scene::menu_scene(crib::core::settings& setting) : settings(setting), root_
 	menu_item(L"3D test scene", L"scene hello3d"),
 	menu_item(L"Settings", std::vector<menu_item>({
 		menu_item(L"Graphics", std::vector<menu_item>({
-			menu_item(L"Direct3D 11", L"graphics", L"d3d11", L"reset-graphics", false),
-			menu_item(L"Direct3D 12", L"graphics", L"d3d12", L"reset-graphics", false),
 			menu_item(L"Anti-aliasing", std::vector<menu_item>({
 				menu_item(L"8x MSAA", L"graphics.msaa", L"8", L"reset-graphics", false),
 				menu_item(L"4x MSAA", L"graphics.msaa", L"4", L"reset-graphics", false),
 				menu_item(L"2x MSAA", L"graphics.msaa", L"2", L"reset-graphics", false),
 				menu_item(L"No anti-aliasing", L"graphics.msaa", L"1", L"reset-graphics", false),
 				menu_item(L"Back", L"back", true)
-				}), true),
+				})),
 			menu_item(L"Field of view angle", std::vector<menu_item>({
 				menu_item(L"30\u00b0", L"camera.fov", L"0.5235", L"", false),
 				menu_item(L"60\u00b0", L"camera.fov", L"1.0471", L"", false),

@@ -13,11 +13,4 @@ void scene::attach_renderer(crib::graphics::base::context& context)
 		ctx.attach_renderer(create_renderer(ctx));
 	}
 	catch (std::bad_cast) {}
-
-	try
-	{
-		auto& ctx = dynamic_cast<graphics::dx12::context&>(context);
-		ctx.attach_renderer(create_renderer(ctx));
-	}
-	catch (std::bad_cast) {}
 }

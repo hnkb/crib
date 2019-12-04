@@ -4,7 +4,6 @@
 #include "../core/settings.h"
 #include "../input/buffer.h"
 #include <Crib/Graphics/Direct3D11.h>
-#include <Crib/Graphics/Direct3D12.h>
 #include <memory>
 
 
@@ -25,7 +24,6 @@ namespace crib
 
 		protected:
 			virtual graphics::dx11::renderer* create_renderer(graphics::dx11::context& context) { return nullptr; }
-			virtual graphics::dx12::renderer* create_renderer(graphics::dx12::context& context) { return nullptr; }
 		};
 
 	}
