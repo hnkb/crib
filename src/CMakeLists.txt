@@ -21,6 +21,7 @@ target_sources(Crib PRIVATE
 	"Input/Timer.cpp"
 	"Platform/Windows/Application_win.cpp"
 	"Platform/Windows/COM.cpp"
+	"Platform/Windows/Error_win.cpp"
 	"Platform/Windows/Window_win.cpp"
 )
 
