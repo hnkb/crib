@@ -16,6 +16,22 @@ namespace crib
 		namespace dx11
 		{
 
+			class vertex_buffer
+			{
+			public:
+				vertex_buffer() {}
+				vertex_buffer(const geometry::mesh& mesh, ID3D11Device* dev);
+
+				void draw(ID3D11DeviceContext2* ctx);
+
+			private:
+				CComPtr<ID3D11Buffer> vertex;
+				CComPtr<ID3D11Buffer> index;
+				UINT vertex_stride;
+				UINT idx_count;
+			};
+
+
 			class context : public base::context
 			{
 			public:
@@ -42,6 +58,20 @@ namespace crib
 				CComPtr<IDXGISwapChain1> swapchain;
 				CComPtr<ID3D11RenderTargetView> rtv;
 				CComPtr<ID3D11DepthStencilView> dsv;
+			};
+
+			class effect
+			{
+			public:
+				effect() {}
+				effect(const std::wstring name, ID3D11Device* dev);
+
+				void bind(ID3D11DeviceContext2* ctx);
+
+			private:
+				CComPtr<ID3D11VertexShader> vs;
+				CComPtr<ID3D11PixelShader> ps;
+				CComPtr<ID3D11InputLayout> layout;
 			};
 
 		}

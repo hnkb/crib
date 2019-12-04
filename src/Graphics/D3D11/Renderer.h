@@ -2,9 +2,8 @@
 #pragma once
 
 #include "../dx11/renderer.h"
-#include "../dx11/effect.h"
+#include <Crib/Graphics/Direct3D11.h>
 #include "ConstantBuffer.h"
-#include "../dx11/vertex_buffer.h"
 #include "../ConstantBuffers.h"
 
 

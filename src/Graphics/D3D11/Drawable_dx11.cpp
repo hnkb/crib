@@ -1,6 +1,5 @@
 
-#include "../dx11/vertex_buffer.h"
-#include <Crib/Platform/Windows.h>
+#include <Crib/Graphics/Direct3D11.h>
 
 using crib::graphics::dx11::vertex_buffer;
 using crib::core::utility::throw_if_failed;

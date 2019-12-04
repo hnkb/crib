@@ -1,6 +1,5 @@
 
-#include "../dx11/effect.h"
-#include <Crib/Platform/Windows.h>
+#include <Crib/Graphics/Direct3D11.h>
 #include <map>
 #include <vector>
 
