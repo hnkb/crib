@@ -148,6 +148,6 @@ std::wstring window::get_title() const
 
 void window::create_graphics_context()
 {
-	graphics = graphics::base::context::create(*settings, handle);
-	if (scene) scene->attach_renderer(*graphics);
+	graphics.reset(new graphics::dx11::context(handle, *settings));
+	if (scene) graphics->attach_renderer(scene.get());
 }

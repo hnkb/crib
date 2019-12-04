@@ -25,7 +25,7 @@ namespace crib
 
 				virtual void draw() override;
 				virtual void resize() override;
-				virtual void attach_renderer(base::renderer* rndr) override;
+				virtual void attach_renderer(scene::scene* scene) override;
 
 				void clear(const FLOAT rgba[4]);
 

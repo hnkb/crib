@@ -19,7 +19,10 @@ namespace crib_scenes
 			virtual std::wstring update(const double delta, const crib::input::buffer& input) override;
 
 		protected:
-			virtual crib::graphics::dx11::renderer* create_renderer(crib::graphics::dx11::context& context) override { return new hello_d3d11_renderer(context, *this); }
+			virtual crib::graphics::base::renderer* create_custom_renderer(crib::graphics::base::context& context) override
+			{
+				return new hello_d3d11_renderer(dynamic_cast<crib::graphics::dx11::context&>(context), *this);
+			}
 
 
 			struct vertex_format

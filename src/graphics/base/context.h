@@ -10,12 +10,12 @@
 
 namespace crib
 {
+	namespace scene { class scene; }
+
 	namespace graphics
 	{
 		namespace base
 		{
-
-			class renderer;
 
 			class context
 			{
@@ -24,9 +24,7 @@ namespace crib
 
 				virtual void draw() = 0;
 				virtual void resize() {}
-				virtual void attach_renderer(renderer* rndr);
-
-				static std::unique_ptr<context> create(core::settings& setting, const HWND handle);
+				virtual void attach_renderer(scene::scene* scene) = 0;
 
 			protected:
 				std::unique_ptr<renderer> renderer;

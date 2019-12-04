@@ -9,8 +9,6 @@ target_include_directories(Crib PUBLIC
 
 target_sources(Crib PRIVATE
 	"core/settings.cpp"
-	"graphics/base/context.cpp"
-	"scene/scene.cpp"
 	"Graphics/D3D11/Context_dx11.cpp"
 	"Graphics/D3D11/Drawable_dx11.cpp"
 	"Graphics/D3D11/Effects_dx11.cpp"

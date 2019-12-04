@@ -23,7 +23,10 @@ namespace crib_scenes
 			const stats& get_stats() const { return stats; }
 
 		protected:
-			virtual crib::graphics::dx11::renderer* create_renderer(crib::graphics::dx11::context& context) override { return new hello3d_renderer_3d(context, *this); }
+			virtual crib::graphics::base::renderer* create_custom_renderer(crib::graphics::base::context& context) override
+			{
+				return new hello3d_renderer_3d(dynamic_cast<crib::graphics::dx11::context&>(context), *this);
+			}
 
 			void load_assets();
 

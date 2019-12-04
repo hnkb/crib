@@ -9,6 +9,16 @@
 
 namespace crib
 {
+
+	namespace graphics
+	{
+		namespace base
+		{
+			class context;
+			class renderer;
+		}
+	}
+
 	namespace scene
 	{
 
@@ -20,10 +30,7 @@ namespace crib
 			virtual std::wstring update(const double delta, const input::buffer& input) = 0;
 			virtual void screen_resize(const float width, const float height) {}
 
-			void attach_renderer(graphics::base::context& context);
-
-		protected:
-			virtual graphics::dx11::renderer* create_renderer(graphics::dx11::context& context) { return nullptr; }
+			virtual graphics::base::renderer* create_custom_renderer(graphics::base::context&) { return nullptr; }
 		};
 
 	}

@@ -52,5 +52,5 @@ void demo_window::create_scene(const std::wstring& name)
 	}(*settings);
 
 	set_title(L"crib: " + name);
-	if (graphics) scene->attach_renderer(*graphics);
+	if (graphics) graphics->attach_renderer(scene.get());
 }

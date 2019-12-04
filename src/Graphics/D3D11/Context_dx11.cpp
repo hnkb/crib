@@ -72,9 +72,12 @@ context::context(const HWND handle, crib::core::settings& setting)
 }
 
 
-void context::attach_renderer(crib::graphics::base::renderer* rndr)
+void context::attach_renderer(crib::scene::scene* scene)
 {
-	base::context::attach_renderer(rndr);
+	auto rndr = scene->create_custom_renderer(*this);
+	if (!rndr)
+		rndr = new renderer_3d<scene::scene_3d>(*this, dynamic_cast<scene::scene_3d&>(*scene));
+	renderer.reset(rndr);
 
 	if (swapchain)
 	{
