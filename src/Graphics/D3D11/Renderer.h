@@ -6,7 +6,6 @@
 #include "ConstantBuffer.h"
 #include "../dx11/vertex_buffer.h"
 #include "../ConstantBuffers.h"
-#include "../data_formats.h"
 
 
 namespace crib

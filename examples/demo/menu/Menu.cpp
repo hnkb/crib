@@ -1,5 +1,6 @@
 
 #include "Menu.h"
+#include <Crib/Window.h>
 
 using crib_scenes::menu::menu_scene;
 

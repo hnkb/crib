@@ -3,7 +3,7 @@
 
 #include "MenuItem.h"
 #include "MenuRender.h"
-#include <Crib/Graphics.h>
+#include <Crib/Window.h>
 
 
 namespace crib_scenes

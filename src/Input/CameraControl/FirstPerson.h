@@ -2,7 +2,7 @@
 #pragma once
 
 #include "../Buffer.h"
-#include "../../Graphics/camera_3d.h"
+#include <Crib/Graphics.h>
 
 
 namespace crib

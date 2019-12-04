@@ -1,5 +1,6 @@
 
 #include "strawman_scene.h"
+#include <Crib/Window.h>
 
 using crib_scenes::strawman::scene;
 

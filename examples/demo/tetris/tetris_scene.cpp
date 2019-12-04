@@ -1,5 +1,6 @@
 
 #include "tetris_scene.h"
+#include <Crib/Window.h>
 
 using crib_scenes::tetris::scene;
 

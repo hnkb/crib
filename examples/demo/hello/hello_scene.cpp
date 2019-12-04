@@ -1,5 +1,6 @@
 
 #include "hello_scene.h"
+#include <Crib/Window.h>
 #include <algorithm>
 
 using crib_scenes::hello::hello_scene;

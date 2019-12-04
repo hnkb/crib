@@ -1,5 +1,5 @@
 
-#include "../geometry/definition.h"
+#include <Crib/Graphics.h>
 
 using crib::geometry::definition;
 

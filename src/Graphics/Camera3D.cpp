@@ -1,5 +1,5 @@
 
-#include "camera_3d.h"
+#include <Crib/Graphics.h>
 #include <cmath>
 
 using crib::graphics::camera_3d;

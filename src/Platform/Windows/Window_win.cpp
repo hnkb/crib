@@ -1,9 +1,7 @@
 
 #include <Crib/Window.h>
+#include <Crib/Graphics/Direct3D11.h>
 #include <Crib/Platform/Windows.h>
-#include "../../core/settings.h"
-#include "../../graphics/base/context.h"
-#include "../../scene/scene.h"
 
 using crib::core::window;
 

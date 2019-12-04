@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "../../../src/graphics/base/context.h"
+#include "../Graphics.h"
 #include "../Platform/Windows.h"
 #include <atlbase.h>
 #include <d3d11_2.h>
