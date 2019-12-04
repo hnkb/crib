@@ -1,8 +1,9 @@
 
 #include "Tetris.h"
-#include "tetris_scene.h"
+#include <Crib/Window.h>
 
 using crib_scenes::tetris::renderer;
+using crib_scenes::tetris::scene;
 using crib::core::utility::throw_if_failed;
 
 
@@ -12,6 +13,16 @@ renderer::renderer(crib::graphics::dx11::context& context, crib_scenes::tetris::
 	throw_if_failed(ctx.context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &brush));
 }
 
+std::wstring scene::update(const double delta, const crib::input::buffer& input)
+{
+	for (auto& e : input)
+	{
+		if (e.message == WM_RBUTTONDOWN || (e.message == WM_KEYDOWN && (e.wParam == VK_ESCAPE || e.wParam == VK_BACK)))
+			return L"quit";
+	}
+
+	return L"";
+}
 
 void renderer::render()
 {

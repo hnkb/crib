@@ -1,6 +1,6 @@
 
 #include "Hello.h"
-#include "hello_scene.h"
+#include <Crib/Window.h>
 #include "hello_vs_fxc.h"
 #include "hello_ps_fxc.h"
 #include <algorithm>
@@ -8,7 +8,34 @@
 #include <strsafe.h>
 
 using crib_scenes::hello::hello_d3d11_renderer;
+using crib_scenes::hello::hello_scene;
 using crib::core::utility::throw_if_failed;
+
+
+hello_scene::hello_scene()
+	: vertex_data{
+		DirectX::XMFLOAT3(.0f,  .5f, .5f), DirectX::XMFLOAT4(0.f, 1.f, 1.f, 1.f),
+		DirectX::XMFLOAT3(.5f, -.5f, .5f), DirectX::XMFLOAT4(.2f, .0f, .2f, 1.f),
+		DirectX::XMFLOAT3(-.5f, -.5f, .5f), DirectX::XMFLOAT4(.5f, .5f, .0f, 1.f),
+	}
+{
+
+}
+
+std::wstring hello_scene::update(const double delta, const crib::input::buffer& input)
+{
+	time += delta;
+	frames += 1.;
+	buffer_size = std::max(buffer_size, size_t(input.end() - input.begin()));
+
+	for (auto& e : input)
+	{
+		if (e.message == WM_RBUTTONDOWN || (e.message == WM_KEYDOWN && (e.wParam == VK_ESCAPE || e.wParam == VK_BACK)))
+			return L"quit";
+	}
+
+	return L"";
+}
 
 
 hello_d3d11_renderer::hello_d3d11_renderer(crib::graphics::dx11::context& context, crib_scenes::hello::hello_scene& hello_scene) : renderer(context), scene(hello_scene)

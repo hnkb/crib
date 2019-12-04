@@ -1,5 +1,4 @@
 
-#include "hello3d_renderer_3d.h"
 #include "Hello3D.h"
 #include <cmath>
 #include <strsafe.h>

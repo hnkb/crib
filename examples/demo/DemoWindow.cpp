@@ -1,11 +1,11 @@
 
 #include "DemoWindow.h"
 #include "menu/Menu.h"
-#include "hello/hello_scene.h"
+#include "hello/Hello.h"
 #include "hello3d/Hello3D.h"
 #include "house/House.h"
-#include "strawman/strawman_scene.h"
-#include "tetris/tetris_scene.h"
+#include "strawman/Strawman.h"
+#include "tetris/Tetris.h"
 
 using namespace crib::scene;
 
