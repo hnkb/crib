@@ -8,46 +8,43 @@
 #include "Platform/Windows.h"
 
 
-namespace crib
+namespace Crib
 {
-	namespace graphics { namespace base { class context; } }
-	namespace scene { class scene; }
 
-	namespace core
+	namespace Graphics { class SceneBase; class Context; }
+	class PersistentSettings;
+
+
+	class Window
 	{
-		class settings;
+	public:
+		Window() : Window(L"crib", L"crib") {}
+		Window(const std::wstring className, const std::wstring title);
 
-		class window
-		{
-		public:
-			window() : window(L"crib", L"crib") {}
-			window(const std::wstring className, const std::wstring title);
+		Window(const Window& other) = delete;
+		Window(Window&& other) = delete;
+		Window& operator=(const Window& other) = delete;
+		Window& operator=(Window&& other) = delete;
 
-			window(const window& other) = delete;
-			window(window&& other) = delete;
-			window& operator=(const window& other) = delete;
-			window& operator=(window&& other) = delete;
+		virtual ~Window();
 
-			virtual ~window();
+		void setTitle(const std::wstring title);
+		std::wstring getTitle() const;
+		HWND getHandle() const { return handle; }
 
-			void set_title(const std::wstring title);
-			std::wstring get_title() const;
-			HWND get_handle() const { return handle; }
+	protected:
+		virtual void frame();
+		virtual LRESULT proc(const UINT message, const WPARAM wParam, const LPARAM lParam);
+		static LRESULT CALLBACK proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-		protected:
-			virtual void frame();
-			virtual LRESULT proc(const UINT message, const WPARAM wParam, const LPARAM lParam);
-			static LRESULT CALLBACK proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+		void createGraphicsContext();
 
-			void create_graphics_context();
+		HWND handle;
+		std::unique_ptr<PersistentSettings> settings;
+		std::unique_ptr<Graphics::SceneBase> scene;
+		std::unique_ptr<Graphics::Context> graphics;
+		Input::Buffer input;
+		Timer timer;
+	};
 
-			HWND handle;
-			std::unique_ptr<settings> settings;
-			std::unique_ptr<scene::scene> scene;
-			std::unique_ptr<graphics::base::context> graphics;
-			input::buffer input;
-			timer timer;
-		};
-
-	}
 }

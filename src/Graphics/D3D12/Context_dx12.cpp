@@ -5,20 +5,21 @@
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
 
-using crib::graphics::dx12::context;
-using crib::core::utility::throw_if_failed;
+using namespace Crib::Platform::Windows;
+
+using Crib::Graphics::D3D12::Context;
 
 
-context::context(const HWND handle)
+Context::Context(const HWND handle)
 {
-	throw_if_failed(D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device)), "Create Direct3D 12 device");
+	ThrowOnFail(D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device)), "Create Direct3D 12 device");
 
 	// Create command queue
 	{
 		D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 		queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 		queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-		throw_if_failed(device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&cmdqueue)), "Create Direct3D 12 command queue");
+		ThrowOnFail(device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&cmdqueue)), "Create Direct3D 12 command queue");
 	}
 
 	// Create swap chain
@@ -34,10 +35,10 @@ context::context(const HWND handle)
 
 		CComPtr<IDXGIFactory4> factory;
 		CComPtr<IDXGISwapChain1> swapChain1;
-		throw_if_failed(CreateDXGIFactory1(IID_PPV_ARGS(&factory)), "CreateDXGIFactory1");
-		throw_if_failed(factory->CreateSwapChainForHwnd(cmdqueue, handle, &swapChainDesc, nullptr, nullptr, &swapChain1), "CreateSwapChainForHwnd");
-		throw_if_failed(swapChain1.QueryInterface(&swapchain), "Cast IDXGISwapChain1 to IDXGISwapChain3");
-		throw_if_failed(factory->MakeWindowAssociation(handle, DXGI_MWA_NO_ALT_ENTER));
+		ThrowOnFail(CreateDXGIFactory1(IID_PPV_ARGS(&factory)), "CreateDXGIFactory1");
+		ThrowOnFail(factory->CreateSwapChainForHwnd(cmdqueue, handle, &swapChainDesc, nullptr, nullptr, &swapChain1), "CreateSwapChainForHwnd");
+		ThrowOnFail(swapChain1.QueryInterface(&swapchain), "Cast IDXGISwapChain1 to IDXGISwapChain3");
+		ThrowOnFail(factory->MakeWindowAssociation(handle, DXGI_MWA_NO_ALT_ENTER));
 		frameidx = swapchain->GetCurrentBackBufferIndex();
 	}
 
@@ -47,20 +48,20 @@ context::context(const HWND handle)
 		rtvHeapDesc.NumDescriptors = 2;
 		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		throw_if_failed(device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvheap)), "CreateDescriptorHeap");
+		ThrowOnFail(device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvheap)), "CreateDescriptorHeap");
 
 		rtvdescsize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 		D3D12_CPU_DESCRIPTOR_HANDLE rtvhandle = rtvheap->GetCPUDescriptorHandleForHeapStart();
 
 		for (UINT i = 0; i < 2; i++)
 		{
-			throw_if_failed(swapchain->GetBuffer(i, IID_PPV_ARGS(&rendertargets[i])), "GetBuffer");
+			ThrowOnFail(swapchain->GetBuffer(i, IID_PPV_ARGS(&rendertargets[i])), "GetBuffer");
 			device->CreateRenderTargetView(rendertargets[i], nullptr, rtvhandle);
 			rtvhandle.ptr += rtvdescsize;
 		}
 	}
 
-	throw_if_failed(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&cmdalloc)), "CreateCommandAllocator");
+	ThrowOnFail(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&cmdalloc)), "CreateCommandAllocator");
 
 
 
@@ -68,45 +69,45 @@ context::context(const HWND handle)
 
 	// Create command list
 	{
-		throw_if_failed(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, cmdalloc, pipelinestate, IID_PPV_ARGS(&cmdlist)), "CreateCommandList failed");
-		throw_if_failed(cmdlist->Close(), "Unable to close command list");
+		ThrowOnFail(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, cmdalloc, pipelinestate, IID_PPV_ARGS(&cmdlist)), "CreateCommandList failed");
+		ThrowOnFail(cmdlist->Close(), "Unable to close command list");
 	}
 
 	// Create synchronization objects.
 	{
-		throw_if_failed(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence)), "CreateFence");
+		ThrowOnFail(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence)), "CreateFence");
 		fenceval = 1;
 
 		fenceevt = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-		if (fenceevt == nullptr) throw core::windows_error("CreateEvent for fence");
+		if (fenceevt == nullptr) throw Error("CreateEvent for fence");
 	}
 }
 
 
-context::~context()
+Context::~Context()
 {
-	wait_for_previous_frame();
+	waitForPreviousFrame();
 	CloseHandle(fenceevt);
 }
 
 
-void context::create_size_dependent_resources()
+void Context::createSizeDependentResources()
 {
 
 }
 
 
-void context::resize()
+void Context::resize()
 {
 
 }
 
 
-void context::draw()
+void Context::draw()
 {
 	{
-		throw_if_failed(cmdalloc->Reset(), "Unable to reset CommandAllocator");
-		throw_if_failed(cmdlist->Reset(cmdalloc, pipelinestate), "Unable to reset CommandList");
+		ThrowOnFail(cmdalloc->Reset(), "Unable to reset CommandAllocator");
+		ThrowOnFail(cmdlist->Reset(cmdalloc, pipelinestate), "Unable to reset CommandList");
 
 		// Indicate that the back buffer will be used as a render target.
 		cmdlist->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(rendertargets[frameidx], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
@@ -122,29 +123,29 @@ void context::draw()
 		// Indicate that the back buffer will now be used to present.
 		cmdlist->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(rendertargets[frameidx], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 
-		throw_if_failed(cmdlist->Close(), "Unable to close CommandList");
+		ThrowOnFail(cmdlist->Close(), "Unable to close CommandList");
 	}
 
 	ID3D12CommandList* ppCommandLists[] = { cmdlist };
 	cmdqueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
-	throw_if_failed(swapchain->Present(1, 0), "SwapChain->Present()");
-	wait_for_previous_frame();
+	ThrowOnFail(swapchain->Present(1, 0), "SwapChain->Present()");
+	waitForPreviousFrame();
 }
 
 
-void context::wait_for_previous_frame()
+void Context::waitForPreviousFrame()
 {
 	// WAITING FOR THE FRAME TO COMPLETE BEFORE CONTINUING IS NOT BEST PRACTICE.
 	// This is code implemented as such for simplicity.
 	// Fences shall be used for efficient resource usage and to maximize GPU utilization.
 
 	const UINT64 val = fenceval++;
-	throw_if_failed(cmdqueue->Signal(fence, val));
+	ThrowOnFail(cmdqueue->Signal(fence, val));
 
 	if (fence->GetCompletedValue() < val)
 	{
-		throw_if_failed(fence->SetEventOnCompletion(val, fenceevt));
+		ThrowOnFail(fence->SetEventOnCompletion(val, fenceevt));
 		WaitForSingleObject(fenceevt, INFINITE);
 	}
 

@@ -1,17 +1,17 @@
 
 #include "timer.h"
 
-using crib::core::timer;
+using Crib::Timer;
 
 
-double timer::next_frame()
+double Timer::nextFrame()
 {
-	auto last_frame = frame_origin;
-	frame_origin = std::chrono::high_resolution_clock::now();
-	return std::chrono::duration<double>(frame_origin - last_frame).count();
+	auto lastFrame = frameOrigin;
+	frameOrigin = std::chrono::high_resolution_clock::now();
+	return std::chrono::duration<double>(frameOrigin - lastFrame).count();
 }
 
-double timer::now() const
+double Timer::now() const
 {
-	return std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - frame_origin).count();
+	return std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - frameOrigin).count();
 }

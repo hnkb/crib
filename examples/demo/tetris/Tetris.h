@@ -4,44 +4,41 @@
 #include <Crib/Graphics/Direct3D11.h>
 
 
-namespace crib_scenes
+namespace CribDemo::Tetris
 {
-	namespace tetris
+
+	class Scene;
+
+
+	class Renderer : public Crib::Graphics::D3D11::Renderer
 	{
+	public:
+		Renderer(Crib::Graphics::D3D11::Context& context, Scene& tetris);
 
-		class scene;
+		virtual void resize(const float w, const float h) override { height = h, width = w; }
+		virtual void render() override;
 
+	protected:
+		Scene& scene;
 
-		class renderer : public crib::graphics::dx11::renderer
+		CComPtr<ID2D1SolidColorBrush> brush;
+		CComPtr<IDWriteTextFormat> textFormat;
+		float width, height;
+	};
+
+	class Scene : public Crib::Graphics::SceneBase
+	{
+	public:
+		Scene() {}
+
+		virtual std::wstring update(const double delta, const Crib::Input::Buffer& input) override;
+
+	protected:
+		virtual Crib::Graphics::Renderer* createCustomRenderer(Crib::Graphics::Context& context) override
 		{
-		public:
-			renderer(crib::graphics::dx11::context& context, scene& tetris);
+			return new Renderer(dynamic_cast<Crib::Graphics::D3D11::Context&>(context), *this);
+		}
 
-			virtual void resize(const float w, const float h) override { height = h, width = w; }
-			virtual void render() override;
+	};
 
-		protected:
-			scene& scene;
-
-			CComPtr<ID2D1SolidColorBrush> brush;
-			CComPtr<IDWriteTextFormat> text_format;
-			float width, height;
-		};
-
-		class scene : public crib::scene::scene
-		{
-		public:
-			scene() {}
-
-			virtual std::wstring update(const double delta, const crib::input::buffer& input) override;
-
-		protected:
-			virtual crib::graphics::base::renderer* create_custom_renderer(crib::graphics::base::context& context) override
-			{
-				return new renderer(dynamic_cast<crib::graphics::dx11::context&>(context), *this);
-			}
-
-		};
-
-	}
 }

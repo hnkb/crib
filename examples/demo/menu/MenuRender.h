@@ -5,35 +5,32 @@
 #include <Crib/Graphics/Direct3D11.h>
 
 
-namespace crib_scenes
+namespace CribDemo::Menu
 {
-	namespace menu
+
+	class Scene;
+
+	class Renderer : public Crib::Graphics::D3D11::Renderer
 	{
+	public:
+		Renderer(Crib::Graphics::D3D11::Context& context, Scene& scene);
 
-		class menu_scene;
+		virtual void resize(const float w, const float h) override;
+		virtual void render() override;
 
-		class menu_d3d11_renderer : public crib::graphics::dx11::renderer
-		{
-		public:
-			menu_d3d11_renderer(crib::graphics::dx11::context& context, menu_scene& hello_scene);
+		void updateBoundingRect(MenuItem& item) const;
 
-			virtual void resize(const float w, const float h) override;
-			virtual void render() override;
+	protected:
+		Scene& scene;
 
-			void update_bounding_rect(menu_item& item) const;
+		CComPtr<ID2D1SolidColorBrush> brush;
+		CComPtr<IDWriteTextFormat> tf_normal;
+		CComPtr<IDWriteTextFormat> tf_selected;
+		float width, height;
 
-		protected:
-			menu_scene& scene;
+		static constexpr float checkboxSize = 17.f;
+		static constexpr float checkboxBorder = 2.f;
+		static constexpr float checkboxPadding = 12.f + checkboxSize + checkboxBorder;
+	};
 
-			CComPtr<ID2D1SolidColorBrush> brush;
-			CComPtr<IDWriteTextFormat> tf_normal;
-			CComPtr<IDWriteTextFormat> tf_selected;
-			float width, height;
-
-			static constexpr float checkbox_size = 17.f;
-			static constexpr float checkbox_border = 2.f;
-			static constexpr float checkbox_padding = 12.f + checkbox_size + checkbox_border;
-		};
-
-	}
 }

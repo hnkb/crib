@@ -3,7 +3,7 @@
 #include <Crib/Platform/Windows.h>
 
 
-int crib::core::application::messageLoop()
+int Crib::Application::messageLoop()
 {
 	MSG msg;
 
@@ -15,7 +15,7 @@ int crib::core::application::messageLoop()
 		TranslateMessage(&msg);
 		DispatchMessageW(&msg);
 
-		if (msg.message == constants::wm_app_windowclosed && EnumThreadWindows(GetCurrentThreadId(), [](HWND, LPARAM) { return FALSE; }, NULL))
+		if (msg.message == Platform::Windows::Application::Message::WindowClosed && EnumThreadWindows(GetCurrentThreadId(), [](HWND, LPARAM) { return FALSE; }, NULL))
 			PostQuitMessage(0);
 	}
 

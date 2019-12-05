@@ -4,22 +4,19 @@
 #include <chrono>
 
 
-namespace crib
+namespace Crib
 {
-	namespace core
+
+	class Timer
 	{
+	public:
+		Timer() : frameOrigin(std::chrono::high_resolution_clock::now()) {}
 
-		class timer
-		{
-		public:
-			timer() : frame_origin(std::chrono::high_resolution_clock::now()) {}
+		double nextFrame();
+		double now() const;
 
-			double next_frame();
-			double now() const;
+	protected:
+		std::chrono::time_point<std::chrono::high_resolution_clock> frameOrigin;
+	};
 
-		protected:
-			std::chrono::time_point<std::chrono::high_resolution_clock> frame_origin;
-		};
-
-	}
 }

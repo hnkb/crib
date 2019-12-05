@@ -2,18 +2,18 @@
 #include "Tetris.h"
 #include <Crib/Window.h>
 
-using crib_scenes::tetris::renderer;
-using crib_scenes::tetris::scene;
-using crib::core::utility::throw_if_failed;
+using CribDemo::Tetris::Renderer;
+using CribDemo::Tetris::Scene;
+using Crib::Platform::Windows::ThrowOnFail;
 
 
-renderer::renderer(crib::graphics::dx11::context& context, crib_scenes::tetris::scene& tetris) : crib::graphics::dx11::renderer(context), scene(tetris)
+Renderer::Renderer(Crib::Graphics::D3D11::Context& context, Scene& tetris) : Crib::Graphics::D3D11::Renderer(context), scene(tetris)
 {
-	throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 28.f, L"", &text_format));
-	throw_if_failed(ctx.context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &brush));
+	ThrowOnFail(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 28.f, L"", &textFormat));
+	ThrowOnFail(ctx.context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &brush));
 }
 
-std::wstring scene::update(const double delta, const crib::input::buffer& input)
+std::wstring Scene::update(const double delta, const Crib::Input::Buffer& input)
 {
 	for (auto& e : input)
 	{
@@ -24,14 +24,14 @@ std::wstring scene::update(const double delta, const crib::input::buffer& input)
 	return L"";
 }
 
-void renderer::render()
+void Renderer::render()
 {
 	ctx.context2d->BeginDraw();
 	ctx.context2d->Clear(D2D1::ColorF(0, .2f, .4f));
 
 
-	ctx.context2d->DrawTextW(L"TETRIS", 6, text_format, D2D1::RectF(10, 10, 500, 100), brush);
+	ctx.context2d->DrawTextW(L"TETRIS", 6, textFormat, D2D1::RectF(10, 10, 500, 100), brush);
 
 
-	throw_if_failed(ctx.context2d->EndDraw());
+	ThrowOnFail(ctx.context2d->EndDraw());
 }

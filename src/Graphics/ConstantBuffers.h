@@ -5,24 +5,21 @@
 #include <DirectXMath.h>
 
 
-namespace crib
+namespace Crib::Graphics
 {
-	namespace graphics
+	namespace ConstantBuffers
 	{
-		namespace constant_buffers
+
+		struct PerObject
 		{
+			DirectX::XMMATRIX world;
+			DirectX::XMMATRIX world_view_proj; // world * view * projection;
+		};
 
-			struct per_object
-			{
-				DirectX::XMMATRIX world;
-				DirectX::XMMATRIX world_view_proj; // world * view * projection;
-			};
+		struct PerFrame
+		{
+			Light::Directional light;
+		};
 
-			struct per_frame
-			{
-				directional_light light;
-			};
-
-		}
 	}
 }

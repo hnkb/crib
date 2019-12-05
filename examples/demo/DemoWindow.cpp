@@ -7,50 +7,52 @@
 #include "strawman/Strawman.h"
 #include "tetris/Tetris.h"
 
-using namespace crib::scene;
+using CribDemo::Window;
+using Crib::Graphics::SceneBase;
 
-demo_window::demo_window() : window(L"crib_demo", L"Crib Demo")
+
+Window::Window() : Crib::Window(L"crib_demo", L"Crib Demo")
 {
-	create_scene(settings->get(L"startup", L"menu"));
+	createScene(settings->get(L"startup", L"menu"));
 }
 
-void demo_window::frame()
+void Window::frame()
 {
 	if (scene)
 	{
-		auto s = scene->update(timer.next_frame(), input.swap());
+		auto s = scene->update(timer.nextFrame(), input.swap());
 		if (s.size())
 		{
 			if (s == L"quit")
 			{
-				if (get_title() == L"crib: menu")
+				if (getTitle() == L"crib: menu")
 					DestroyWindow(handle);
 				else
-					create_scene(L"menu");
+					createScene(L"menu");
 				return;
 			}
 			else if (s.compare(0, 5, L"scene") == 0)
-				create_scene(s.substr(6));
+				createScene(s.substr(6));
 			else if (s == L"reset-graphics")
-				create_graphics_context();
+				createGraphicsContext();
 		}
-		window::frame();
+		Crib::Window::frame();
 	}
 }
 
-void demo_window::create_scene(const std::wstring& name)
+void Window::createScene(const std::wstring& name)
 {
-	scene = [&](crib::core::settings& setting) {
-		if (name == L"menu") return std::unique_ptr<scene>(new crib_scenes::menu::menu_scene(setting));
-		if (name == L"hello") return std::unique_ptr<scene>(new crib_scenes::hello::hello_scene());
-		if (name == L"hello3d") return std::unique_ptr<scene>(new crib_scenes::hello3d::hello3d_scene(setting));
-		if (name == L"house") return std::unique_ptr<scene>(new crib_scenes::house::scene(setting));
-		if (name == L"strawman") return std::unique_ptr<scene>(new crib_scenes::strawman::scene());
-		if (name == L"tetris") return std::unique_ptr<scene>(new crib_scenes::tetris::scene());
+	scene = [&](Crib::PersistentSettings& setting) {
+		if (name == L"menu") return std::unique_ptr<SceneBase>(new Menu::Scene(setting));
+		if (name == L"hello") return std::unique_ptr<SceneBase>(new Hello::Scene());
+		if (name == L"hello3d") return std::unique_ptr<SceneBase>(new Hello3D::Scene(setting));
+		if (name == L"house") return std::unique_ptr<SceneBase>(new House::Scene(setting));
+		if (name == L"strawman") return std::unique_ptr<SceneBase>(new Strawman::Scene());
+		if (name == L"tetris") return std::unique_ptr<SceneBase>(new Tetris::Scene());
 
-		throw std::invalid_argument("crib::scene::scene name is invalid.");
+		throw std::invalid_argument("demo scene name is invalid.");
 	}(*settings);
 
-	set_title(L"crib: " + name);
-	if (graphics) graphics->attach_renderer(scene.get());
+	setTitle(L"crib: " + name);
+	if (graphics) graphics->bind(scene.get());
 }

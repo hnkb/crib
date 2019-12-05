@@ -2,18 +2,18 @@
 #include "ThirdPerson.h"
 #include <algorithm>
 
-using crib::input::camera_control_third_person;
+using Crib::Input::CameraControl::ThirdPerson;
 
 
-void camera_control_third_person::update(const double delta, const crib::input::buffer& buffer)
+void ThirdPerson::update(const double delta, const Buffer& buffer)
 {
 	for (const auto& evt : buffer)
-		process_message(float(delta), evt);
+		processMessage(float(delta), evt);
 
-	update_camera();
+	updateCamera();
 }
 
-void camera_control_third_person::update_camera()
+void ThirdPerson::updateCamera()
 {
 	// In 3rd-person, focus is fixed (to player position), eye rotates around it.
 
@@ -23,22 +23,22 @@ void camera_control_third_person::update_camera()
 	// Note: phi is different from math convention, instead of rotating around Z it rotates around Y
 
 	const auto unit = DirectX::XMVectorSet(0, 0, -radius, 1.f); // for left-hand, use +radius
-	camera.position = DirectX::XMVectorAdd(camera.look_at, DirectX::XMVector4Transform(unit, DirectX::XMMatrixRotationX(phi) * DirectX::XMMatrixRotationY(theta)));
+	camera.position = DirectX::XMVectorAdd(camera.lookAt, DirectX::XMVector4Transform(unit, DirectX::XMMatrixRotationX(phi) * DirectX::XMMatrixRotationY(theta)));
 }
 
-void camera_control_third_person::process_message(const float delta, const crib::input::event& e)
+void ThirdPerson::processMessage(const float delta, const Event& e)
 {
 	switch (e.message)
 	{
 	case WM_MOUSEWHEEL:
-		radius = std::min(max_radius, std::max(min_radius, radius + float(GET_WHEEL_DELTA_WPARAM(e.wParam)) * -.15f * delta));
+		radius = std::min(maxRadius, std::max(minRadius, radius + float(GET_WHEEL_DELTA_WPARAM(e.wParam)) * -.15f * delta));
 		break;
 
 	case WM_MBUTTONDOWN:
 		// Assuming window captures all mouse-down events
 		// If not, call SetCapture() here, and ReleaseCapture() in WM_MBUTTONUP
-		GetCursorPos(&origin_cursor);
-		origin_phi = phi, origin_theta = theta;
+		GetCursorPos(&originCursor);
+		originPhi = phi, originTheta = theta;
 		SetCursor(LoadCursor(NULL, IDC_SIZEALL));
 		break;
 
@@ -48,8 +48,8 @@ void camera_control_third_person::process_message(const float delta, const crib:
 			POINT current;
 			GetCursorPos(&current);
 
-			phi = std::min(max_phi, std::max(min_phi, origin_phi - (origin_cursor.y - current.y) / 200.0f));
-			theta = origin_theta + (origin_cursor.x - current.x) / 200.0f;
+			phi = std::min(maxPhi, std::max(minPhi, originPhi - (originCursor.y - current.y) / 200.0f));
+			theta = originTheta + (originCursor.x - current.x) / 200.0f;
 
 			// Cursor won't change as long as mouse capture is set, so no need for this,
 			// unless on rare occasions when capture is lost unexpectedly (ALT+TAB)
@@ -72,20 +72,20 @@ void camera_control_third_person::process_message(const float delta, const crib:
 
 		case VK_NUMPAD8:
 		case VK_UP:
-			phi = std::min(max_phi, phi + 3.f * delta);
+			phi = std::min(maxPhi, phi + 3.f * delta);
 			break;
 
 		case VK_NUMPAD2:
 		case VK_DOWN:
-			phi = std::max(min_phi, phi - 3.f * delta);
+			phi = std::max(minPhi, phi - 3.f * delta);
 			break;
 
 		case VK_ADD:
-			radius = std::max(min_radius, radius - 5.f * delta);
+			radius = std::max(minRadius, radius - 5.f * delta);
 			break;
 
 		case VK_SUBTRACT:
-			radius = std::min(max_radius, radius + 5.f * delta);
+			radius = std::min(maxRadius, radius + 5.f * delta);
 			break;
 		}
 		break;

@@ -6,44 +6,40 @@
 #include <Crib/Window.h>
 
 
-namespace crib_scenes
+namespace CribDemo::Menu
 {
 
-	namespace menu
+	class Scene : public Crib::Graphics::SceneBase
 	{
+	public:
+		Scene(Crib::PersistentSettings& setting);
 
-		class menu_scene : public crib::scene::scene
-		{
-		public:
-			menu_scene(crib::core::settings& setting);
+		virtual std::wstring update(const double delta, const Crib::Input::Buffer& input) override;
 
-			virtual std::wstring update(const double delta, const crib::input::buffer& input) override;
+		const std::vector<MenuItem>& getItems() const { return navigation.back().first; }
+		const size_t getSelectedIdx() const { return navigation.back().second; }
+		const bool isActive(const MenuItem item) { return settings.get(item.settingsKey, L"") == item.settingsValue; }
 
-			const std::vector<menu_item>& get_items() const { return navigation.back().first; }
-			const size_t get_selected_index() const { return navigation.back().second; }
-			const bool is_active(const menu_item item) { return settings.get(item.setting_key, L"") == item.setting_value; }
-
-		protected:
-			virtual crib::graphics::base::renderer* create_custom_renderer(crib::graphics::base::context& context) override;
+	protected:
+		virtual Crib::Graphics::Renderer* createCustomRenderer(Crib::Graphics::Context& context) override;
 
 
-			std::wstring handle_event(const crib::input::event& e);
-			std::wstring navigate_to(menu_item& item);
-			std::wstring navigate_back();
-			const size_t find_item(const float x, const float y) const;
+		std::wstring handleEvent(const Crib::Input::Event& e);
+		std::wstring navigateTo(MenuItem& item);
+		std::wstring navigateBack();
+		const size_t findItem(const float x, const float y) const;
 
-			std::vector<menu_item> root_items;
-			size_t root_sel;
-			std::vector<std::pair<std::vector<menu_item>&, size_t&>> navigation;
+		std::vector<MenuItem> rootItems;
+		size_t rootSel;
+		std::vector<std::pair<std::vector<MenuItem>&, size_t&>> navigation;
 
-			crib::core::settings& settings;
+		Crib::PersistentSettings& settings;
 
 
-			void update_bounding_rect(std::vector<menu_item>& items, const menu_d3d11_renderer* rndr);
+		void updateBoundingRect(std::vector<MenuItem>& items, const Renderer* rndr);
 
-			static constexpr float const_line_spacing = 48.f;
-			static constexpr float const_line_extra_spacing = 67.f;
-		};
+		static constexpr float lineSpacingNormal = 48.f;
+		static constexpr float lineSpacingExtra = 67.f;
+	};
 
-	}
 }

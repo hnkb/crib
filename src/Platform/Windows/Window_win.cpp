@@ -3,10 +3,12 @@
 #include <Crib/Graphics/Direct3D11.h>
 #include <Crib/Platform/Windows.h>
 
-using crib::core::window;
+using namespace Crib::Platform::Windows;
+
+using Crib::Window;
 
 
-window::window(const std::wstring className, const std::wstring title) : settings(new core::settings), handle(nullptr), graphics(nullptr)
+Window::Window(const std::wstring className, const std::wstring title) : settings(new Crib::PersistentSettings), handle(nullptr), graphics(nullptr)
 {
 	int width = settings->get(L"window.width", CW_USEDEFAULT),
 		height = settings->get(L"window.height", 0),
@@ -29,14 +31,14 @@ window::window(const std::wstring className, const std::wstring title) : setting
 	RegisterClassExW(&wcex);
 
 	handle = CreateWindowExW(0, wcex.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW, left, top, width, height, nullptr, nullptr, wcex.hInstance, nullptr);
-	if (!handle) throw windows_error("CreateWindow");
+	if (!handle) throw Error("CreateWindow");
 
 	SetWindowLongPtrW(handle, GWLP_USERDATA, LONG_PTR(this));
 	ShowWindow(handle, SW_SHOWDEFAULT);
-	create_graphics_context();
+	createGraphicsContext();
 }
 
-window::~window()
+Window::~Window()
 {
 	if (handle)
 	{
@@ -45,7 +47,7 @@ window::~window()
 }
 
 
-void window::frame()
+void Window::frame()
 {
 	if (scene && graphics)
 	{
@@ -53,14 +55,14 @@ void window::frame()
 		{
 			graphics->draw();
 		}
-		catch (graphics::base::context_invalid e)
+		catch (Graphics::Context::Invalid e)
 		{
-			create_graphics_context();
+			createGraphicsContext();
 		}
 	}
 }
 
-LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lParam)
+LRESULT Window::proc(const UINT message, const WPARAM wParam, const LPARAM lParam)
 {
 	if ((message >= WM_MOUSEFIRST && message <= WM_MOUSELAST) || message == WM_KEYDOWN || message == WM_KEYUP)
 	{
@@ -97,9 +99,9 @@ LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lPara
 			{
 				graphics->resize();
 			}
-			catch (graphics::base::context_invalid e)
+			catch (Graphics::Context::Invalid e)
 			{
-				create_graphics_context();
+				createGraphicsContext();
 			}
 		}
 		return 0;
@@ -117,26 +119,26 @@ LRESULT window::proc(const UINT message, const WPARAM wParam, const LPARAM lPara
 	case WM_DESTROY:
 		graphics.reset();
 		handle = nullptr;
-		PostMessageW(nullptr, constants::wm_app_windowclosed, 0, 0);
+		PostMessageW(nullptr, Application::Message::WindowClosed, 0, 0);
 		return 0;
 	}
 
 	return DefWindowProcW(handle, message, wParam, lParam);
 }
 
-LRESULT CALLBACK window::proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK Window::proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	auto wnd = (window*)GetWindowLongPtrW(hWnd, GWLP_USERDATA);
+	auto wnd = (Window*)GetWindowLongPtrW(hWnd, GWLP_USERDATA);
 	return (wnd && wnd->handle == hWnd) ? wnd->proc(message, wParam, lParam) : DefWindowProcW(hWnd, message, wParam, lParam);
 }
 
 
-void window::set_title(const std::wstring title)
+void Window::setTitle(const std::wstring title)
 {
 	SetWindowTextW(handle, title.c_str());
 }
 
-std::wstring window::get_title() const
+std::wstring Window::getTitle() const
 {
 	std::vector<wchar_t> buffer(GetWindowTextLengthW(handle) + 2);
 	GetWindowTextW(handle, buffer.data(), (int)buffer.size() - 1);
@@ -144,8 +146,8 @@ std::wstring window::get_title() const
 }
 
 
-void window::create_graphics_context()
+void Window::createGraphicsContext()
 {
-	graphics.reset(new graphics::dx11::context(handle, *settings));
-	if (scene) graphics->attach_renderer(scene.get());
+	graphics.reset(new Graphics::D3D11::Context(handle, *settings));
+	if (scene) graphics->bind(scene.get());
 }

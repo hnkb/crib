@@ -3,10 +3,11 @@
 #include <Crib/Platform/Windows.h>
 #include <vector>
 
-using crib::core::settings;
+using Crib::PersistentSettings;
+using Crib::Platform::Windows::Error;
 
 
-settings::settings()
+PersistentSettings::PersistentSettings()
 {
 	HKEY key;
 	LSTATUS err = RegOpenKeyExW(HKEY_CURRENT_USER, L"SOFTWARE\\crib", 0, KEY_READ, &key);
@@ -17,7 +18,7 @@ settings::settings()
 		DWORD count, maxname, maxval;
 
 		err = RegQueryInfoKeyW(key, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, &count, &maxname, &maxval, nullptr, nullptr);
-		if (err != ERROR_SUCCESS) throw windows_error(err, "Reading settings from registry");
+		if (err != ERROR_SUCCESS) throw Error(err, "Reading settings from registry");
 
 		name.resize(maxname + 1);
 		value.resize(maxval / sizeof(wchar_t) + 1);
@@ -29,7 +30,7 @@ settings::settings()
 			maxval = DWORD((value.size() - 1) * sizeof(wchar_t));
 
 			err = RegEnumValueW(key, i, name.data(), &maxname, nullptr, nullptr, LPBYTE(value.data()), &maxval);
-			if (err != ERROR_SUCCESS) throw windows_error(err, "Reading settings from registry");
+			if (err != ERROR_SUCCESS) throw Error(err, "Reading settings from registry");
 
 			values.emplace(std::make_pair(name.data(), value.data()));
 		}
@@ -38,11 +39,11 @@ settings::settings()
 	}
 	else if (err != ERROR_FILE_NOT_FOUND)
 	{
-		throw windows_error(err, "Reading settings from registry");
+		throw Error(err, "Reading settings from registry");
 	}
 }
 
-settings::~settings()
+PersistentSettings::~PersistentSettings()
 {
 	HKEY key;
 

@@ -5,11 +5,11 @@
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "dwrite.lib")
 
-using crib::graphics::dx11::context;
-using crib::core::utility::throw_if_failed;
+using Crib::Graphics::D3D11::Context;
+using Crib::Platform::Windows::ThrowOnFail;
 
 
-context::context(const HWND handle, crib::core::settings& setting)
+Context::Context(const HWND handle, PersistentSettings& setting)
 {
 	// Create D3D11 device
 	{
@@ -26,23 +26,23 @@ context::context(const HWND handle, crib::core::settings& setting)
 		CComPtr<ID3D11DeviceContext> ctx;
 		D3D_FEATURE_LEVEL feature_level; // TODO: keep this as member variable if necessary
 
-		throw_if_failed(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, flags, featureLevels, ARRAYSIZE(featureLevels), D3D11_SDK_VERSION, &dev, &feature_level, &ctx), "Create Direct3D 11 device");
-		throw_if_failed(dev.QueryInterface(&device), "Get D3D 11.2 interface");
-		throw_if_failed(ctx.QueryInterface(&context3d), "Get D3D 11.2 interface");
+		ThrowOnFail(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, flags, featureLevels, ARRAYSIZE(featureLevels), D3D11_SDK_VERSION, &dev, &feature_level, &ctx), "Create Direct3D 11 device");
+		ThrowOnFail(dev.QueryInterface(&device), "Get D3D 11.2 interface");
+		ThrowOnFail(ctx.QueryInterface(&context3d), "Get D3D 11.2 interface");
 	}
 
 	// Create D2D device context
 	{
 		CComPtr<ID2D1Factory1> d2d_factory;
 		CComPtr<ID2D1Device> d2d_device;
-		throw_if_failed(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, IID_PPV_ARGS(&d2d_factory)));
-		throw_if_failed(d2d_factory->CreateDevice(CComQIPtr<IDXGIDevice>(device), &d2d_device));
-		throw_if_failed(d2d_device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &context2d));
+		ThrowOnFail(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, IID_PPV_ARGS(&d2d_factory)));
+		ThrowOnFail(d2d_factory->CreateDevice(CComQIPtr<IDXGIDevice>(device), &d2d_device));
+		ThrowOnFail(d2d_device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &context2d));
 	}
 
 	// Create DWrite factory
 	{
-		throw_if_failed(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(write), (IUnknown**)&write));
+		ThrowOnFail(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(write), (IUnknown**)&write));
 	}
 
 	// Create swap chain
@@ -58,25 +58,25 @@ context::context(const HWND handle, crib::core::settings& setting)
 		CComQIPtr<IDXGIDevice1> dxgi_device(device);
 		CComPtr<IDXGIAdapter> dxgi_adapter;
 		CComPtr<IDXGIFactory2> dxgi_factory;
-		throw_if_failed(dxgi_device->GetAdapter(&dxgi_adapter), "Create swap chain");
-		throw_if_failed(dxgi_adapter->GetParent(IID_PPV_ARGS(&dxgi_factory)), "Create swap chain");
-		throw_if_failed(dxgi_factory->CreateSwapChainForHwnd(device, handle, &sd, nullptr, nullptr, &swapchain), "Create swap chain");
-		throw_if_failed(dxgi_factory->MakeWindowAssociation(handle, DXGI_MWA_NO_ALT_ENTER));
+		ThrowOnFail(dxgi_device->GetAdapter(&dxgi_adapter), "Create swap chain");
+		ThrowOnFail(dxgi_adapter->GetParent(IID_PPV_ARGS(&dxgi_factory)), "Create swap chain");
+		ThrowOnFail(dxgi_factory->CreateSwapChainForHwnd(device, handle, &sd, nullptr, nullptr, &swapchain), "Create swap chain");
+		ThrowOnFail(dxgi_factory->MakeWindowAssociation(handle, DXGI_MWA_NO_ALT_ENTER));
 
 		// Ensure that DXGI does not queue more than one frame at a time. This both reduces latency and
 		// ensures that the application will only render after each VSync, minimizing power consumption.
-		throw_if_failed(dxgi_device->SetMaximumFrameLatency(1), "Enable VSync");
+		ThrowOnFail(dxgi_device->SetMaximumFrameLatency(1), "Enable VSync");
 	}
 
-	create_size_dependent_resources();
+	createSizeDependentResources();
 }
 
 
-void context::attach_renderer(crib::scene::scene* scene)
+void Context::bind(SceneBase* scene)
 {
-	auto rndr = scene->create_custom_renderer(*this);
+	auto rndr = scene->createCustomRenderer(*this);
 	if (!rndr)
-		rndr = new renderer_3d<scene::scene_3d>(*this, dynamic_cast<scene::scene_3d&>(*scene));
+		rndr = new Renderer3D<Scene>(*this, dynamic_cast<Scene&>(*scene));
 	renderer.reset(rndr);
 
 	if (swapchain)
@@ -85,7 +85,7 @@ void context::attach_renderer(crib::scene::scene* scene)
 
 		CComPtr<ID3D11Texture2D> backBuffer;
 		D3D11_TEXTURE2D_DESC backBufferDesc;
-		throw_if_failed(swapchain->GetBuffer(0, IID_PPV_ARGS(&backBuffer)), "Get swap buffer");
+		ThrowOnFail(swapchain->GetBuffer(0, IID_PPV_ARGS(&backBuffer)), "Get swap buffer");
 		backBuffer->GetDesc(&backBufferDesc);
 
 		context3d->RSSetViewports(1, &CD3D11_VIEWPORT(0.0f, 0.0f, float(backBufferDesc.Width), float(backBufferDesc.Height)));
@@ -94,15 +94,15 @@ void context::attach_renderer(crib::scene::scene* scene)
 }
 
 
-void context::create_size_dependent_resources()
+void Context::createSizeDependentResources()
 {
 	CComPtr<ID3D11Texture2D> backBuffer;
 	D3D11_TEXTURE2D_DESC backBufferDesc;
-	throw_if_failed(swapchain->GetBuffer(0, IID_PPV_ARGS(&backBuffer)), "Get swap buffer");
+	ThrowOnFail(swapchain->GetBuffer(0, IID_PPV_ARGS(&backBuffer)), "Get swap buffer");
 	backBuffer->GetDesc(&backBufferDesc);
 
 	// Create a Direct3D render target view of the swap chain back buffer.
-	throw_if_failed(device->CreateRenderTargetView(backBuffer, nullptr, &rtv), "Create render target view");
+	ThrowOnFail(device->CreateRenderTargetView(backBuffer, nullptr, &rtv), "Create render target view");
 
 	// Create depth stencil
 	{
@@ -116,8 +116,8 @@ void context::create_size_dependent_resources()
 		depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
 		CComPtr<ID3D11Texture2D> depthStencil;
-		throw_if_failed(device->CreateTexture2D(&depthStencilDesc, nullptr, &depthStencil), "Create depth stencil");
-		throw_if_failed(device->CreateDepthStencilView(depthStencil, &CD3D11_DEPTH_STENCIL_VIEW_DESC(depthStencilDesc.SampleDesc.Count == 1 ? D3D11_DSV_DIMENSION_TEXTURE2D : D3D11_DSV_DIMENSION_TEXTURE2DMS), &dsv), "Create depth stencil");
+		ThrowOnFail(device->CreateTexture2D(&depthStencilDesc, nullptr, &depthStencil), "Create depth stencil");
+		ThrowOnFail(device->CreateDepthStencilView(depthStencil, &CD3D11_DEPTH_STENCIL_VIEW_DESC(depthStencilDesc.SampleDesc.Count == 1 ? D3D11_DSV_DIMENSION_TEXTURE2D : D3D11_DSV_DIMENSION_TEXTURE2DMS), &dsv), "Create depth stencil");
 	}
 
 	// Set the 3D rendering viewport to target the entire window.
@@ -128,8 +128,8 @@ void context::create_size_dependent_resources()
 		CComPtr<IDXGISurface> dxgiBackBuffer;
 		CComPtr<ID2D1Bitmap1> target;
 
-		throw_if_failed(swapchain->GetBuffer(0, IID_PPV_ARGS(&dxgiBackBuffer)));
-		throw_if_failed(context2d->CreateBitmapFromDxgiSurface(dxgiBackBuffer,
+		ThrowOnFail(swapchain->GetBuffer(0, IID_PPV_ARGS(&dxgiBackBuffer)));
+		ThrowOnFail(context2d->CreateBitmapFromDxgiSurface(dxgiBackBuffer,
 			&D2D1::BitmapProperties1(D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW, D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_IGNORE)), &target));
 		context2d->SetTarget(target);
 	}
@@ -139,7 +139,7 @@ void context::create_size_dependent_resources()
 }
 
 
-void context::resize()
+void Context::resize()
 {
 	rtv = nullptr;
 	dsv = nullptr;
@@ -147,16 +147,16 @@ void context::resize()
 
 	HRESULT hr;
 
-	if (!swapchain || (hr = swapchain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0)) == DXGI_ERROR_DEVICE_REMOVED) throw base::context_invalid();
-	throw_if_failed(hr, "Buffer resize");
+	if (!swapchain || (hr = swapchain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0)) == DXGI_ERROR_DEVICE_REMOVED) throw Context::Invalid();
+	ThrowOnFail(hr, "Buffer resize");
 
-	create_size_dependent_resources();
+	createSizeDependentResources();
 }
 
 
-void context::draw()
+void Context::draw()
 {
-	if (!swapchain || !context3d) throw base::context_invalid();
+	if (!swapchain || !context3d) throw Context::Invalid();
 
 	context3d->OMSetRenderTargets(1, &rtv.p, dsv);
 
@@ -167,12 +167,12 @@ void context::draw()
 	context3d->DiscardView(rtv);
 	context3d->DiscardView(dsv);
 
-	if (hr == DXGI_ERROR_DEVICE_REMOVED) throw base::context_invalid();
-	throw_if_failed(hr, "Rendernig");
+	if (hr == DXGI_ERROR_DEVICE_REMOVED) throw Context::Invalid();
+	ThrowOnFail(hr, "Rendernig");
 }
 
 
-void context::clear(const FLOAT rgba[4])
+void Context::clear(const FLOAT rgba[4])
 {
 	context3d->ClearRenderTargetView(rtv, rgba);
 	context3d->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH, 1.f, 0);

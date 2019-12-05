@@ -4,26 +4,20 @@
 #include <Crib/Graphics.h>
 
 
-namespace crib
+namespace Crib::Graphics::D3D12
 {
-	namespace graphics
+
+	class Context;
+
+	class Renderer : public Graphics::Renderer
 	{
-		namespace dx12
-		{
+	public:
+		Renderer(Context& context) : ctx(context) {}
 
-			class context;
+		virtual ~Renderer() {}
 
-			class renderer : public base::renderer
-			{
-			public:
-				renderer(context& context) : ctx(context) {}
+	protected:
+		Context& ctx;
+	};
 
-				virtual ~renderer() {}
-
-			protected:
-				context& ctx;
-			};
-
-		}
-	}
 }

@@ -1,12 +1,12 @@
 
 #include "Hello3D.h"
 
-using crib_scenes::hello3d::hello3d_scene;
+using CribDemo::Hello3D::Scene;
 
 
-hello3d_scene::hello3d_scene(crib::core::settings& settings) : scene_3d(settings), camera_control(camera)
+Scene::Scene(Crib::PersistentSettings& settings) : Crib::Graphics::Scene(settings), camControl(camera)
 {
-	load_assets();
+	loadAssets();
 
 	entities.emplace_back(L"cube0", L"cube", L"basic");
 	entities.emplace_back(L"cube1", L"white-cube", L"basic");
@@ -18,14 +18,14 @@ hello3d_scene::hello3d_scene(crib::core::settings& settings) : scene_3d(settings
 }
 
 
-std::wstring hello3d_scene::update(const double delta, const crib::input::buffer& input)
+std::wstring Scene::update(const double delta, const Crib::Input::Buffer& input)
 {
 	time += delta;
 	stats.update(delta, input);
 
-	entities[0].world_transform = DirectX::XMMatrixRotationX(float(time)) * DirectX::XMMatrixTranslation( 1.f, 0, 0);
-	entities[1].world_transform = DirectX::XMMatrixRotationY(float(time)) * DirectX::XMMatrixTranslation(-1.f, 0, 0);
-	entities[2].world_transform = DirectX::XMMatrixRotationZ(float(time)) * DirectX::XMMatrixTranslation(0, 0, 1.5f);
+	entities[0].worldTransform = DirectX::XMMatrixRotationX(float(time)) * DirectX::XMMatrixTranslation( 1.f, 0, 0);
+	entities[1].worldTransform = DirectX::XMMatrixRotationY(float(time)) * DirectX::XMMatrixTranslation(-1.f, 0, 0);
+	entities[2].worldTransform = DirectX::XMMatrixRotationZ(float(time)) * DirectX::XMMatrixTranslation(0, 0, 1.5f);
 
 	for (auto& e : input)
 	{
@@ -33,30 +33,30 @@ std::wstring hello3d_scene::update(const double delta, const crib::input::buffer
 			return L"quit";
 
 		// Note: because object in the seen are animated and may move, even when mouse is stationary the result
-		// of hit test might change. So, only calling hit_testing on mouse move is not enough.
+		// of hit test might change. So, only calling hitTesting() on mouse move is not enough.
 		if (e.message == WM_MOUSEMOVE)
-			hit_testing(short(LOWORD(e.lParam)), short(HIWORD(e.lParam)));
+			hitTesting(short(LOWORD(e.lParam)), short(HIWORD(e.lParam)));
 	}
 
-	camera_control.update(delta, input);
+	camControl.update(delta, input);
 
 	return L"";
 }
 
 
-void hello3d_scene::hit_testing(const float x, const float y)
+void Scene::hitTesting(const float x, const float y)
 {
-	auto ray = camera.screen_to_world(x, y);
+	auto ray = camera.screenToWorld(x, y);
 
 	// If we draw a line from camera location in the direction of `ray`, any triangle intersecting with it is a hit!
 	// Instead of searching every vector triangle, we first test each object's bounding sphere to find candidates.
 
-	hit_test_result = L"";
+	hitTestResult = L"";
 
 	for (const auto& e : entities)
 	{
 		// Object's center in world space
-		const auto center = DirectX::XMVector3TransformCoord(DirectX::XMVectorZero(), e.world_transform);
+		const auto center = DirectX::XMVector3TransformCoord(DirectX::XMVectorZero(), e.worldTransform);
 
 		const auto distance_from_cam_to_object_center = DirectX::XMVector3Length(DirectX::XMVectorSubtract(center, camera.position));
 		const auto same_distance_in_ray_direction = DirectX::XMVectorAdd(camera.position, DirectX::XMVectorMultiply(ray, distance_from_cam_to_object_center));
@@ -71,18 +71,18 @@ void hello3d_scene::hit_testing(const float x, const float y)
 			// not necessarily hits. We need to test if `ray` hits any of their triangles.
 			// But this approximation is good enough for now.
 
-			hit_test_result = hit_test_result + (hit_test_result.size() ? L", " : L"") + e.id;
+			hitTestResult = hitTestResult + (hitTestResult.size() ? L", " : L"") + e.id;
 		}
 	}
 
 }
 
 
-void crib_scenes::hello3d::hello3d_scene::load_assets()
+void CribDemo::Hello3D::Scene::loadAssets()
 {
-	using crib::geometry::definition;
+	using Crib::Graphics::DrawableBase;
 
-	definition::assets.emplace(L"white-cube", definition(
+	DrawableBase::assets.emplace(L"white-cube", DrawableBase(
 		// vertices
 		{
 			{ -.5f,  .5f, -.5f },

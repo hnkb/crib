@@ -1,13 +1,13 @@
 
 #include "House.h"
 
-using crib_scenes::house::scene;
+using CribDemo::House::Scene;
 using namespace DirectX;
 
 
-scene::scene(crib::core::settings& settings) : scene_3d(settings), camera_control(camera)
+Scene::Scene(Crib::PersistentSettings& settings) : Crib::Graphics::Scene(settings), camControl(camera)
 {
-	add_assets();
+	addAssets();
 
 	entities.emplace_back(L"earth", L"earth", L"basic");
 	entities.emplace_back(L"cube0", L"cube", L"basic");
@@ -16,17 +16,17 @@ scene::scene(crib::core::settings& settings) : scene_3d(settings), camera_contro
 	entities.emplace_back(L"pyramid0", L"pyramid", L"basic");
 
 	camera.position = XMVectorSet(0, 2.f, 0, 0);
-	entities[1].world_transform = XMMatrixScaling(2.f, 2.f, 2.f) * XMMatrixTranslation(20.f, 1.f, 40.f);
-	entities[2].world_transform = XMMatrixTranslation(-10.f, .5f, 30.f);
-	entities[3].world_transform = XMMatrixScaling(4.f, 4.f, 2.f) * XMMatrixTranslation(0, 2.f, -35.f);
-	entities[4].world_transform = XMMatrixScaling(1.f, 2.f, 2.f) * XMMatrixTranslation(10.f, .5f, -30.f);
+	entities[1].worldTransform = XMMatrixScaling(2.f, 2.f, 2.f) * XMMatrixTranslation(20.f, 1.f, 40.f);
+	entities[2].worldTransform = XMMatrixTranslation(-10.f, .5f, 30.f);
+	entities[3].worldTransform = XMMatrixScaling(4.f, 4.f, 2.f) * XMMatrixTranslation(0, 2.f, -35.f);
+	entities[4].worldTransform = XMMatrixScaling(1.f, 2.f, 2.f) * XMMatrixTranslation(10.f, .5f, -30.f);
 
 	light.direction = XMFLOAT3(XMVector3Normalize(XMVectorSet(-.2f, 1.f, -.5f, 0.f)).m128_f32);
 	light.ambient = XMFLOAT4(.2f, .1f, .1f, 1.f);
 	light.diffuse = XMFLOAT4(.6f, .7f, .7f, 1.f);
 }
 
-std::wstring scene::update(const double delta, const crib::input::buffer& input)
+std::wstring Scene::update(const double delta, const Crib::Input::Buffer& input)
 {
 	time += delta;
 
@@ -36,16 +36,16 @@ std::wstring scene::update(const double delta, const crib::input::buffer& input)
 			return L"quit";
 	}
 
-	camera_control.update(delta, input);
+	camControl.update(delta, input);
 
 	return L"";
 }
 
-void crib_scenes::house::scene::add_assets()
+void CribDemo::House::Scene::addAssets()
 {
-	using crib::geometry::definition;
+	using Crib::Graphics::DrawableBase;
 
-	definition::assets.emplace(L"earth", definition(
+	DrawableBase::assets.emplace(L"earth", DrawableBase(
 		// vertices
 		{
 			{ -200.f, 0.f, -200.f },

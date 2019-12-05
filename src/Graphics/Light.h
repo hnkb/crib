@@ -4,18 +4,15 @@
 #include <DirectXMath.h>
 
 
-namespace crib
+namespace Crib::Graphics::Light
 {
-	namespace graphics
+
+	struct Directional
 	{
+		DirectX::XMFLOAT3 direction;
+		float __padding;
+		DirectX::XMFLOAT4 ambient;
+		DirectX::XMFLOAT4 diffuse;
+	};
 
-		struct directional_light
-		{
-			DirectX::XMFLOAT3 direction;
-			float __padding;
-			DirectX::XMFLOAT4 ambient;
-			DirectX::XMFLOAT4 diffuse;
-		};
-
-	}
 }

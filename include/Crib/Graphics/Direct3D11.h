@@ -9,73 +9,67 @@
 #include <dwrite.h>
 
 
-namespace crib
+namespace Crib::Graphics::D3D11
 {
-	namespace graphics
+
+	class Drawable
 	{
-		namespace dx11
-		{
+	public:
+		Drawable() {}
+		Drawable(const Graphics::Drawable& drawable, ID3D11Device* dev);
 
-			class vertex_buffer
-			{
-			public:
-				vertex_buffer() {}
-				vertex_buffer(const geometry::mesh& mesh, ID3D11Device* dev);
+		void draw(ID3D11DeviceContext2* ctx);
 
-				void draw(ID3D11DeviceContext2* ctx);
-
-			private:
-				CComPtr<ID3D11Buffer> vertex;
-				CComPtr<ID3D11Buffer> index;
-				UINT vertex_stride;
-				UINT idx_count;
-			};
+	private:
+		CComPtr<ID3D11Buffer> vertex;
+		CComPtr<ID3D11Buffer> index;
+		UINT getVertexStride;
+		UINT idxCount;
+	};
 
 
-			class context : public base::context
-			{
-			public:
-				context(const HWND handle, core::settings& setting);
+	class Context : public Graphics::Context
+	{
+	public:
+		Context(const HWND handle, PersistentSettings& setting);
 
-				virtual ~context() {}
+		virtual ~Context() {}
 
-				virtual void draw() override;
-				virtual void resize() override;
-				virtual void attach_renderer(scene::scene* scene) override;
+		virtual void draw() override;
+		virtual void resize() override;
+		virtual void bind(SceneBase* scene) override;
 
-				void clear(const FLOAT rgba[4]);
+		void clear(const FLOAT rgba[4]);
 
-				CComPtr<ID3D11Device2> device;
-				CComPtr<ID3D11DeviceContext2> context3d;
-				CComPtr<ID2D1DeviceContext> context2d;
-				CComPtr<IDWriteFactory> write;
+		CComPtr<ID3D11Device2> device;
+		CComPtr<ID3D11DeviceContext2> context3d;
+		CComPtr<ID2D1DeviceContext> context2d;
+		CComPtr<IDWriteFactory> write;
 
-			protected:
-				void create_size_dependent_resources();
+	protected:
+		void createSizeDependentResources();
 
-				core::utility::com_initialize com_init;
+		Platform::Windows::InitializeCOM com;
 
-				CComPtr<IDXGISwapChain1> swapchain;
-				CComPtr<ID3D11RenderTargetView> rtv;
-				CComPtr<ID3D11DepthStencilView> dsv;
-			};
+		CComPtr<IDXGISwapChain1> swapchain;
+		CComPtr<ID3D11RenderTargetView> rtv;
+		CComPtr<ID3D11DepthStencilView> dsv;
+	};
 
-			class effect
-			{
-			public:
-				effect() {}
-				effect(const std::wstring name, ID3D11Device* dev);
+	class Effect
+	{
+	public:
+		Effect() {}
+		Effect(const std::wstring name, ID3D11Device* dev);
 
-				void bind(ID3D11DeviceContext2* ctx);
+		void bind(ID3D11DeviceContext2* ctx);
 
-			private:
-				CComPtr<ID3D11VertexShader> vs;
-				CComPtr<ID3D11PixelShader> ps;
-				CComPtr<ID3D11InputLayout> layout;
-			};
+	private:
+		CComPtr<ID3D11VertexShader> vs;
+		CComPtr<ID3D11PixelShader> ps;
+		CComPtr<ID3D11InputLayout> layout;
+	};
 
-		}
-	}
 }
 
 #include "../../../src/Graphics/D3D11/Renderer.h"

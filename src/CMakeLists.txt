@@ -6,6 +6,8 @@ target_include_directories(Crib PUBLIC
 	"${PROJECT_SOURCE_DIR}/include"
 )
 
+target_compile_features(Crib PUBLIC cxx_std_17)
+
 
 target_sources(Crib PRIVATE
 	"core/settings.cpp"

@@ -2,41 +2,41 @@
 #include "FirstPerson.h"
 #include <algorithm>
 
-using crib::input::camera_control_first_person;
+using Crib::Input::CameraControl::FirstPerson;
 
 
-camera_control_first_person::camera_control_first_person(crib::graphics::camera_3d& camera) : camera(camera)
+FirstPerson::FirstPerson(Crib::Graphics::Camera3D& camera) : camera(camera)
 {
 	RECT r;
 	GetWindowRect(GetForegroundWindow(), &r);
 
-	SetCursorPos(center_x = r.left + (r.right - r.left) / 2, center_y = r.top + (r.bottom - r.top) / 2);
+	SetCursorPos(centerX = r.left + (r.right - r.left) / 2, centerY = r.top + (r.bottom - r.top) / 2);
 	ClipCursor(&r);
 
-	update_camera();
+	updateCamera();
 }
 
-camera_control_first_person::~camera_control_first_person()
+FirstPerson::~FirstPerson()
 {
 	ClipCursor(nullptr);
 	SetCursor(LoadCursor(NULL, IDC_ARROW));
 }
 
 
-void camera_control_first_person::update_camera(const DirectX::XMVECTOR& movement)
+void FirstPerson::updateCamera(const DirectX::XMVECTOR& movement)
 {
 	// In 1st-person camera, eye is fixed (to player position), focus rotates around it.
 	// Note: phi is different from math convention, instead of rotating around Z it rotates around Y
 
 	const auto unit = DirectX::XMVectorSet(0, 0, 1.f, 1.f); // for left-hand, use -1
-	const auto roty = DirectX::XMMatrixRotationY(theta);
+	const auto rotY = DirectX::XMMatrixRotationY(theta);
 
-	camera.position = DirectX::XMVectorAdd(camera.position, DirectX::XMVector4Transform(movement, roty));
-	camera.look_at = DirectX::XMVectorAdd(camera.position, DirectX::XMVector4Transform(unit, DirectX::XMMatrixRotationX(phi) * roty));
+	camera.position = DirectX::XMVectorAdd(camera.position, DirectX::XMVector4Transform(movement, rotY));
+	camera.lookAt = DirectX::XMVectorAdd(camera.position, DirectX::XMVector4Transform(unit, DirectX::XMMatrixRotationX(phi) * rotY));
 }
 
 
-void camera_control_first_person::update(const double delta, const crib::input::buffer& buffer)
+void FirstPerson::update(const double delta, const Buffer& buffer)
 {
 	for (const auto& e : buffer)
 	{
@@ -45,10 +45,10 @@ void camera_control_first_person::update(const double delta, const crib::input::
 			POINT p;
 			GetCursorPos(&p);
 
-			phi = std::min(max_phi, std::max(min_phi, phi - float(center_y - p.y) / 300.0f));
-			theta += float(center_x - p.x) / 300.f;
+			phi = std::min(maxPhi, std::max(minPhi, phi - float(centerY - p.y) / 300.0f));
+			theta += float(centerX - p.x) / 300.f;
 
-			SetCursorPos(center_x, center_y);
+			SetCursorPos(centerX, centerY);
 			SetCursor(nullptr);
 		}
 	}
@@ -59,9 +59,9 @@ void camera_control_first_person::update(const double delta, const crib::input::
 		theta -= float(delta);
 
 	if (GetAsyncKeyState(VK_UP) & 0x8000)
-		phi = std::min(max_phi, phi - float(delta));
+		phi = std::min(maxPhi, phi - float(delta));
 	else if (GetAsyncKeyState(VK_DOWN) & 0x8000)
-		phi = std::max(min_phi, phi + float(delta));
+		phi = std::max(minPhi, phi + float(delta));
 
 
 	auto d = DirectX::XMVectorSet(
@@ -69,5 +69,5 @@ void camera_control_first_person::update(const double delta, const crib::input::
 		GetAsyncKeyState('W') & 0x8000 ? 1.f : (GetAsyncKeyState('S') & 0x8000 ? -1.f : 0), 1.f);
 
 
-	update_camera(DirectX::XMVectorScale(d, 10.f * float(delta)));
+	updateCamera(DirectX::XMVectorScale(d, 10.f * float(delta)));
 }

@@ -7,8 +7,8 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /
 {
 	try
 	{
-		demo_window main;
-		return crib::core::application::messageLoop();
+		CribDemo::Window main;
+		return Crib::Application::messageLoop();
 	}
 	catch (std::exception e)
 	{

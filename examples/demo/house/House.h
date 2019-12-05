@@ -5,24 +5,21 @@
 #include <Crib/CameraControl.h>
 
 
-namespace crib_scenes
+namespace CribDemo::House
 {
-	namespace house
+
+	class Scene : public Crib::Graphics::Scene
 	{
+	public:
+		Scene(Crib::PersistentSettings& settings);
 
-		class scene : public crib::scene::scene_3d
-		{
-		public:
-			scene(crib::core::settings& settings);
+		virtual std::wstring update(const double delta, const Crib::Input::Buffer& input) override;
 
-			virtual std::wstring update(const double delta, const crib::input::buffer& input) override;
+	protected:
+		void addAssets();
 
-		protected:
-			void add_assets();
+		Crib::Input::CameraControl::FirstPerson camControl;
+		double time = 0;
+	};
 
-			crib::input::camera_control_first_person camera_control;
-			double time = 0;
-		};
-
-	}
 }

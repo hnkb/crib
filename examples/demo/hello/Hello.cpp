@@ -7,13 +7,13 @@
 #include <cmath>
 #include <strsafe.h>
 
-using crib_scenes::hello::hello_d3d11_renderer;
-using crib_scenes::hello::hello_scene;
-using crib::core::utility::throw_if_failed;
+using CribDemo::Hello::Renderer;
+using CribDemo::Hello::Scene;
+using Crib::Platform::Windows::ThrowOnFail;
 
 
-hello_scene::hello_scene()
-	: vertex_data{
+Scene::Scene()
+	: vertexData{
 		DirectX::XMFLOAT3(.0f,  .5f, .5f), DirectX::XMFLOAT4(0.f, 1.f, 1.f, 1.f),
 		DirectX::XMFLOAT3(.5f, -.5f, .5f), DirectX::XMFLOAT4(.2f, .0f, .2f, 1.f),
 		DirectX::XMFLOAT3(-.5f, -.5f, .5f), DirectX::XMFLOAT4(.5f, .5f, .0f, 1.f),
@@ -22,11 +22,11 @@ hello_scene::hello_scene()
 
 }
 
-std::wstring hello_scene::update(const double delta, const crib::input::buffer& input)
+std::wstring Scene::update(const double delta, const Crib::Input::Buffer& input)
 {
 	time += delta;
 	frames += 1.;
-	buffer_size = std::max(buffer_size, size_t(input.end() - input.begin()));
+	bufferSize = std::max(bufferSize, size_t(input.end() - input.begin()));
 
 	for (auto& e : input)
 	{
@@ -38,12 +38,12 @@ std::wstring hello_scene::update(const double delta, const crib::input::buffer& 
 }
 
 
-hello_d3d11_renderer::hello_d3d11_renderer(crib::graphics::dx11::context& context, crib_scenes::hello::hello_scene& hello_scene) : renderer(context), scene(hello_scene)
+Renderer::Renderer(Crib::Graphics::D3D11::Context& context, Scene& scene) : Crib::Graphics::D3D11::Renderer(context), scene(scene)
 {
 	// Set up pipeline
 	{
-		throw_if_failed(ctx.device->CreateVertexShader(hello_vs, sizeof(hello_vs), nullptr, &vs), "Create vertex shader");
-		throw_if_failed(ctx.device->CreatePixelShader(hello_ps, sizeof(hello_ps), nullptr, &ps), "Create pixel shader");
+		ThrowOnFail(ctx.device->CreateVertexShader(hello_vs, sizeof(hello_vs), nullptr, &vs), "Create vertex shader");
+		ThrowOnFail(ctx.device->CreatePixelShader(hello_ps, sizeof(hello_ps), nullptr, &ps), "Create pixel shader");
 
 		ctx.context3d->VSSetShader(vs, nullptr, 0);
 		ctx.context3d->PSSetShader(ps, nullptr, 0);
@@ -56,35 +56,35 @@ hello_d3d11_renderer::hello_d3d11_renderer(crib::graphics::dx11::context& contex
 		};
 
 		CComPtr< ID3D11InputLayout> layout;
-		throw_if_failed(ctx.device->CreateInputLayout(ld, _countof(ld), hello_vs, sizeof(hello_vs), &layout), "Register vertex layout");
+		ThrowOnFail(ctx.device->CreateInputLayout(ld, _countof(ld), hello_vs, sizeof(hello_vs), &layout), "Register vertex layout");
 		ctx.context3d->IASetInputLayout(layout);
 	}
 
 	// Create vertex buffer
 	{
 		D3D11_BUFFER_DESC bufferDesc = {};
-		bufferDesc.ByteWidth = sizeof(scene.vertex_data);
+		bufferDesc.ByteWidth = sizeof(scene.vertexData);
 		bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
 		D3D11_SUBRESOURCE_DATA initData = {};
-		initData.pSysMem = scene.vertex_data;
+		initData.pSysMem = scene.vertexData;
 
-		throw_if_failed(ctx.device->CreateBuffer(&bufferDesc, &initData, &vb), "Create vertex buffer");
+		ThrowOnFail(ctx.device->CreateBuffer(&bufferDesc, &initData, &vb), "Create vertex buffer");
 	}
 
 	// D2D objects
 	{
-		throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 64.f, L"", &tf_value));
-		throw_if_failed(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 20.f, L"", &tf_title));
+		ThrowOnFail(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 64.f, L"", &tf_value));
+		ThrowOnFail(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 20.f, L"", &tf_title));
 		tf_value->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
 		tf_title->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
 
-		throw_if_failed(ctx.context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &brush));
+		ThrowOnFail(ctx.context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &brush));
 	}
 }
 
 
-void hello_d3d11_renderer::resize(const float w, const float h)
+void Renderer::resize(const float w, const float h)
 {
 	height = h, width = w;
 	const float least = std::min(width, height);
@@ -92,13 +92,13 @@ void hello_d3d11_renderer::resize(const float w, const float h)
 }
 
 
-void hello_d3d11_renderer::render()
+void Renderer::render()
 {
 	ctx.clear((FLOAT*)&DirectX::XMFLOAT4(std::fabs(std::sin(float(scene.time))) * .4f, .2f, .4f, 1.f));
 
 	// Draw with D3D
 	{
-		UINT stride = sizeof(scene.vertex_data[0]);
+		UINT stride = sizeof(scene.vertexData[0]);
 		UINT offset = 0;
 		ctx.context3d->IASetVertexBuffers(0, 1, &vb, &stride, &offset);
 
@@ -110,20 +110,20 @@ void hello_d3d11_renderer::render()
 	{
 		ctx.context2d->BeginDraw();
 
-		draw_stat(L"average fps", std::to_wstring(int(std::round(scene.frames / scene.time))), 40);
+		drawStats(L"average fps", std::to_wstring(int(std::round(scene.frames / scene.time))), 40);
 
 		wchar_t buffer[16];
 		double minutes = std::floor(scene.time / 60.);
 		StringCchPrintfW(buffer, 16, L"%d:%02d", int(minutes), int(std::floor(scene.time - minutes * 60.)));
-		draw_stat(L"running time", buffer, 160);
+		drawStats(L"running time", buffer, 160);
 
-		draw_stat(L"input buffer", std::to_wstring(scene.buffer_size), 280);
+		drawStats(L"input buffer", std::to_wstring(scene.bufferSize), 280);
 
-		throw_if_failed(ctx.context2d->EndDraw());
+		ThrowOnFail(ctx.context2d->EndDraw());
 	}
 }
 
-void hello_d3d11_renderer::draw_stat(std::wstring title, std::wstring value, float top)
+void Renderer::drawStats(std::wstring title, std::wstring value, float top)
 {
 	ctx.context2d->DrawTextW(value.c_str(), UINT32(value.size()), tf_value, D2D1::RectF(50, top, width - 50, top + 76), brush);
 	ctx.context2d->DrawLine(D2D1::Point2F(width - 50, top + 76), D2D1::Point2F(width - 200, top + 76), brush);

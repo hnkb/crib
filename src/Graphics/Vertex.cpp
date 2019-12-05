@@ -1,11 +1,11 @@
 
 #include <Crib/Graphics.h>
 
-using crib::geometry::definition;
+using Crib::Graphics::DrawableBase;
 
 
-std::map<std::wstring, definition> definition::assets({
-	{ L"pyramid", definition(
+std::map<std::wstring, DrawableBase> DrawableBase::assets({
+	{ L"pyramid", DrawableBase(
 		// vertices
 		{
 			{   0 ,  .5f,   0  },
@@ -27,7 +27,7 @@ std::map<std::wstring, definition> definition::assets({
 			{ 0, 2, 4 }
 		})},
 
-	{ L"cube", definition(
+	{ L"cube", DrawableBase(
 		// vertices
 		{
 			{ -.5f,  .5f, -.5f },

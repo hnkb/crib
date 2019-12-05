@@ -2,15 +2,7 @@
 #pragma once
 
 
-namespace crib
+namespace Crib::Application
 {
-	namespace core
-	{
-
-		namespace application
-		{
-			int messageLoop();
-		}
-
-	}
+	int messageLoop();
 }
