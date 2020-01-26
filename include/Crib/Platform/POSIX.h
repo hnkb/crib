@@ -12,7 +12,9 @@ namespace Crib::Platform::POSIX
 	public:
 		template <class... Args>
 		Error(int code, Args... args)
-			: Crib::Error(std::error_code(code, std::generic_category()), std::forward<Args>(args)...)
+			: Crib::Error(
+				std::error_code(code, std::generic_category()),
+				std::forward<Args>(args)...)
 		{}
 
 		template <class... Args>

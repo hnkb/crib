@@ -8,7 +8,7 @@ using namespace std;
 // Unfortunately, MinGW std::system_category() does not correctly report Windows error
 // messages, so we have to do it ourselves.
 #if defined(__MINGW32__)
-#include <Crib/Platform/Windows.h>
+#	include <Crib/Platform/Windows.h>
 
 namespace
 {
@@ -51,8 +51,8 @@ Error::Error(error_code _code, CallSite callSite)
 	if (callSite.description && *callSite.description)
 		message = "Error "s + callSite.description + ": " + message;
 
-	while (!message.empty() &&
-		(message.back() == '\r' || message.back() == '\n' || message.back() == ' '))
+	while (!message.empty()
+		   && (message.back() == '\r' || message.back() == '\n' || message.back() == ' '))
 		message.pop_back();
 
 	if (callSite.syscall && *callSite.syscall)

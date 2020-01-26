@@ -25,11 +25,8 @@ namespace Crib
 			// pointers must stay valid as long as this object is alive.
 
 			CallSite(
-				const char* description,
-				const char* syscall,
-				const char* function,
-				const char* file,
-				int line)
+				const char* description, const char* syscall,
+				const char* function, const char* file, int line)
 				: description(description),
 				  syscall(syscall),
 				  function(function),
@@ -60,7 +57,7 @@ namespace Crib
 }
 
 #if defined(_MSC_VER) && !defined(__clang__)
-#define CurrentSourceLocation __FUNCTION__, __FILE__, __LINE__
+#	define CurrentSourceLocation __FUNCTION__, __FILE__, __LINE__
 #else
-#define CurrentSourceLocation __PRETTY_FUNCTION__, __FILE__, __LINE__
+#	define CurrentSourceLocation __PRETTY_FUNCTION__, __FILE__, __LINE__
 #endif
