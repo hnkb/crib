@@ -7,6 +7,12 @@ project (Crib)
 add_library (Crib STATIC "")
 
 
+if (CMAKE_PROJECT_NAME STREQUAL Crib)
+	enable_testing()
+	add_subdirectory ("test")
+endif()
+
+
 target_include_directories (Crib
 	PUBLIC
 		"include")
@@ -19,7 +25,7 @@ target_compile_features (Crib
 if (MSVC)
 	# CMake 3.14 and older add /W3 by default
 	# CMP0092 is meant to remove /W3, but does not work in Visual Studio-bundled CMake
-	string(REGEX REPLACE " */W3 *" " " CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+	string (REGEX REPLACE " */W3 *" " " CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 	target_compile_options (Crib
 		PRIVATE
@@ -37,6 +43,10 @@ target_sources (Crib PRIVATE
 	"src/Platform/Error.cpp")
 
 if (WIN32)
+
+	if (CMAKE_COMPILER_IS_GNUCXX)
+		target_link_libraries (Crib PUBLIC windowscodecs)
+	endif()
 
 	target_sources (Crib PRIVATE
 		"include/Crib/Platform/Windows.h"
