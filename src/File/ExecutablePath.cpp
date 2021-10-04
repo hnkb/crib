@@ -7,9 +7,7 @@ using namespace std;
 
 #ifdef _WIN32
 
-//#	include <Crib/Platform/Windows.h>
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#	include <crib/Platform/Win>
 
 filesystem::path App::executablePath()
 {

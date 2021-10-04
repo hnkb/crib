@@ -7,7 +7,7 @@ foreach (CXX_STD 17 20)
 		"unit/App.cpp"
 		"unit/File.cpp"
 		"unit/main.cpp"
-	 )
+	)
 
 	target_compile_features(${TARGET_NAME} PRIVATE "cxx_std_${CXX_STD}")
 	include("${crib_SOURCE_DIR}/src/Platform/CMake/Compiler-config.cmake")

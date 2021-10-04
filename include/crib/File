@@ -2,8 +2,8 @@
 #pragma once
 
 #include <filesystem>
-#include <string>
 #include <vector>
+#include <stdio.h>
 
 
 namespace crib::App
@@ -68,6 +68,41 @@ namespace crib::File
 	};
 
 
+	template <typename Type>
+	std::vector<Type> readAll(const std::filesystem::path& filename)
+	{
+		auto file = Stream(filename, "rb");
+		std::vector<Type> buffer(file.size() / sizeof(Type));
+
+		if (fread(buffer.data(), sizeof(Type), buffer.size(), file) != buffer.size()
+			&& ferror(file))
+			throw std::system_error(std::error_code(errno, std::generic_category()));
+
+		return buffer;
+	}
+
+	// TODO: readAllText using memory-mapped to avoid extra string init with zero
+
+	template <typename Type>
+	void writeAll(const Type* data, const size_t size, const std::filesystem::path& filename)
+	{
+		std::filesystem::create_directories(filename.parent_path());
+
+		auto file = Stream(filename, "wb");
+		fwrite(data, sizeof(Type), size, file);
+	}
+
+	template <typename Container>
+	void writeAll(const Container& data, const std::filesystem::path& filename)
+	{
+		return writeAll(data.data(), data.size(), filename);
+	}
+
+	// TODO:
+	// template <> void writeAll(const char* data, const size_t size, const
+	// std::filesystem::path& filename);
+
+
 
 	template <class Type = uint8_t>
 	class MemoryMapped
@@ -111,26 +146,26 @@ namespace crib::File
 	};
 
 	template <>
-	File::MemoryMapped<uint8_t>::MemoryMapped(const std::filesystem::path& filename);
+	MemoryMapped<uint8_t>::MemoryMapped(const std::filesystem::path& filename);
 	template <>
-	File::MemoryMapped<uint8_t>::~MemoryMapped();
+	MemoryMapped<uint8_t>::~MemoryMapped();
 	template <>
-	size_t File::MemoryMapped<uint8_t>::size() const;
+	size_t MemoryMapped<uint8_t>::size() const;
 
 	template <class Type>
-	File::MemoryMapped<Type>::MemoryMapped(const std::filesystem::path& filename)
+	MemoryMapped<Type>::MemoryMapped(const std::filesystem::path& filename)
 		: base(new MemoryMapped<uint8_t>(filename)),
 		  startAddress(
 			  reinterpret_cast<Type*>(reinterpret_cast<MemoryMapped<uint8_t>*>(base)->data()))
 	{}
 	template <class Type>
-	File::MemoryMapped<Type>::~MemoryMapped()
+	MemoryMapped<Type>::~MemoryMapped()
 	{
 		if (base)
 			delete reinterpret_cast<MemoryMapped<uint8_t>*>(base);
 	}
 	template <class Type>
-	size_t File::MemoryMapped<Type>::size() const
+	size_t MemoryMapped<Type>::size() const
 	{
 		return base ? reinterpret_cast<MemoryMapped<uint8_t>*>(base)->size() / sizeof(Type) : 0;
 	}

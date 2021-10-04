@@ -1,17 +1,15 @@
 
 #include <crib/File>
 
-using namespace crib;
+using namespace crib::File;
 using namespace std;
 
 
 #if defined(_WIN32)
 
-//#	include <Crib/Platform/Windows.h>
-#	define WIN32_LEAN_AND_MEAN
-#	include <Windows.h>
+#	include <crib/Platform/Win>
 
-//using namespace Crib::Platform;
+using namespace crib::Platform;
 
 
 struct MemMapData
@@ -39,8 +37,7 @@ File::MemoryMapped<uint8_t>::MemoryMapped(const std::filesystem::path& filename)
 		nullptr);
 	if (data->fileHandle == INVALID_HANDLE_VALUE)
 		// throw CribError("opening '" + filename.u8string() + "'", "CreateFileW");
-		// throw Windows::Error(action.c_str(), "CreateFileW", CurrentSourceLocation);
-		throw system_error(error_code(GetLastError(), system_category()));
+		throw Win::Error(action.c_str(), "CreateFileW", CurrentSourceLocation);
 
 	// read file size
 	{
@@ -52,13 +49,11 @@ File::MemoryMapped<uint8_t>::MemoryMapped(const std::filesystem::path& filename)
 	data->fileMapHandle =
 		CreateFileMappingW(data->fileHandle, nullptr, PAGE_READONLY, 0, 0, nullptr);
 	if (data->fileMapHandle == nullptr)
-		//throw Windows::Error(action.c_str(), "CreateFileMappingW", CurrentSourceLocation);
-		throw system_error(error_code(GetLastError(), system_category()));
+		throw Win::Error(action.c_str(), "CreateFileMappingW", CurrentSourceLocation);
 
 	startAddress = (uint8_t*)MapViewOfFile(data->fileMapHandle, FILE_MAP_READ, 0, 0, 0);
 	if (startAddress == nullptr)
-		//throw Windows::Error(action.c_str(), "MapViewOfFile", CurrentSourceLocation);
-		throw system_error(error_code(GetLastError(), system_category()));
+		throw Win::Error(action.c_str(), "MapViewOfFile", CurrentSourceLocation);
 }
 
 template <>

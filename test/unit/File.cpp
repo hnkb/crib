@@ -6,6 +6,9 @@ using namespace crib;
 using namespace std;
 
 
+// const std::filesystem::path existingFile = __FILE__;
+
+
 TEST_CASE("crib::File::Stream")
 {
 	auto validFile = App::executablePath();
