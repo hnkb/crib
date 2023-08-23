@@ -1,6 +1,6 @@
 
 #include <crib/Network>
-#include <cstring>
+#include "chat.h"
 #include <iostream>
 
 using crib::Socket;
@@ -40,16 +40,9 @@ void server()
 
 	char client_ip[INET_ADDRSTRLEN];
 	inet_ntop(AF_INET, &client_address.sin_addr, client_ip, INET_ADDRSTRLEN);
-	std::cout << "Connected to client " << client_ip << "...\n";
+	std::cout << "Connected to client " << client_ip << ". You can now chat...\n";
 
-	char buffer[1024];
-
-	auto rec = recv(client, buffer, sizeof(buffer), 0);
-	buffer[rec] = 0;
-	std::cout << " [client]: " << buffer << "\n";
-
-	fgets(buffer, sizeof(buffer), stdin);
-	auto sent = send(client, buffer, strlen(buffer), 0);
+	chat(client);
 }
 
 int main()

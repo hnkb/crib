@@ -1,5 +1,5 @@
 
-add_executable(chat-server "server.cpp")
+add_executable(chat-server "server.cpp" "chat.cpp")
 add_executable(chat-client "client.cpp" "chat.cpp")
 
 target_link_libraries(chat-server PRIVATE crib)
