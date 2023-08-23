@@ -12,4 +12,5 @@ include("Platform/CMake/Compiler-config.cmake")
 
 target_sources(crib PRIVATE
 	"File/Stream.cpp"
+	"Network/Socket.cpp"
 )
