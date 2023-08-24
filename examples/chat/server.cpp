@@ -1,7 +1,5 @@
 
 #include <crib/Network>
-#include <arpa/inet.h>
-
 #include <cstring>
 #include <iostream>
 
