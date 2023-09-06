@@ -168,7 +168,7 @@ void Context::draw()
 	context3d->DiscardView(dsv);
 
 	if (hr == DXGI_ERROR_DEVICE_REMOVED) throw Context::Invalid();
-	ThrowOnFail(hr, "Rendernig");
+	ThrowOnFail(hr, "Rendering");
 }
 
 
