@@ -78,7 +78,16 @@ Context::Context(const App::Window& window) : owner(window)
 	if (!gladLoadGL())
 		throw std::runtime_error("Unable to load OpenGL");
 
-	readDeviceDescription(0);
+	// enable V-Sync
+	if (GLAD_GLX_EXT_swap_control)
+		glXSwapIntervalEXT(disp, glXGetCurrentDrawable(), 1);  // or 0 to disable V-Sync
+
+	if (GLAD_GLX_EXT_swap_control_tear)
+		glXSwapIntervalEXT(disp, glXGetCurrentDrawable(), -1);  // to enable adaptive sync
+
+	GLuint interval;
+	glXQueryDrawable(disp, glXGetCurrentDrawable(), GLX_SWAP_INTERVAL_EXT, &interval);
+	readDeviceDescription(interval);
 }
 
 Context::~Context()
