@@ -31,4 +31,17 @@ if (WIN32)
 	)
 
 	target_link_libraries(crib PRIVATE opengl32)
+elseif (APPLE)
+else()
+	# Assuming Unix and Linux here. We can also check (UNIX AND NOT APPLE)
+
+	#target_compile_options(crib PRIVATE -mavx -Wall -Wextra -pedantic -Werror)
+
+	target_sources(crib PRIVATE
+		"App/Xlib/App_x11.cpp"
+		"App/Xlib/Window_x11.cpp"
+	)
+
+	find_package(X11 REQUIRED)
+	target_link_libraries(crib PRIVATE X11::X11)
 endif()
