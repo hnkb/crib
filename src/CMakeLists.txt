@@ -40,8 +40,12 @@ else()
 	target_sources(crib PRIVATE
 		"App/Xlib/App_x11.cpp"
 		"App/Xlib/Window_x11.cpp"
+		"Graphics/OpenGL/Context_glx.cpp"
 	)
 
 	find_package(X11 REQUIRED)
 	target_link_libraries(crib PRIVATE X11::X11)
+	
+	find_package(OpenGL REQUIRED)
+	target_link_libraries(crib PRIVATE OpenGL::OpenGL OpenGL::GLX)
 endif()

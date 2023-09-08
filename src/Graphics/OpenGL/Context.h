@@ -7,6 +7,9 @@
 #if defined(_WIN32)
 #	include <crib/Platform/Win>
 #	define PLATFORM_GL_CONTEXT HGLRC
+#elif defined(__unix__)
+#	include <glad/glad_glx.h>
+#	define PLATFORM_GL_CONTEXT GLXContext
 #endif
 
 

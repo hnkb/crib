@@ -2,15 +2,15 @@
 #include <crib/App>
 #include "../Graphics/OpenGL/Context.h"
 
-using crib::App::Window;
+using namespace crib;
 
 
-Window::Window(Window&& other)
+App::Window::Window(Window&& other)
 {
 	*this = std::move(other);
 }
 
-Window& Window::operator=(Window&& other)
+App::Window& App::Window::operator=(Window&& other)
 {
 	if (this != &other)
 	{
@@ -23,7 +23,7 @@ Window& Window::operator=(Window&& other)
 }
 
 
-void Window::createGraphicsContext(Options options)
+void App::Window::createGraphicsContext(Options options)
 {
 	if (options.preferEngine == Engine::any || options.preferEngine == Engine::openGL)
 		context = new Graphics::OpenGL::Context(*this);
@@ -35,7 +35,7 @@ void Window::createGraphicsContext(Options options)
 	}
 }
 
-void Window::draw()
+void App::Window::draw()
 {
 	if (context)
 		context->draw();

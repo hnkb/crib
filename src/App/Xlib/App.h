@@ -2,6 +2,7 @@
 #include <crib/App>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <glad/glad_glx.h>
 #include <string>
 
 
@@ -21,19 +22,25 @@ namespace crib::Platform::X11
 	class Window
 	{
 	public:
-		Window(const crib::App::Window::Options&);
+		Window(crib::App::Window&, const crib::App::Window::Options&);
 		~Window();
 
 		void proc(XEvent& event);
 		void close();
 		void setTitle(const std::string& title);
 
-	private:
-		int screen;
+		crib::App::Window& owner;
+
 		::Window wnd;
-		::GC gc;
+		Colormap colorMap;
+		GLXFBConfig pixelFormat;
 
 		bool alreadyDeleted = false;
 	};
+
+	namespace GLX
+	{
+		GLXFBConfig choosePixelFormat(Display*);
+	}
 
 }
