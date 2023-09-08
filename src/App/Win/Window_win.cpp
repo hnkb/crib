@@ -29,8 +29,7 @@ namespace
 					return TRUE;
 
 				case WM_PAINT:
-					if (window->context)
-						window->context->draw();
+					window->draw();
 					return 0;
 
 				case WM_DESTROY:
@@ -98,12 +97,7 @@ Window::Window(Options opt)
 
 	SetWindowLongPtrW((HWND)impl, GWLP_USERDATA, LONG_PTR(this));
 
-	{
-		if (opt.preferEngine == Engine::any || opt.preferEngine == Engine::openGL)
-			context = new Graphics::OpenGL::Context(*this);
-		if (context)
-			SetWindowTextW((HWND)impl, Platform::Win::WideString(context->description));
-	}
+	createGraphicsContext(opt);
 
 	ShowWindow((HWND)impl, SW_SHOWDEFAULT);
 

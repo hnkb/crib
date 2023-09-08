@@ -6,6 +6,7 @@
 
 #if defined(_WIN32)
 #	include <crib/Platform/Win>
+#	define PLATFORM_GL_CONTEXT HGLRC
 #endif
 
 
@@ -22,7 +23,10 @@ namespace crib::Graphics::OpenGL
 		virtual void onResize(int2 dims) override;
 
 	private:
-		HGLRC ctx = nullptr;
+		void drawPlatformIndependent();
+		void readDeviceDescription(int swapInterval);
+
+		PLATFORM_GL_CONTEXT ctx = nullptr;
 		const App::Window& owner;
 	};
 
