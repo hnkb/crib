@@ -60,6 +60,12 @@ namespace
 				return 0;
 			}
 
+			// if (message == WM_KEYDOWN || message == WM_KEYUP)
+			// {
+			//	input.push(message, wParam, lParam, timer.now());
+			//	return 0;
+			// }
+
 			switch (message)
 			{
 				case WM_CHAR:
