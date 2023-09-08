@@ -7,9 +7,16 @@
 #if defined(_WIN32)
 #	include <crib/Platform/Win>
 #	define PLATFORM_GL_CONTEXT HGLRC
+#	define PLATFORM_OWNER_TYPE HWND
 #elif defined(__unix__)
 #	include <glad/glad_glx.h>
 #	define PLATFORM_GL_CONTEXT GLXContext
+#	define PLATFORM_OWNER_TYPE crib::Platform::X11::Window&
+
+namespace crib::Platform::X11
+{
+	class Window;
+}
 #endif
 
 
@@ -30,7 +37,7 @@ namespace crib::Graphics::OpenGL
 		void readDeviceDescription(int swapInterval);
 
 		PLATFORM_GL_CONTEXT ctx = nullptr;
-		const App::Window& owner;
+		PLATFORM_OWNER_TYPE owner;
 	};
 
 }

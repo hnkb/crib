@@ -22,14 +22,14 @@ namespace crib::Platform::X11
 	class Window
 	{
 	public:
-		Window(crib::App::Window&, const crib::App::Window::Options&);
+		Window(crib::App::Window*, const crib::App::Window::Options&);
 		~Window();
 
 		void proc(XEvent& event);
 		void close();
 		void setTitle(const std::string& title);
 
-		crib::App::Window& owner;
+		crib::App::Window* owner;
 
 		::Window wnd;
 		Colormap colorMap;

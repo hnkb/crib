@@ -10,18 +10,6 @@ App::Window::Window(Window&& other)
 	*this = std::move(other);
 }
 
-App::Window& App::Window::operator=(Window&& other)
-{
-	if (this != &other)
-	{
-		impl = other.impl;
-		context = other.context;
-		other.impl = nullptr;
-		other.context = nullptr;
-	}
-	return *this;
-}
-
 
 void App::Window::createGraphicsContext(Options options)
 {

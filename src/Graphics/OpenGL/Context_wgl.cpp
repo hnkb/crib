@@ -108,14 +108,13 @@ namespace
 }
 
 
-Context::Context(const App::Window& window) : owner(window)
+Context::Context(const App::Window& window) : owner((HWND)window.impl)
 {
 	description = "OpenGL  |  no or unknown device";
 
 	loadOpenGL();
 
-	auto handle = (HWND)owner.impl;
-	auto hdc = GetDC(handle);
+	auto hdc = GetDC(owner);
 	SetPixelFormat(hdc, selectBetterPixelFormat(hdc), &pfd);
 
 	// Try to create the ideal context, but if it fails, fall back to whatever we can get
@@ -150,18 +149,17 @@ Context::Context(const App::Window& window) : owner(window)
 
 Context::~Context()
 {
-	wglMakeCurrent(GetDC((HWND)owner.impl), nullptr);
+	wglMakeCurrent(GetDC(owner), nullptr);
 	wglDeleteContext(ctx);
 }
 
 void Context::draw()
 {
 	PAINTSTRUCT ps;
-	auto handle = (HWND)owner.impl;
-	auto hdc = BeginPaint(handle, &ps);
+	auto hdc = BeginPaint(owner, &ps);
 
 	drawPlatformIndependent();
 
 	SwapBuffers(hdc);
-	EndPaint(handle, &ps);
+	EndPaint(owner, &ps);
 }

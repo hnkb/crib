@@ -120,6 +120,20 @@ Window::~Window()
 		DestroyWindow((HWND)impl);
 }
 
+Window& Window::operator=(Window&& other)
+{
+	if (this != &other)
+	{
+		impl = other.impl;
+		context = other.context;
+		other.impl = nullptr;
+		other.context = nullptr;
+
+		SetWindowLongPtrW((HWND)impl, GWLP_USERDATA, LONG_PTR(this));
+	}
+	return *this;
+}
+
 
 Window::Options Window::getOptions() const
 {

@@ -18,13 +18,12 @@ namespace
 	}
 }
 
-Context::Context(const App::Window& window) : owner(window)
+Context::Context(const App::Window& window) : owner(*(X11::Window*)window.impl)
 {
 	description = "OpenGL  |  no or unknown device";
 
 	auto& disp = X11::App::display;
-	auto& xwnd = *(X11::Window*)owner.impl;
-	auto& fbc = xwnd.pixelFormat;
+	auto& fbc = owner.pixelFormat;
 
 	if (!GLAD_GLX_ARB_create_context || !GLAD_GLX_ARB_create_context_profile)
 	{
@@ -73,7 +72,7 @@ Context::Context(const App::Window& window) : owner(window)
 	if (!ctx)
 		throw std::runtime_error("Failed to create an OpenGL context");
 
-	glXMakeCurrent(disp, xwnd.wnd, ctx);
+	glXMakeCurrent(disp, owner.wnd, ctx);
 
 	if (!gladLoadGL())
 		throw std::runtime_error("Unable to load OpenGL");
@@ -104,7 +103,7 @@ void Context::draw()
 	if (ctx)
 	{
 		drawPlatformIndependent();
-		glXSwapBuffers(X11::App::display, ((X11::Window*)owner.impl)->wnd);
+		glXSwapBuffers(X11::App::display, owner.wnd);
 	}
 }
 

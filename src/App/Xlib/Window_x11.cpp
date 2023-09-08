@@ -7,7 +7,7 @@ using namespace crib;
 using namespace crib::Platform;
 
 
-X11::Window::Window(crib::App::Window& owner, const crib::App::Window::Options& opt)
+X11::Window::Window(crib::App::Window* owner, const crib::App::Window::Options& opt)
 	: owner(owner)
 {
 	App::open();
@@ -86,7 +86,7 @@ void X11::Window::proc(XEvent& event)
 	switch (event.type)
 	{
 		case Expose:
-			owner.draw();
+			owner->draw();
 			break;
 
 		case KeyPress:
@@ -121,7 +121,7 @@ App::Window::Window(Options opt)
 	if (opt.title.empty())
 		opt.title = "crib";
 
-	impl = new X11::Window(*this, opt);
+	impl = new X11::Window(this, opt);
 
 	createGraphicsContext(opt);
 
@@ -138,6 +138,21 @@ App::Window::~Window()
 	if (impl)
 		delete (X11::Window*)impl;
 }
+
+App::Window& App::Window::operator=(Window&& other)
+{
+	if (this != &other)
+	{
+		impl = other.impl;
+		context = other.context;
+		other.impl = nullptr;
+		other.context = nullptr;
+
+		((Platform::X11::Window*)impl)->owner = this;
+	}
+	return *this;
+}
+
 
 App::Window::Options App::Window::getOptions() const
 {
