@@ -36,6 +36,8 @@ namespace crib::App
 		Options getOptions() const;
 		Window& setOptions(const Options&);
 
+		void close();
+
 		void createGraphicsContext(Options);
 		virtual void draw();
 

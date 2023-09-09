@@ -138,6 +138,12 @@ Window& Window::operator=(Window&& other)
 }
 
 
+void Window::close()
+{
+	DestroyWindow((HWND)impl);
+}
+
+
 Window::Options Window::getOptions() const
 {
 	return {};
