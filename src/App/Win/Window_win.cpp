@@ -27,6 +27,7 @@ namespace
 
 				case WM_SIZE:
 					window->onSizeChanged({ LOWORD(lParam), HIWORD(lParam) });
+					InvalidateRect(handle, nullptr, FALSE);
 					return 0;
 
 				case WM_ERASEBKGND:
