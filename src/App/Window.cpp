@@ -37,3 +37,13 @@ void App::Window::draw()
 	if (context)
 		context->draw();
 }
+
+
+void App::Window::onPosChanged(int2 pos)
+{}
+
+void App::Window::onSizeChanged(int2 dims)
+{
+	if (context)
+		context->onResize(dims);
+}

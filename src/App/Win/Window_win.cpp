@@ -17,9 +17,16 @@ namespace
 		{
 			switch (message)
 			{
+				case WM_MOVE:
+				{
+					RECT rect;
+					GetWindowRect(handle, &rect);
+					window->onPosChanged({ rect.left, rect.top });
+					return 0;
+				}
+
 				case WM_SIZE:
-					if (window->context)
-						window->context->onResize({ LOWORD(lParam), HIWORD(lParam) });
+					window->onSizeChanged({ LOWORD(lParam), HIWORD(lParam) });
 					return 0;
 
 				case WM_ERASEBKGND:

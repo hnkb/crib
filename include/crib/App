@@ -41,6 +41,9 @@ namespace crib::App
 		void createGraphicsContext(Options);
 		virtual void draw();
 
+		virtual void onPosChanged(int2 pos);
+		virtual void onSizeChanged(int2 dims);
+
 		void* impl = nullptr;
 		Graphics::Context* context = nullptr;
 	};
