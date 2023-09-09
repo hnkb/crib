@@ -13,6 +13,15 @@ App::Window::Window(Window&& other)
 
 void App::Window::createGraphicsContext(Options options)
 {
+	if (context)
+	{
+		delete context;
+		context = nullptr;
+	}
+
+	if (!impl)
+		return;
+
 	if (options.preferEngine == Engine::any || options.preferEngine == Engine::openGL)
 		context = new Graphics::OpenGL::Context(*this);
 

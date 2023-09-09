@@ -115,7 +115,10 @@ Window::Window(Options opt)
 Window::~Window()
 {
 	if (context)
+	{
 		delete context;
+		context = nullptr;
+	}
 	if (impl)
 		DestroyWindow((HWND)impl);
 }
