@@ -17,6 +17,15 @@ namespace crib::App
 	int run();
 
 
+	struct MouseEvent
+	{
+		enum class Type { ButtonDown, ButtonUp, Move };
+		enum class Button { Left, Middle, Right };
+		Type type;
+		Button button;
+		int2 pos;
+	};
+
 	class Window
 	{
 	public:
@@ -41,6 +50,7 @@ namespace crib::App
 		void createGraphicsContext(Options);
 		virtual void draw();
 
+		virtual void onMouseEvent(const MouseEvent&) {}
 		virtual void onKeyChar(const std::string& text) {}
 		virtual void onPosChanged(int2 pos);
 		virtual void onSizeChanged(int2 dims);

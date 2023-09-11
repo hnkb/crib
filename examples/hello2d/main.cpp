@@ -5,6 +5,9 @@
 using namespace crib;
 
 
+float2 offset = { 0.f, 0.f };
+
+
 class MyWindow : public App::Window
 {
 public:
@@ -41,9 +44,31 @@ public:
 		}
 		setOptions(opt);
 	}
+	void onMouseEvent(const App::MouseEvent& ev) override
+	{
+		using App::MouseEvent;
+
+		if (ev.type == MouseEvent::Type::ButtonDown)
+		{
+			if (dragStartPos.x == -1)
+				dragStartPos = ev.pos;
+		}
+		else if (ev.type == MouseEvent::Type::ButtonUp)
+		{
+			dragStartPos = { -1 };
+			this->draw();
+		}
+		else if (ev.type == MouseEvent::Type::Move && dragStartPos.x != -1)
+		{
+			offset = toFloat2(ev.pos - dragStartPos) / 400.f;
+			offset.y *= -1.f;
+			draw();
+		}
+	}
 
 private:
 	Options opt;
+	int2 dragStartPos = { -1 };
 };
 
 int main()

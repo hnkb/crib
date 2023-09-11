@@ -2,6 +2,7 @@
 #include "App.h"
 #include <crib/App>
 #include "../../Graphics/OpenGL/Context.h"
+#include <windowsx.h>
 
 using crib::App::Window;
 
@@ -15,6 +16,43 @@ namespace
 
 		if (window)
 		{
+			if ((message >= WM_MOUSEFIRST && message <= WM_MOUSELAST))
+			{
+				using crib::App::MouseEvent;
+
+				MouseEvent ev;
+				ev.pos.x = GET_X_LPARAM(lParam);
+				ev.pos.y = GET_Y_LPARAM(lParam);
+
+				switch (message)
+				{
+					case WM_MOUSEMOVE:
+						ev.type = MouseEvent::Type::Move;
+						break;
+					case WM_LBUTTONDOWN:
+					case WM_MBUTTONDOWN:
+					case WM_RBUTTONDOWN:
+						SetCapture(handle);
+						ev.type = MouseEvent::Type::ButtonDown;
+						break;
+					case WM_LBUTTONUP:
+					case WM_RBUTTONUP:
+					case WM_MBUTTONUP:
+						ReleaseCapture();
+						ev.type = MouseEvent::Type::ButtonUp;
+						break;
+				}
+				if (message == WM_LBUTTONDOWN || message == WM_LBUTTONUP)
+					ev.button = MouseEvent::Button::Left;
+				else if (message == WM_MBUTTONDOWN || message == WM_MBUTTONUP)
+					ev.button = MouseEvent::Button::Middle;
+				else if (message == WM_RBUTTONDOWN || message == WM_RBUTTONUP)
+					ev.button = MouseEvent::Button::Right;
+
+				window->onMouseEvent(ev);
+				return 0;
+			}
+
 			switch (message)
 			{
 				case WM_CHAR:
