@@ -11,6 +11,7 @@ float2 offset = { 0.f, 0.f };
 class MyWindow : public App::Window
 {
 public:
+	MyWindow() : Window(Options { "HelloTriangle", { 400, 300 }, { 800, 800 } }) {}
 	void onSizeChanged(int2 dims) override
 	{
 		Window::onSizeChanged(dims);
