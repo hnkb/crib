@@ -11,12 +11,12 @@ public:
 	void onSizeChanged(int2 dims) override
 	{
 		Window::onSizeChanged(dims);
-		printf("size\n");
+		printf("size %d %d\n", dims.x, dims.y);
 	}
 	void onPosChanged(int2 pos) override
 	{
 		Window::onPosChanged(pos);
-		printf("move\n");
+		// printf("move\n");
 	}
 };
 
