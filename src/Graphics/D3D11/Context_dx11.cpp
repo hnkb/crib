@@ -1,7 +1,5 @@
 
 #include <Crib/Graphics/Direct3D11.h>
-#include "../dx11/renderer_3d.h"
-#include <Crib/Graphics.h>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d2d1.lib")

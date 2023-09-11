@@ -1,10 +1,10 @@
 
 #pragma once
 
-#include "renderer.h"
-#include "effect.h"
-#include "constant_buffer.h"
-#include "vertex_buffer.h"
+#include "../dx11/renderer.h"
+#include "../dx11/effect.h"
+#include "ConstantBuffer.h"
+#include "../dx11/vertex_buffer.h"
 #include "../ConstantBuffers.h"
 #include "../data_formats.h"
 

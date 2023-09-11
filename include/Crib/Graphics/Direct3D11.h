@@ -48,4 +48,4 @@ namespace crib
 	}
 }
 
-#include "../../../src/graphics/dx11/renderer_3d.h"
+#include "../../../src/Graphics/D3D11/Renderer.h"
