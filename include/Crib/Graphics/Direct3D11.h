@@ -12,6 +12,8 @@
 namespace Crib::Graphics::D3D11
 {
 
+	class Renderer3D;
+
 	class Drawable
 	{
 	public:
@@ -33,7 +35,7 @@ namespace Crib::Graphics::D3D11
 	public:
 		Context(const HWND handle, PersistentSettings& setting);
 
-		virtual ~Context() {}
+		virtual ~Context();
 
 		virtual void draw() override;
 		virtual void resize() override;
@@ -54,6 +56,8 @@ namespace Crib::Graphics::D3D11
 		CComPtr<IDXGISwapChain1> swapchain;
 		CComPtr<ID3D11RenderTargetView> rtv;
 		CComPtr<ID3D11DepthStencilView> dsv;
+
+		std::unique_ptr<Renderer3D> renderer;
 	};
 
 	class Effect

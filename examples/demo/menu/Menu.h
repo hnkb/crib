@@ -20,9 +20,13 @@ namespace CribDemo::Menu
 		const size_t getSelectedIdx() const { return navigation.back().second; }
 		const bool isActive(const MenuItem item) { return settings.get(item.settingsKey, L"") == item.settingsValue; }
 
-	protected:
-		virtual Crib::Graphics::Renderer* createCustomRenderer(Crib::Graphics::Context& context) override;
+		virtual void overlayInit(Crib::Graphics::Context& context) override;
+		virtual void overlayDraw() { if (renderer) renderer->render(); }
+		virtual void onScreenResize(const float width, const float height) override { if (renderer) renderer->resize(width, height); }
 
+
+	protected:
+		std::unique_ptr<Renderer> renderer;
 
 		std::wstring handleEvent(const Crib::Input::Event& e);
 		std::wstring navigateTo(MenuItem& item);

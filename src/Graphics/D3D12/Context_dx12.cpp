@@ -117,7 +117,7 @@ void Context::draw()
 		cmdlist->OMSetRenderTargets(1, &rtvhandle, FALSE, nullptr);
 
 
-		if (renderer) renderer->render();
+		//if (renderer) renderer->render();
 
 
 		// Indicate that the back buffer will now be used to present.

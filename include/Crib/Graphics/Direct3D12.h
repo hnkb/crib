@@ -49,5 +49,3 @@ namespace Crib::Graphics::D3D12
 	};
 
 }
-
-#include "../../../src/graphics/dx12/renderer.h"

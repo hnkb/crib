@@ -71,13 +71,12 @@ Context::Context(const HWND handle, PersistentSettings& setting)
 	createSizeDependentResources();
 }
 
+Context::~Context() {}
+
 
 void Context::bind(SceneBase* scene)
 {
-	auto rndr = scene->createCustomRenderer(*this);
-	if (!rndr)
-		rndr = new Renderer3D<Scene>(*this, dynamic_cast<Scene&>(*scene));
-	renderer.reset(rndr);
+	renderer.reset(new Renderer3D(*this, *scene));
 
 	if (swapchain)
 	{

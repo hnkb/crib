@@ -3,7 +3,6 @@
 #include <Crib/Window.h>
 #include <cmath>
 
-using CribDemo::Strawman::Renderer;
 using CribDemo::Strawman::Scene;
 using Crib::Platform::Windows::ThrowOnFail;
 
@@ -47,37 +46,49 @@ std::wstring Scene::update(const double delta, const Crib::Input::Buffer& input)
 }
 
 
-Renderer::Renderer(Crib::Graphics::D3D11::Context& context, Scene& scene) : Crib::Graphics::D3D11::Renderer(context), scene(scene)
+void Scene::overlayInit(Crib::Graphics::Context& context)
 {
-	ThrowOnFail(ctx.write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 28.f, L"", &textFormat));
-	ThrowOnFail(ctx.context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &brush));
+	resources.ctx = dynamic_cast<Crib::Graphics::D3D11::Context*>(&context);
+	if (resources.ctx)
+	{
+		ThrowOnFail(resources.ctx->write->CreateTextFormat(L"Segoe UI", nullptr, DWRITE_FONT_WEIGHT_THIN, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 28.f, L"", &resources.textFormat));
+		ThrowOnFail(resources.ctx->context2d->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &resources.brush));
+	}
 }
 
-void Renderer::render()
+void Scene::overlayDraw()
 {
+	if (!resources.ctx)
+		return;
+
+	auto& ctx = *resources.ctx;
+
 	ctx.context2d->BeginDraw();
 	ctx.context2d->Clear(D2D1::ColorF(0, .2f, .4f));
 
-	const float y0 = height * (1 - baselineY);
+	const float y0 = resources.height * (1 - baselineY);
 
-	brush->SetOpacity(.7f);
-	ctx.context2d->DrawLine(D2D1::Point2F(0, y0), D2D1::Point2F(width, y0), brush, 5);
+	resources.brush->SetOpacity(.7f);
+	ctx.context2d->DrawLine(D2D1::Point2F(0, y0), D2D1::Point2F(resources.width, y0), resources.brush, 5);
 
 
 	// assuming leg is never lifted and y for both legs is 0
 	const auto torso_base = D2D1::Point2F(
-		(scene.leg[0].x + scene.leg[1].x) * .5f,
-		y0 - std::sqrt(legLength * legLength - (scene.leg[0].x - scene.leg[1].x) * (scene.leg[0].x - scene.leg[1].x) * .25f)
+		(leg[0].x + leg[1].x) * .5f,
+		y0 - std::sqrt(legLength * legLength - (leg[0].x - leg[1].x) * (leg[0].x - leg[1].x) * .25f)
 	);
 
-	drawMan(scene.leg[0], scene.leg[1], torso_base, y0);
+	drawMan(leg[0], leg[1], torso_base, y0);
 
 
 	ThrowOnFail(ctx.context2d->EndDraw());
 }
 
-void Renderer::drawMan(const D2D1_POINT_2F front_leg, const D2D1_POINT_2F back_leg, const D2D1_POINT_2F torso_base, const float y0)
+void Scene::drawMan(const D2D1_POINT_2F front_leg, const D2D1_POINT_2F back_leg, const D2D1_POINT_2F torso_base, const float y0)
 {
+	auto& ctx = *resources.ctx;
+	auto& brush = resources.brush;
+
 	// Draw far limbs with less opacity
 	brush->SetOpacity(.7f);
 	ctx.context2d->DrawLine(D2D1::Point2F(back_leg.x, y0 - back_leg.y), torso_base, brush, 2); // back leg

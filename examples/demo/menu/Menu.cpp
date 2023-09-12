@@ -191,11 +191,10 @@ const size_t Scene::findItem(const float x, const float y) const
 }
 
 
-Crib::Graphics::Renderer* Scene::createCustomRenderer(Crib::Graphics::Context& context)
+void Scene::overlayInit(Crib::Graphics::Context& context)
 {
-	auto rndr = new Renderer(dynamic_cast<Crib::Graphics::D3D11::Context&>(context), *this);
-	updateBoundingRect(rootItems, rndr);
-	return rndr;
+	renderer.reset(new Renderer(dynamic_cast<Crib::Graphics::D3D11::Context&>(context), *this));
+	updateBoundingRect(rootItems, renderer.get());
 }
 
 void Scene::updateBoundingRect(std::vector<MenuItem>& items, const Renderer* rndr)

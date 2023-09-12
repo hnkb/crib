@@ -19,7 +19,6 @@ namespace Crib::Graphics
 	typedef unsigned int UINT;
 
 	class Context;
-	class Renderer;
 
 
 	class DrawableBase
@@ -158,7 +157,8 @@ namespace Crib::Graphics
 		virtual std::wstring update(const double delta, const Input::Buffer& input) = 0;
 		virtual void onScreenResize(const float width, const float height) {}
 
-		virtual Renderer* createCustomRenderer(Context&) { return nullptr; }
+		virtual void overlayInit(Context& context) {}
+		virtual void overlayDraw() {}
 	};
 
 	class Scene : public SceneBase
@@ -182,15 +182,6 @@ namespace Crib::Graphics
 	};
 
 
-	class Renderer
-	{
-	public:
-		virtual ~Renderer() {}
-
-		virtual void render() = 0;
-		virtual void resize(const float width, const float height) {}
-	};
-
 	class Context
 	{
 	public:
@@ -201,9 +192,6 @@ namespace Crib::Graphics
 		virtual void draw() = 0;
 		virtual void resize() {}
 		virtual void bind(SceneBase*) = 0;
-
-	protected:
-		std::unique_ptr<Renderer> renderer;
 	};
 
 

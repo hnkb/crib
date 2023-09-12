@@ -10,18 +10,20 @@ namespace CribDemo::Menu
 
 	class Scene;
 
-	class Renderer : public Crib::Graphics::D3D11::Renderer
+	class Renderer
 	{
 	public:
 		Renderer(Crib::Graphics::D3D11::Context& context, Scene& scene);
 
-		virtual void resize(const float w, const float h) override;
-		virtual void render() override;
+		void resize(const float w, const float h);
+		void render();
 
 		void updateBoundingRect(MenuItem& item) const;
 
 	protected:
 		Scene& scene;
+
+		Crib::Graphics::D3D11::Context& ctx;
 
 		CComPtr<ID2D1SolidColorBrush> brush;
 		CComPtr<IDWriteTextFormat> tf_normal;
