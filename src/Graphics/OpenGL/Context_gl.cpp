@@ -151,7 +151,7 @@ DrawableObject tt;
 
 void InitializeVertexBuffer()
 {
-	Crib::Font font("/home/hani/Desktop/overpass-bold.ttf");
+	Crib::Font font("C:\\Users\\Hani\\Downloads\\overpass-bold.ttf");
 
 
 	// temporary buffers to store CPU-side data
