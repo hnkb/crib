@@ -1,0 +1,16 @@
+
+cmake_minimum_required(VERSION 3.13)
+
+
+project(crib
+	VERSION 0.0.0
+	DESCRIPTION "crib: C++ library for rendering and processing"
+	HOMEPAGE_URL https://github.com/hnkb/crib
+)
+
+
+add_subdirectory("src")
+
+if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+
+endif()
