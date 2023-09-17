@@ -9,6 +9,7 @@ project(crib
 )
 
 
+add_subdirectory("third-party")
 add_subdirectory("src")
 
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
