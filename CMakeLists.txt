@@ -9,6 +9,11 @@ project(crib
 )
 
 
+if (TARGET crib)
+	return()
+endif()
+
+
 add_subdirectory("third-party")
 add_subdirectory("src")
 
