@@ -2,8 +2,10 @@
 cmake_minimum_required(VERSION 3.15)
 
 
+include("src/Platform/CMake/Git-version.cmake")
+
 project(crib
-	VERSION 0.0.0
+	VERSION "${CRIB_VERSION_TAG}.${CRIB_VERSION_PATCH}"
 	DESCRIPTION "crib: C++ library for rendering and processing"
 	HOMEPAGE_URL https://github.com/hnkb/crib
 )
