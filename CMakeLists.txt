@@ -13,5 +13,7 @@ add_subdirectory("third-party")
 add_subdirectory("src")
 
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+	enable_testing()
+	add_subdirectory("test")
 
 endif()
