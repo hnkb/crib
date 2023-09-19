@@ -15,6 +15,11 @@ foreach (CXX_STD 17 20)
 			doctest
 	)
 
+	if (WIN32 AND NOT MSVC)
+		target_link_libraries(${TARGET_NAME} PRIVATE -static)
+	endif()
+
+
 	add_test(
 		NAME ${TARGET_NAME}
 		COMMAND ${TARGET_NAME}
