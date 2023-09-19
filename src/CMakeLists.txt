@@ -12,5 +12,6 @@ include("Platform/CMake/Compiler-config.cmake")
 
 target_sources(crib PRIVATE
 	"File/ExecutablePath.cpp"
+	"File/MemoryMapped.cpp"
 	"File/Stream.cpp"
 )

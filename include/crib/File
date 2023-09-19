@@ -62,6 +62,75 @@ namespace crib
 
 	private:
 		FILE* handle = nullptr;
+
+
+
+	public:
+		template <class Type = uint8_t>
+		class MemoryMapped
+		{
+		public:
+			MemoryMapped(const std::filesystem::path& filename);
+			~MemoryMapped();
+
+			MemoryMapped(const MemoryMapped&) = delete;
+			MemoryMapped(MemoryMapped&& other) { *this = std::move(other); }
+			MemoryMapped& operator=(const MemoryMapped&) = delete;
+			MemoryMapped& operator=(MemoryMapped&& other)
+			{
+				if (this != &other)
+				{
+					this->base = other.base;
+					other.base = nullptr;
+
+					this->startAddress = other.startAddress;
+					other.startAddress = nullptr;
+				}
+				return *this;
+			}
+
+			size_t size() const;
+
+			const Type* data() const { return startAddress; }
+			Type* data() { return startAddress; }
+
+			Type* begin() { return startAddress; }
+			const Type* begin() const { return startAddress; }
+			Type* end() { return startAddress + size(); }
+			const Type* end() const { return startAddress + size(); }
+
+			Type& operator[](const size_t index) { return startAddress[index]; }
+			const Type& operator[](const size_t index) const { return startAddress[index]; }
+
+		private:
+			void* base = nullptr;
+			Type* startAddress = nullptr;
+		};
 	};
+
+	template <>
+	File::MemoryMapped<uint8_t>::MemoryMapped(const std::filesystem::path& filename);
+	template <>
+	File::MemoryMapped<uint8_t>::~MemoryMapped();
+	template <>
+	size_t File::MemoryMapped<uint8_t>::size() const;
+
+	template <class Type>
+	File::MemoryMapped<Type>::MemoryMapped(const std::filesystem::path& filename)
+		: base(new MemoryMapped<uint8_t>(filename)),
+		  startAddress(
+			  reinterpret_cast<Type*>(reinterpret_cast<MemoryMapped<uint8_t>*>(base)->data()))
+	{}
+	template <class Type>
+	File::MemoryMapped<Type>::~MemoryMapped()
+	{
+		if (base)
+			delete reinterpret_cast<MemoryMapped<uint8_t>*>(base);
+	}
+	template <class Type>
+	size_t File::MemoryMapped<Type>::size() const
+	{
+		return base ? reinterpret_cast<MemoryMapped<uint8_t>*>(base)->size() / sizeof(Type) : 0;
+	}
 
 }
