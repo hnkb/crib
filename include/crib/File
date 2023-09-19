@@ -3,6 +3,7 @@
 
 #include <filesystem>
 #include <string>
+#include <vector>
 
 
 namespace crib
@@ -19,6 +20,40 @@ namespace crib
 		int seek(size_t offset, int origin);
 
 		operator FILE*() { return handle; }
+
+		// TODO: replace with generic container or Buffer
+		//       for the case of known buffer size can also be replaced with View
+		template <typename Type>
+		File& operator>>(std::vector<Type>& output)
+		{
+			if (output.empty())
+				output.resize((size() - tell()) / sizeof(Type));
+
+			auto count = fread(output.data(), sizeof(Type), output.size(), handle);
+
+			if (count != output.size())
+			{
+				if (feof(handle))
+					output.resize(count);
+
+				if (ferror(handle))
+					throw std::system_error(std::error_code(errno, std::generic_category()));
+
+				// any other possibility? throw unknown error?
+			}
+
+			return *this;
+		}
+
+		// TODO: replace with View
+		template <typename Type>
+		File& operator<<(const std::vector<Type>& output)
+		{
+			auto count = fwrite(output.data(), sizeof(Type), output.size(), handle);
+			if (count != output.size())
+				throw "Unexpected! cannot write all!!";
+			return *this;
+		}
 
 	private:
 		FILE* handle = nullptr;
