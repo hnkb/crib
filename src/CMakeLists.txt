@@ -11,5 +11,6 @@ target_include_directories(crib PUBLIC
 include("Platform/CMake/Compiler-config.cmake")
 
 target_sources(crib PRIVATE
+	"File/ExecutablePath.cpp"
 	"File/Stream.cpp"
 )

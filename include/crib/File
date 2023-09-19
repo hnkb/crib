@@ -9,6 +9,11 @@
 namespace crib
 {
 
+	namespace App
+	{
+		std::filesystem::path executablePath();
+	}
+
 	class File
 	{
 	public:
