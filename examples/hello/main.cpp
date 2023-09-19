@@ -39,6 +39,7 @@ int main()
 		vector<int> vals { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 		// File::writeAll(vals, file);
 		File::Stream(file, "wb") << vals;
+		// or:  fprintf(file, "Hello world!\n");
 
 		File::MemoryMapped<int> m(file);
 

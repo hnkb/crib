@@ -20,6 +20,9 @@ namespace crib::File
 		Stream(const std::filesystem::path& filename, const std::string& mode);
 		~Stream();
 
+		// copy?
+		// move?
+
 		size_t size();
 		size_t tell() const;
 		int seek(size_t offset, int origin);
