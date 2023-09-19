@@ -14,7 +14,7 @@ int main()
 	{
 		auto path = filesystem::current_path() / "cmake_install.cmake";
 
-		File file(path, "rb");
+		File::Stream file(path, "rb");
 
 		cout << "File name is: " << path.string() << "\n";
 		cout << "File size is: " << file.size() << "\n";

@@ -6,19 +6,19 @@
 #include <vector>
 
 
-namespace crib
+namespace crib::App
+{
+	std::filesystem::path executablePath();
+}
+
+namespace crib::File
 {
 
-	namespace App
-	{
-		std::filesystem::path executablePath();
-	}
-
-	class File
+	class Stream
 	{
 	public:
-		File(const std::filesystem::path& filename, const std::string& mode);
-		~File();
+		Stream(const std::filesystem::path& filename, const std::string& mode);
+		~Stream();
 
 		size_t size();
 		size_t tell() const;
@@ -29,7 +29,7 @@ namespace crib
 		// TODO: replace with generic container or Buffer
 		//       for the case of known buffer size can also be replaced with View
 		template <typename Type>
-		File& operator>>(std::vector<Type>& output)
+		Stream& operator>>(std::vector<Type>& output)
 		{
 			if (output.empty())
 				output.resize((size() - tell()) / sizeof(Type));
@@ -52,7 +52,7 @@ namespace crib
 
 		// TODO: replace with View
 		template <typename Type>
-		File& operator<<(const std::vector<Type>& output)
+		Stream& operator<<(const std::vector<Type>& output)
 		{
 			auto count = fwrite(output.data(), sizeof(Type), output.size(), handle);
 			if (count != output.size())
@@ -62,50 +62,49 @@ namespace crib
 
 	private:
 		FILE* handle = nullptr;
+	};
 
 
 
+	template <class Type = uint8_t>
+	class MemoryMapped
+	{
 	public:
-		template <class Type = uint8_t>
-		class MemoryMapped
+		MemoryMapped(const std::filesystem::path& filename);
+		~MemoryMapped();
+
+		MemoryMapped(const MemoryMapped&) = delete;
+		MemoryMapped(MemoryMapped&& other) { *this = std::move(other); }
+		MemoryMapped& operator=(const MemoryMapped&) = delete;
+		MemoryMapped& operator=(MemoryMapped&& other)
 		{
-		public:
-			MemoryMapped(const std::filesystem::path& filename);
-			~MemoryMapped();
-
-			MemoryMapped(const MemoryMapped&) = delete;
-			MemoryMapped(MemoryMapped&& other) { *this = std::move(other); }
-			MemoryMapped& operator=(const MemoryMapped&) = delete;
-			MemoryMapped& operator=(MemoryMapped&& other)
+			if (this != &other)
 			{
-				if (this != &other)
-				{
-					this->base = other.base;
-					other.base = nullptr;
+				this->base = other.base;
+				other.base = nullptr;
 
-					this->startAddress = other.startAddress;
-					other.startAddress = nullptr;
-				}
-				return *this;
+				this->startAddress = other.startAddress;
+				other.startAddress = nullptr;
 			}
+			return *this;
+		}
 
-			size_t size() const;
+		size_t size() const;
 
-			const Type* data() const { return startAddress; }
-			Type* data() { return startAddress; }
+		const Type* data() const { return startAddress; }
+		Type* data() { return startAddress; }
 
-			Type* begin() { return startAddress; }
-			const Type* begin() const { return startAddress; }
-			Type* end() { return startAddress + size(); }
-			const Type* end() const { return startAddress + size(); }
+		Type* begin() { return startAddress; }
+		const Type* begin() const { return startAddress; }
+		Type* end() { return startAddress + size(); }
+		const Type* end() const { return startAddress + size(); }
 
-			Type& operator[](const size_t index) { return startAddress[index]; }
-			const Type& operator[](const size_t index) const { return startAddress[index]; }
+		Type& operator[](const size_t index) { return startAddress[index]; }
+		const Type& operator[](const size_t index) const { return startAddress[index]; }
 
-		private:
-			void* base = nullptr;
-			Type* startAddress = nullptr;
-		};
+	private:
+		void* base = nullptr;
+		Type* startAddress = nullptr;
 	};
 
 	template <>
