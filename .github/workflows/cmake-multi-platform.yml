@@ -9,15 +9,15 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.runner }}
-    name: build (${{ matrix.os }}-${{ matrix.compiler }})
+    name: build (${{ matrix.os }}, ${{ matrix.compiler }})
 
     strategy:
       # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations.
       fail-fast: false
 
       matrix:
-        os: [ windows, ubuntu, mac ]
-        compiler: [ cl, gcc, clang ]
+        os: [ windows, ubuntu, macos ]
+        compiler: [ msvc, gcc, clang ]
         build_type: [ Release ]
 
         exclude:
@@ -26,10 +26,10 @@ jobs:
           # - os: windows
           #   compiler: clang
           - os: ubuntu
-            compiler: cl
-          - os: mac
-            compiler: cl
-          - os: mac
+            compiler: msvc
+          - os: macos
+            compiler: msvc
+          - os: macos
             compiler: gcc
 
         include:
@@ -37,10 +37,10 @@ jobs:
             runner: windows-latest
           - os: ubuntu
             runner: ubuntu-latest
-          - os: mac
+          - os: macos
             runner: macos-latest
 
-          - compiler: cl
+          - compiler: msvc
             cc: cl
             cxx: cl
           - compiler: gcc
@@ -59,7 +59,7 @@ jobs:
 
     - name: (Windows) Enable MSVC Developer Command Prompt (needed for Ninja)
       uses: ilammy/msvc-dev-cmd@v1.12.1
-      if: ${{ (matrix.os == 'windows') && (matrix.compiler == 'cl') }}
+      if: ${{ (matrix.os == 'windows') && (matrix.compiler == 'msvc') }}
 
     - name: (Windows) Enable MSYS2 and install Mingw-w64
       if: ${{ (matrix.os == 'windows') && (matrix.compiler == 'gcc') }}
