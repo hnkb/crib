@@ -31,5 +31,24 @@ int main()
 		cout << "First bytes: " << exec[0] << exec[1] << exec[2] << "\n";
 	}
 
+	{
+		auto file = App::executablePath().parent_path() / "test.dat";
+
+		cout << "File name is " << file << "\n";
+
+		vector<int> vals { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		// File::writeAll(vals, file);
+		File::Stream(file, "wb") << vals;
+
+		File::MemoryMapped<int> m(file);
+
+		if (0)
+			auto n = std::move(m);
+
+		cout << "Size is " << m.size() << "\n";
+		cout << "Data is " << m.data() << "\n";
+		cout << "Item 3 is " << m[3] << "\n";
+	}
+
 	return 0;
 }
