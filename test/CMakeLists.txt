@@ -5,6 +5,7 @@ foreach (CXX_STD 17 20)
 
 	add_executable(${TARGET_NAME}
 		"unit/App.cpp"
+		"unit/File.cpp"
 		"unit/main.cpp"
 	 )
 
