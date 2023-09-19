@@ -4,8 +4,9 @@ foreach (CXX_STD 17 20)
 	set(TARGET_NAME "crib-test-cpp${CXX_STD}")
 
 	add_executable(${TARGET_NAME}
+		"unit/App.cpp"
 		"unit/main.cpp"
-	)
+	 )
 
 	target_compile_features(${TARGET_NAME} PRIVATE "cxx_std_${CXX_STD}")
 	include("${crib_SOURCE_DIR}/src/Platform/CMake/Compiler-config.cmake")
