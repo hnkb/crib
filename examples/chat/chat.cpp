@@ -1,6 +1,5 @@
 
 #include "chat.h"
-#include <cstring>
 #include <iostream>
 
 
@@ -35,6 +34,28 @@ private:
 };
 
 #else
+
+class combinedPoll
+{
+public:
+	combinedPoll(Socket& sock)
+	{
+		char buffer[1024];
+
+
+		const HANDLE sources[] { GetStdHandle(STD_INPUT_HANDLE), WSACreateEvent() };
+		WSAEventSelect(sock, sources[1], FD_READ | FD_OOB | FD_CLOSE);
+
+		for (int i = 0; i < 3; i++)
+		{
+			auto result = WaitForMultipleObjectsEx(2, sources, FALSE, INFINITE, FALSE);
+
+			std::cout << "Return value " << result << "\n";
+			fgets(buffer, sizeof(buffer), stdin);
+		}
+	}
+};
+
 
 #endif
 
