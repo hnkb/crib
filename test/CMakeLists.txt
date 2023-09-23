@@ -4,6 +4,7 @@ foreach (CXX_STD 17 20)
 	set(TARGET_NAME "crib-test-cpp${CXX_STD}")
 
 	add_executable(${TARGET_NAME}
+		"unit/String.cpp"
 		"unit/main.cpp"
 	)
 
