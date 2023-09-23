@@ -16,6 +16,10 @@ if (TARGET crib)
 endif()
 
 
+#option(CRIB_USE_AVX "Use AVX SIMD instruction set and VEX coding" ON)
+#include("src/Platform/CMake/Compiler-config.cmake")
+
+
 add_subdirectory("third-party")
 add_subdirectory("src")
 
