@@ -10,6 +10,14 @@ target_include_directories(crib PUBLIC
 
 include("Platform/CMake/Compiler-config.cmake")
 
+
 target_sources(crib PRIVATE
 	"File/Stream.cpp"
 )
+
+if (WIN32)
+	target_sources(crib PRIVATE
+		"Platform/Win/COM.cpp"
+		"Platform/Win/Error_win.cpp"
+	)
+endif()

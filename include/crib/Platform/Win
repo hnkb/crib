@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include <system_error>
+
 
 #ifndef UNICODE
 #	define UNICODE 1
@@ -15,3 +17,41 @@
 #endif
 
 #include <Windows.h>
+
+
+namespace crib::Platform::Win
+{
+
+	class InitializeCOM
+	{
+	public:
+		InitializeCOM();
+		InitializeCOM(const DWORD concurrencyModel);
+		~InitializeCOM();
+
+	private:
+		bool mustShutdown;
+	};
+
+
+	class Error : public std::system_error
+	{
+	public:
+		Error(std::error_code code);
+		Error(HRESULT code) : Error({ code, std::system_category() }) {}
+		Error(DWORD code) : Error(std::error_code(code, std::system_category())) {}
+		Error() : Error(GetLastError()) {}
+
+		const char* what() const noexcept override { return message.c_str(); }
+
+	private:
+		std::string message;
+	};
+
+	inline void throwOnError(HRESULT code, const char* hint = nullptr)
+	{
+		if (FAILED(code))
+			throw Error(code);
+	}
+
+}
