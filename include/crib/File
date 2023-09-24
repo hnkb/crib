@@ -1,0 +1,27 @@
+
+#pragma once
+
+#include <filesystem>
+#include <string>
+
+
+namespace crib
+{
+
+	class File
+	{
+	public:
+		File(const std::filesystem::path& filename, const std::string& mode);
+		~File();
+
+		size_t size();
+		size_t tell() const;
+		int seek(size_t offset, int origin);
+
+		operator FILE*() { return handle; }
+
+	private:
+		FILE* handle = nullptr;
+	};
+
+}
