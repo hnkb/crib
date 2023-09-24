@@ -19,5 +19,6 @@ if (WIN32)
 	target_sources(crib PRIVATE
 		"Platform/Win/COM.cpp"
 		"Platform/Win/Error_win.cpp"
+		"Platform/Win/String_win.cpp"
 	)
 endif()
