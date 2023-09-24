@@ -20,7 +20,7 @@ InitializeCOM::InitializeCOM(const DWORD concurrencyModel)
 	mustShutdown = SUCCEEDED(errorCode);
 
 	if (!mustShutdown && errorCode != RPC_E_CHANGED_MODE)
-		throw Error(errorCode);
+		throw Error(errorCode);  //, "initializing COM");
 }
 
 InitializeCOM::~InitializeCOM()
