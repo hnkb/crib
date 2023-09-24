@@ -17,6 +17,8 @@ target_sources(crib PRIVATE
 
 if (WIN32)
 	target_sources(crib PRIVATE
+		"App/Win/App_win.cpp"
+		"App/Win/Window_win.cpp"
 		"Platform/Win/COM.cpp"
 		"Platform/Win/Error_win.cpp"
 		"Platform/Win/String_win.cpp"

@@ -1,0 +1,54 @@
+
+#pragma once
+
+#include "Math"
+#include <string>
+#include <memory>
+
+
+namespace crib::App
+{
+
+	int run();
+
+
+	class Window
+	{
+	public:
+		struct Options;
+
+		Window();
+		Window(Options);
+
+		virtual ~Window();
+
+		Window(const Window&) = delete;
+		Window(Window&& other) { *this = std::move(other); }
+		Window& operator=(const Window&) = delete;
+		Window& operator=(Window&& other)
+		{
+			if (this != &other)
+			{
+				impl = other.impl;
+				other.impl = nullptr;
+			}
+			return *this;
+		}
+
+		Options getOptions() const;
+		Window& setOptions(const Options&);
+
+		void* impl = nullptr;
+	};
+
+	struct Window::Options
+	{
+		std::string title;
+		int2 pos;
+		int2 size;
+		// TODO: graphics engine
+		// TODO: anti-aliasing settings
+		// TODO: constant redraw or redraw on change?
+	};
+
+}
