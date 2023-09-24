@@ -1,6 +1,7 @@
 
 #include "App.h"
 #include <crib/App>
+#include "../../Graphics/OpenGL/Context.h"
 
 using crib::App::Window;
 
@@ -17,6 +18,8 @@ namespace
 			switch (message)
 			{
 				case WM_SIZE:
+					if (window->context)
+						window->context->onResize({ LOWORD(lParam), HIWORD(lParam) });
 					return 0;
 
 				case WM_ERASEBKGND:
@@ -26,9 +29,16 @@ namespace
 					return TRUE;
 
 				case WM_PAINT:
+					if (window->context)
+						window->context->draw();
 					return 0;
 
 				case WM_DESTROY:
+					if (window->context)
+					{
+						delete window->context;
+						window->context = nullptr;
+					}
 					window->impl = nullptr;
 					PostMessageW(nullptr, (UINT)crib::Platform::Win::Message::closed, 0, 0);
 					return 0;
@@ -88,6 +98,12 @@ Window::Window(Options opt)
 
 	SetWindowLongPtrW((HWND)impl, GWLP_USERDATA, LONG_PTR(this));
 
+	{
+		context = new Graphics::OpenGL::Context(*this);
+		if (context)
+			SetWindowTextW((HWND)impl, Platform::Win::WideString(context->description));
+	}
+
 	ShowWindow((HWND)impl, SW_SHOWDEFAULT);
 
 	{
@@ -103,6 +119,8 @@ Window::Window(Options opt)
 
 Window::~Window()
 {
+	if (context)
+		delete context;
 	if (impl)
 		DestroyWindow((HWND)impl);
 }

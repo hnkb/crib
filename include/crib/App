@@ -6,6 +6,11 @@
 #include <memory>
 
 
+namespace crib::Graphics
+{
+	class Context;
+}
+
 namespace crib::App
 {
 
@@ -30,7 +35,9 @@ namespace crib::App
 			if (this != &other)
 			{
 				impl = other.impl;
+				context = other.context;
 				other.impl = nullptr;
+				other.context = nullptr;
 			}
 			return *this;
 		}
@@ -39,6 +46,7 @@ namespace crib::App
 		Window& setOptions(const Options&);
 
 		void* impl = nullptr;
+		Graphics::Context* context = nullptr;
 	};
 
 	struct Window::Options

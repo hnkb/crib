@@ -1,0 +1,24 @@
+
+#pragma once
+
+#include "Math"
+
+#include <cstdint>
+#include <string>
+
+
+namespace crib::Graphics
+{
+
+	class Context
+	{
+	public:
+		virtual ~Context() {}
+
+		virtual void draw() = 0;
+		virtual void onResize(int2 dims) {}
+
+		std::string description;
+	};
+
+}
