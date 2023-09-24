@@ -21,6 +21,7 @@ namespace crib::App
 	{
 	public:
 		struct Options;
+		enum class Engine;
 
 		Window();
 		Window(Options);
@@ -54,9 +55,22 @@ namespace crib::App
 		std::string title;
 		int2 pos;
 		int2 size;
-		// TODO: graphics engine
+		Engine preferEngine;
 		// TODO: anti-aliasing settings
 		// TODO: constant redraw or redraw on change?
+	};
+
+	enum class Window::Engine {
+		any,
+#if _WIN32
+		d3d11,
+		d3d12,
+#endif
+		openGL,
+		vulkan,
+#if __APPLE__
+		metal,
+#endif
 	};
 
 }
