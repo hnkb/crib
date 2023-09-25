@@ -78,29 +78,17 @@ public:
 		}
 		else if (ev.type == MouseEvent::Type::Wheel)
 		{
-			// first, I convert from pixel space to range -1...1
-			auto screen = camera.pixelToClip(toFloat2(ev.pos));
+			// I want the cursor position on screen to point to the same world coordinates as
+			// before the scaling. So, I subtract the difference between the new world position
+			// and the original one from the view offset.
 
-			// this is the reverse of the transformation in my shader:
-			// screen = (world + offset) * scale
-
-			// I have two values for scale (before and after).
-			// I want the screen to point to the same world coordinates, but it does not.
-			// So, I have to add the difference between worldBefore and worldAfter to my offset.
-			//
-			// Therefore:
-			//     world_before = screen / scale_before - offset
-			//  -  world_after  = screen / scale_after  - offset
-			// --------------------------------------------------
-			//        diff       = (screen / scale_before) - (screen / scale_after)
-
-			auto worldBefore = camera.pixelToWorld(toFloat2(ev.pos));
+			auto before = camera.pixelToWorld(toFloat2(ev.pos));
 
 			camera.view.scale *= powf(1.25f, ev.wheel);
 
-			auto worldAfter = camera.pixelToWorld(toFloat2(ev.pos));
+			auto after = camera.pixelToWorld(toFloat2(ev.pos));
 
-			camera.view.offset -= worldBefore - worldAfter;
+			camera.view.offset -= before - after;
 
 			draw();
 		}
