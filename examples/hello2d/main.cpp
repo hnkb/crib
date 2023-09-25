@@ -1,15 +1,14 @@
 
 #include <crib/App>
+#include <crib/Graphics>
 #include <iostream>
 #include <cmath>
 
 using namespace crib;
 
 
-float2 offset = { 0.f, 0.f };
-float scale = .25f;
+Graphics::Camera camera;
 std::string text;
-float scaleX = 1.f;
 
 
 class MyWindow : public App::Window
@@ -17,14 +16,14 @@ class MyWindow : public App::Window
 public:
 	MyWindow() : Window(Options { "HelloTriangle", { 400, 300 }, { 800, 800 } })
 	{
-		opt = getOptions();  // on X11 we won't receive any size change after constructor!
+		camera.view.scale = .25f;
+		camera.setViewport(getOptions().size);
 	}
 	void onSizeChanged(int2 dims) override
 	{
 		Window::onSizeChanged(dims);
 		printf("size %d %d\n", dims.x, dims.y);
-
-		opt.size = dims;
+		camera.setViewport(dims);
 	}
 	void onPosChanged(int2 pos) override
 	{
@@ -62,29 +61,25 @@ public:
 
 		if (ev.type == MouseEvent::Type::ButtonDown)
 		{
-			if (dragStartPos.x == -1)
-			{
-				dragStartPos = ev.pos;
-				dragStartOffset = offset;
-			}
+			if (std::isnan(dragStart.x))
+				dragStart = camera.pixelToWorld(toFloat2(ev.pos));
 		}
 		else if (ev.type == MouseEvent::Type::ButtonUp)
 		{
-			dragStartPos = { -1 };
+			dragStart = { std::numeric_limits<float>::quiet_NaN(), -1 };
 			this->draw();
 		}
-		else if (ev.type == MouseEvent::Type::Move && dragStartPos.x != -1)
+		else if (ev.type == MouseEvent::Type::Move && !std::isnan(dragStart.x))
 		{
-			offset = toFloat2(ev.pos - dragStartPos) / 400.f / scale;
-			offset.y *= -1.f;
-			offset += dragStartOffset;
+			// our mouse pointer is now pointing at a world position, but, we want it to be
+			// pointing to the same position as dragStart => so fix the offset to achieve this
+			camera.view.offset -= dragStart - camera.pixelToWorld(toFloat2(ev.pos));
 			draw();
 		}
 		else if (ev.type == MouseEvent::Type::Wheel)
 		{
 			// first, I convert from pixel space to range -1...1
-			auto screen = toFloat2(ev.pos) / toFloat2(opt.size) * 2.f - 1.f;
-			screen.y *= -1;
+			auto screen = camera.pixelToClip(toFloat2(ev.pos));
 
 			// this is the reverse of the transformation in my shader:
 			// screen = (world + offset) * scale
@@ -99,13 +94,13 @@ public:
 			// --------------------------------------------------
 			//        diff       = (screen / scale_before) - (screen / scale_after)
 
-			float2 scale_before = { scale / scaleX, scale };
+			auto worldBefore = camera.pixelToWorld(toFloat2(ev.pos));
 
-			scale *= powf(1.25f, ev.wheel);
+			camera.view.scale *= powf(1.25f, ev.wheel);
 
-			float2 scale_after = { scale / scaleX, scale };
+			auto worldAfter = camera.pixelToWorld(toFloat2(ev.pos));
 
-			offset -= screen / scale_before - screen / scale_after;
+			camera.view.offset -= worldBefore - worldAfter;
 
 			draw();
 		}
@@ -113,8 +108,7 @@ public:
 
 private:
 	Options opt;
-	int2 dragStartPos = { -1 };
-	float2 dragStartOffset = {};
+	float2 dragStart = { std::numeric_limits<float>::quiet_NaN(), -1 };
 };
 
 int main()

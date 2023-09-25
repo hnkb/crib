@@ -11,10 +11,8 @@ using namespace crib;
 using Graphics::OpenGL::Context;
 
 
-extern float2 offset;
-extern float scale;
+extern Graphics::Camera camera;
 extern std::string text;
-extern float scaleX;
 
 
 GLuint theProgram = 0;
@@ -252,8 +250,7 @@ void initGL_3()
 void Context::onResize(int2 dims)
 {
 	glViewport(0, 0, dims.x, dims.y);
-
-	scaleX = dims.x / (float)dims.y;
+	camera.setViewport(dims);
 }
 
 void Context::readDeviceDescription(int swapInterval)
@@ -292,12 +289,10 @@ void Context::drawPlatformIndependent()
 
 	glUseProgram(theProgram);
 
-	float2 scale2d = { scale / scaleX, scale };
-	//glUniform1f(scaleLocation, scale);
-	glUniform2fv(scaleLocation, 1, (float*)&scale2d);
+	float2 scale = camera.scaleWithAR();
+	glUniform2fv(scaleLocation, 1, (float*)&scale);
 
 	float xStart = -2;
-	//-.8 / scale;
 	float2 textPos = { xStart, -xStart - .9f };
 
 	for (auto symbol: text + "_")  // std::wstring(L"prognosis"))
@@ -312,7 +307,7 @@ void Context::drawPlatformIndependent()
 		else if (objects.find(symbol) != objects.end())
 		{
 			auto& obj = objects.at(symbol);
-			auto pos = offset + textPos;
+			auto pos = camera.view.offset + textPos;
 			//pos.x += obj.lbearing * scale;
 			glBindVertexArray(obj.objectId);
 			glUniform2fv(offsetLocation, 1, (float*)&pos);
