@@ -14,7 +14,7 @@ include("Platform/CMake/Compiler-config.cmake")
 target_sources(crib PRIVATE
 	"App/Window.cpp"
 	"File/Stream.cpp"
-	"Graphics/Font.cpp"
+	"Graphics/Text-Layout/Font.cpp"
 	"Graphics/OpenGL/Context_gl.cpp"
 )
 
