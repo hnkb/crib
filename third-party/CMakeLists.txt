@@ -44,3 +44,16 @@ endif()
 
 add_library (ttf2mesh STATIC "ttf2mesh/ttf2mesh.c")
 target_include_directories(ttf2mesh PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/ttf2mesh")
+
+
+
+if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/overpass-font/Overpass-Bold.ttf")
+	message("Downloading Overpass font from GitHub...")
+	file(DOWNLOAD
+		"https://raw.githubusercontent.com/RedHatOfficial/Overpass/master/fonts/ttf/Overpass-Bold.ttf"
+		"${CMAKE_CURRENT_SOURCE_DIR}/overpass-font/Overpass-Bold.ttf"
+	)
+endif()
+
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/overpass-font/Overpass-Bold.ttf"
+	DESTINATION "${CMAKE_BINARY_DIR}/assets/")
