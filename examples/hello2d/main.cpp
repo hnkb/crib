@@ -24,6 +24,8 @@ public:
 		Window::onSizeChanged(dims);
 		printf("size %d %d\n", dims.x, dims.y);
 		camera.setViewport(dims);
+
+		// TODO: update scale so that objects are in similar size as before
 	}
 	void onPosChanged(int2 pos) override
 	{
