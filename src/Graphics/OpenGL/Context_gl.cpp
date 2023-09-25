@@ -102,6 +102,7 @@ const std::string strFragmentShader(
 	"out vec4 outputColor;"
 	"void main()"
 	"{"
+	//"   outputColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);"
 	"   outputColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);"
 	"}");
 
@@ -282,6 +283,7 @@ void Context::readDeviceDescription(int swapInterval)
 void Context::drawPlatformIndependent()
 {
 	glClearColor(0.6f, 0.2f, 0.15f, 0.0f);
+	//glClearColor(1.f, 0.75f, 0.f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	if (theProgram == 0)
