@@ -36,25 +36,23 @@ public:
 	{
 		if (str[0] == 27)  // Escape
 		{
-			if (opt.title.empty())
+			if (text.empty())
 				close();
 			else
-				opt.title.clear();
+				text.clear();
 		}
 		else if (str[0] == 8)  // Backspace
 		{
 			// remove all UTF-8 continuation bytes
-			while (opt.title.size() && (opt.title.back() & 0xc0) == 0x80)
-				opt.title.pop_back();
-			if (opt.title.size())
-				opt.title.pop_back();
+			while (text.size() && (text.back() & 0xc0) == 0x80)
+				text.pop_back();
+			if (text.size())
+				text.pop_back();
 		}
 		else
 		{
-			opt.title += str;
+			text += str;
 		}
-		// setOptions(opt);
-		text = opt.title;
 		draw();
 	}
 	void onMouseEvent(const App::MouseEvent& ev) override
@@ -109,7 +107,6 @@ public:
 	}
 
 private:
-	Options opt;
 	float2 dragStart = { std::numeric_limits<float>::quiet_NaN(), -1 };
 };
 
