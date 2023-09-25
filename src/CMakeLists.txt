@@ -14,10 +14,11 @@ include("Platform/CMake/Compiler-config.cmake")
 target_sources(crib PRIVATE
 	"App/Window.cpp"
 	"File/Stream.cpp"
+	"Graphics/Font.cpp"
 	"Graphics/OpenGL/Context_gl.cpp"
 )
 
-target_link_libraries(crib PRIVATE glad)
+target_link_libraries(crib PRIVATE glad ttf2mesh)
 
 
 if (WIN32)
