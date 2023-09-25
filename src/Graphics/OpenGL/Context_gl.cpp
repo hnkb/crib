@@ -248,6 +248,58 @@ void initGL_3()
 }
 
 
+
+struct Entity
+{
+	int modelId;  // or uint64_t or void*
+
+	// model transformation
+	float2 pos;
+	// float scale;
+
+	// TODO:
+	//  - proper trafo matrix
+	//  - hierarchy
+	//    - with caching (isDirty)
+	//    - with flattening
+};
+
+std::vector<Entity> scene;
+
+void updateScene(const std::string& text)
+{
+	static std::string cachedText;
+	if (cachedText == text)
+		return;
+
+	scene.clear();
+	cachedText = text;
+
+
+	float xStart = -2;
+	float2 textPos = { xStart, -xStart - .9f };
+
+	for (auto symbol: text)
+	{
+		if (symbol == ' ')
+			textPos.x += .2f;
+		else if (symbol == '\n' || symbol == '\r')
+		{
+			textPos.x = xStart;
+			textPos.y -= 1.1f;
+		}
+		else if (objects.find(symbol) != objects.end())
+		{
+			auto& e = scene.emplace_back();
+
+			e.modelId = symbol;
+			e.pos = textPos;
+			textPos.x += objects.at(symbol).advance;
+		}
+	}
+}
+
+
 void Context::onResize(int2 dims)
 {
 	glViewport(0, 0, dims.x, dims.y);
@@ -282,40 +334,28 @@ void Context::readDeviceDescription(int swapInterval)
 
 void Context::drawPlatformIndependent()
 {
+	if (theProgram == 0)
+		initGL_3();
+
+	updateScene(text + "_");
+
+
 	glClearColor(0.6f, 0.2f, 0.15f, 0.0f);
 	//glClearColor(1.f, 0.75f, 0.f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	if (theProgram == 0)
-		initGL_3();
 
 	glUseProgram(theProgram);
 
 	float2 scale = camera.scaleWithAR();
 	glUniform2fv(scaleLocation, 1, (float*)&scale);
 
-	float xStart = -2;
-	float2 textPos = { xStart, -xStart - .9f };
-
-	for (auto symbol: text + "_")  // std::wstring(L"prognosis"))
+	for (auto e: scene)
 	{
-		if (symbol == ' ')
-			textPos.x += .2f;
-		else if (symbol == '\n' || symbol == '\r')
-		{
-			textPos.x = xStart;
-			textPos.y -= 1.1f;
-		}
-		else if (objects.find(symbol) != objects.end())
-		{
-			auto& obj = objects.at(symbol);
-			auto pos = camera.view.offset + textPos;
-			//pos.x += obj.lbearing * scale;
-			glBindVertexArray(obj.objectId);
-			glUniform2fv(offsetLocation, 1, (float*)&pos);
-			glDrawElements(GL_TRIANGLES, obj.numPoints, GL_UNSIGNED_SHORT, obj.start);
-			textPos.x += obj.advance;
-		}
+		auto& obj = objects.at(e.modelId);
+		auto pos = camera.view.offset + e.pos;
+		glBindVertexArray(obj.objectId);
+		glUniform2fv(offsetLocation, 1, (float*)&pos);
+		glDrawElements(GL_TRIANGLES, obj.numPoints, GL_UNSIGNED_SHORT, obj.start);
 	}
 
 	glBindVertexArray(0);
