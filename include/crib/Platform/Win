@@ -49,7 +49,7 @@ namespace crib::Platform::Win
 		std::string message;
 	};
 
-	inline void throwOnError(HRESULT code, const char* hint = nullptr)
+	inline void throwOnError(HRESULT code, const char* /*hint*/ = nullptr)
 	{
 		if (FAILED(code))
 			throw Error(code);
