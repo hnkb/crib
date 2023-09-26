@@ -242,17 +242,28 @@ namespace crib::Graphics
 
 		struct Entity
 		{
+			enum class Type { None, Text };
+
+			Type type = Type::None;
 			int modelId;  // or uint64_t or void*
 
 			// model transformation
 			float2 pos;
 			// float scale;
+			float2 dims = float2::nan();
 
 			// TODO:
 			//  - proper trafo matrix
 			//  - hierarchy
 			//    - with caching (isDirty)
 			//    - with flattening
+
+			std::string id;
+			std::string text;
+			std::string fontFace;
+			float fontSize;
+
+			std::vector<Entity> children;
 		};
 
 		std::vector<Entity> entities;

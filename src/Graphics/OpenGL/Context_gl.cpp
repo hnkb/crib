@@ -12,7 +12,6 @@ using Graphics::OpenGL::Context;
 
 
 extern Graphics::View view;
-extern std::string text;
 
 
 GLuint theProgram = 0;
@@ -204,35 +203,35 @@ void initGL_3()
 
 
 
+std::map<std::string, std::string> cached;
 
-void updateScene(const std::string& text)
+
+void updateText(Graphics::Scene::Entity& div)
 {
-	auto& scene = view.scene;
+	auto& cachedText = cached[div.id];
 
-	static std::string cachedText;
-	if (cachedText == text)
+	if (cachedText == div.text)
 		return;
 
-	scene.entities.clear();
-	cachedText = text;
+	div.children.clear();
+	cachedText = div.text;
 
-	const auto& font = scene.assets.models.at("Overpass-Bold").meshes;
+	const auto& font = view.scene.assets.models.at(div.fontFace).meshes;
 
-	float xStart = -2;
-	float2 textPos = { xStart, -xStart - .9f };
+	auto textPos = div.pos;
 
-	for (auto symbol: text)
+	for (auto symbol: div.text)
 	{
 		if (symbol == ' ')
 			textPos.x += .2f;
 		else if (symbol == '\n' || symbol == '\r')
 		{
-			textPos.x = xStart;
+			textPos.x = div.pos.x;
 			textPos.y -= 1.1f;
 		}
 		else
 		{
-			auto& e = scene.entities.emplace_back();
+			auto& e = div.children.emplace_back();
 
 			e.modelId = font.find(symbol) == font.end() ? 175 : symbol;
 			e.pos = textPos;
@@ -241,8 +240,13 @@ void updateScene(const std::string& text)
 	}
 }
 
+void updateScene()
+{
+	for (auto& e: view.scene.entities)
+		if (e.type == Graphics::Scene::Entity::Type::Text)
+			updateText(e);
+}
 
-#include <crib/File>
 
 void Context::onResize(int2 dims)
 {
@@ -276,18 +280,27 @@ void Context::readDeviceDescription(int swapInterval)
 		+ (char*)glGetString(GL_RENDERER) + sync;
 }
 
+void drawEntity(const Graphics::Scene::Entity& e)
+{
+	if (e.modelId != -1)
+	{
+		auto& obj = objects.at(e.modelId);
+		auto pos = view.camera.view.offset + e.pos;
+		glBindVertexArray(obj.objectId);
+		glUniform2fv(offsetLocation, 1, (float*)&pos);
+		glDrawElements(GL_TRIANGLES, obj.numPoints, GL_UNSIGNED_SHORT, obj.start);
+	}
+	for (auto& child: e.children)
+		drawEntity(child);
+}
+
+
 void Context::drawPlatformIndependent()
 {
 	if (theProgram == 0)
 		initGL_3();
 
-	//File txt(__FILE__, "rb");
-	//char buffer[5000];
-	//fread(buffer, 1, sizeof(buffer),txt);
-	
-	//updateScene(__FILE__);
-	//updateScene(buffer);
-	updateScene(text + "_");
+	updateScene();
 
 
 	glClearColor(0.6f, 0.2f, 0.15f, 0.0f);
@@ -300,13 +313,7 @@ void Context::drawPlatformIndependent()
 	glUniform2fv(scaleLocation, 1, (float*)&scale);
 
 	for (auto e: view.scene.entities)
-	{
-		auto& obj = objects.at(e.modelId);
-		auto pos = view.camera.view.offset + e.pos;
-		glBindVertexArray(obj.objectId);
-		glUniform2fv(offsetLocation, 1, (float*)&pos);
-		glDrawElements(GL_TRIANGLES, obj.numPoints, GL_UNSIGNED_SHORT, obj.start);
-	}
+		drawEntity(e);
 
 	glBindVertexArray(0);
 	glUseProgram(0);

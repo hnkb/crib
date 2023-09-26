@@ -10,7 +10,6 @@ using namespace crib;
 Graphics::Scene scene;
 Graphics::View view { scene, {} };
 auto& camera = view.camera;
-std::string text;
 
 
 class MyWindow : public App::Window
@@ -55,6 +54,7 @@ public:
 		{
 			text += str;
 		}
+		scene.entities.back().text = text + "_";
 		draw();
 	}
 	void onMouseEvent(const App::MouseEvent& ev) override
@@ -98,6 +98,7 @@ public:
 
 private:
 	float2 dragStart = float2::nan();
+	std::string text;
 };
 
 int main()
@@ -107,6 +108,16 @@ int main()
 		scene.assets.models["Overpass-Bold"] = Graphics::loadMeshFromTTF(
 			std::filesystem::current_path().parent_path().parent_path()
 			/ "assets/Overpass-Bold.ttf");
+
+		{
+			auto& div = scene.entities.emplace_back();
+			div.type = Graphics::Scene::Entity::Type::Text;
+			div.modelId = -1;
+			div.id = "text-box";
+			div.pos = { -2, 1.1 };
+			div.fontFace = "Overpass-Bold";
+			div.text = "_";
+		}
 
 		// App::Window win;
 		MyWindow win2;
