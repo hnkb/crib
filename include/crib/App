@@ -52,7 +52,7 @@ namespace crib::App
 		virtual void draw();
 
 		virtual void onMouseEvent(const MouseEvent&) {}
-		virtual void onKeyChar(const std::string& text) {}
+		virtual void onKeyChar(const std::string&) {}
 		virtual void onPosChanged(int2 pos);
 		virtual void onSizeChanged(int2 dims);
 

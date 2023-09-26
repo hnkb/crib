@@ -39,7 +39,7 @@ void App::Window::draw()
 }
 
 
-void App::Window::onPosChanged(int2 pos)
+void App::Window::onPosChanged(int2)
 {}
 
 void App::Window::onSizeChanged(int2 dims)
