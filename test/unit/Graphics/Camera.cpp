@@ -57,7 +57,7 @@ TEST_CASE("Camera TBD")
 	CHECK(cam.clipToPixel({ -1, 1 }) == approx(0, 0));
 	CHECK(cam.clipToPixel({ 0, 0 }) == approx(250, 300));
 	CHECK(cam.clipToPixel({ 1, -1 }) == approx(500, 600));
-	CHECK(cam.clipToPixel({ -.8, -2. / 3. }) == approx(50, 500));
-	CHECK(cam.clipToPixel({ .4, .5 }) == approx(350, 150));
+	CHECK(cam.clipToPixel({ -.8f, -2.f / 3.f }) == approx(50, 500));
+	CHECK(cam.clipToPixel({ .4f, .5f }) == approx(350, 150));
 
 }
