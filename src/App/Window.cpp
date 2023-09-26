@@ -47,7 +47,7 @@ void App::Window::onSizeChanged(int2 dims)
 	// try
 	//{
 	if (context)
-		context->onResize(dims);
+		context->resize(dims);
 	//}
 	// catch (Graphics::Base::ContextInvalid e)
 	//{

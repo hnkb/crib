@@ -30,7 +30,7 @@ namespace crib::Graphics::OpenGL
 		virtual ~Context();
 
 		virtual void draw() override;
-		virtual void onResize(int2 dims) override;
+		virtual void resize(int2) override;
 
 	private:
 		void drawPlatformIndependent();

@@ -201,7 +201,7 @@ void initGL_3()
 
 
 
-void Context::onResize(int2 dims)
+void Context::resize(int2 dims)
 {
 	glViewport(0, 0, dims.x, dims.y);
 	view.camera.setViewport(dims);

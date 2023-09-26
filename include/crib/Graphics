@@ -146,7 +146,7 @@ namespace crib::Graphics
 		virtual ~Context() {}
 
 		virtual void draw() = 0;
-		virtual void onResize(int2 dims) {}
+		virtual void resize(int2) {}
 
 		std::string description;
 	};
