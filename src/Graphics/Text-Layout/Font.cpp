@@ -69,9 +69,9 @@ Graphics::ModelPack crib::Graphics::loadMeshFromTTF(const std::filesystem::path&
 
 			for (int i = 0; i < g.mesh->nfaces; i++)
 			{
-				output.buffer.index.push_back(g.mesh->faces[i].v1);
-				output.buffer.index.push_back(g.mesh->faces[i].v2);
-				output.buffer.index.push_back(g.mesh->faces[i].v3);
+				output.buffer.index.push_back((uint16_t)g.mesh->faces[i].v1);
+				output.buffer.index.push_back((uint16_t)g.mesh->faces[i].v2);
+				output.buffer.index.push_back((uint16_t)g.mesh->faces[i].v3);
 			}
 		}
 		catch (...)
