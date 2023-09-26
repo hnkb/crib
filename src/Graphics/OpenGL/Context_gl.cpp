@@ -11,7 +11,7 @@ using namespace crib;
 using Graphics::OpenGL::Context;
 
 
-extern Graphics::Camera camera;
+extern Graphics::View view;
 extern std::string text;
 
 
@@ -140,15 +140,9 @@ struct DrawableObject
 std::map<wchar_t, DrawableObject> objects;
 
 
-Graphics::ModelPack fontMesh;
-
-
 void InitializeVertexBuffer()
 {
-	fontMesh = Graphics::loadMeshFromTTF(
-		std::filesystem::current_path().parent_path().parent_path()
-		/ "assets/Overpass-Bold.ttf");
-
+	auto& model = view.scene.assets.models.at("Overpass-Bold");
 
 	//////////////////// create buffers and copy data //////////////////////////
 
@@ -156,8 +150,8 @@ void InitializeVertexBuffer()
 	glBindBuffer(GL_ARRAY_BUFFER, buffer.vertex);
 	glBufferData(
 		GL_ARRAY_BUFFER,
-		sizeof(fontMesh.buffer.vertex[0]) * fontMesh.buffer.vertex.size(),
-		fontMesh.buffer.vertex.data(),
+		sizeof(model.buffer.vertex[0]) * model.buffer.vertex.size(),
+		model.buffer.vertex.data(),
 		GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -166,20 +160,20 @@ void InitializeVertexBuffer()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.index);
 	glBufferData(
 		GL_ELEMENT_ARRAY_BUFFER,
-		sizeof(fontMesh.buffer.index[0]) * fontMesh.buffer.index.size(),
-		fontMesh.buffer.index.data(),
+		sizeof(model.buffer.index[0]) * model.buffer.index.size(),
+		model.buffer.index.data(),
 		GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	////////////////////// create objects for each glyph ///////////////////////
 
-	for (auto& mesh: fontMesh.meshes)
+	for (auto& mesh: model.meshes)
 	{
 		auto& obj = objects[mesh.first];
 		obj.numPoints = mesh.second.indexCount;
 		obj.start = (void*)(mesh.second.startIndex * sizeof(GLushort));
 
-		auto vertOffset = (void*)(mesh.second.startVertex * sizeof(fontMesh.buffer.vertex[0]));
+		auto vertOffset = (void*)(mesh.second.startVertex * sizeof(model.buffer.vertex[0]));
 
 		glGenVertexArrays(1, &obj.objectId);
 		glBindVertexArray(obj.objectId);
@@ -208,32 +202,21 @@ void initGL_3()
 
 
 
-struct Entity
-{
-	int modelId;  // or uint64_t or void*
 
-	// model transformation
-	float2 pos;
-	// float scale;
 
-	// TODO:
-	//  - proper trafo matrix
-	//  - hierarchy
-	//    - with caching (isDirty)
-	//    - with flattening
-};
-
-std::vector<Entity> scene;
 
 void updateScene(const std::string& text)
 {
+	auto& scene = view.scene;
+
 	static std::string cachedText;
 	if (cachedText == text)
 		return;
 
-	scene.clear();
+	scene.entities.clear();
 	cachedText = text;
 
+	const auto& font = scene.assets.models.at("Overpass-Bold").meshes;
 
 	float xStart = -2;
 	float2 textPos = { xStart, -xStart - .9f };
@@ -249,11 +232,11 @@ void updateScene(const std::string& text)
 		}
 		else
 		{
-			auto& e = scene.emplace_back();
+			auto& e = scene.entities.emplace_back();
 
-			e.modelId = fontMesh.meshes.find(symbol) == fontMesh.meshes.end() ? 175 : symbol;
+			e.modelId = font.find(symbol) == font.end() ? 175 : symbol;
 			e.pos = textPos;
-			textPos.x += fontMesh.meshes.at(e.modelId).font.advance;
+			textPos.x += font.at(e.modelId).font.advance;
 		}
 	}
 }
@@ -264,7 +247,7 @@ void updateScene(const std::string& text)
 void Context::onResize(int2 dims)
 {
 	glViewport(0, 0, dims.x, dims.y);
-	camera.setViewport(dims);
+	view.camera.setViewport(dims);
 }
 
 void Context::readDeviceDescription(int swapInterval)
@@ -313,13 +296,13 @@ void Context::drawPlatformIndependent()
 
 	glUseProgram(theProgram);
 
-	float2 scale = camera.scaleWithAR();
+	float2 scale = view.camera.scaleWithAR();
 	glUniform2fv(scaleLocation, 1, (float*)&scale);
 
-	for (auto e: scene)
+	for (auto e: view.scene.entities)
 	{
 		auto& obj = objects.at(e.modelId);
-		auto pos = camera.view.offset + e.pos;
+		auto pos = view.camera.view.offset + e.pos;
 		glBindVertexArray(obj.objectId);
 		glUniform2fv(offsetLocation, 1, (float*)&pos);
 		glDrawElements(GL_TRIANGLES, obj.numPoints, GL_UNSIGNED_SHORT, obj.start);

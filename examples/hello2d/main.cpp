@@ -7,7 +7,9 @@
 using namespace crib;
 
 
-Graphics::Camera camera;
+Graphics::Scene scene;
+Graphics::View view { scene, {} };
+auto& camera = view.camera;
 std::string text;
 
 
@@ -102,6 +104,10 @@ int main()
 {
 	try
 	{
+		scene.assets.models["Overpass-Bold"] = Graphics::loadMeshFromTTF(
+			std::filesystem::current_path().parent_path().parent_path()
+			/ "assets/Overpass-Bold.ttf");
+
 		// App::Window win;
 		MyWindow win2;
 		auto win = std::move(win2);

@@ -231,4 +231,37 @@ namespace crib::Graphics
 
 	ModelPack loadMeshFromTTF(const std::filesystem::path&);
 
+
+	struct Scene
+	{
+		struct
+		{
+			std::map<std::string, ModelPack> models;
+			// textures, ...
+		} assets;
+
+		struct Entity
+		{
+			int modelId;  // or uint64_t or void*
+
+			// model transformation
+			float2 pos;
+			// float scale;
+
+			// TODO:
+			//  - proper trafo matrix
+			//  - hierarchy
+			//    - with caching (isDirty)
+			//    - with flattening
+		};
+
+		std::vector<Entity> entities;
+	};
+
+	struct View
+	{
+		Scene& scene;
+		Camera camera;
+	};
+
 }
