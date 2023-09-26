@@ -4,7 +4,10 @@
 #include "Math"
 
 #include <cstdint>
+#include <filesystem>
+#include <map>
 #include <string>
+#include <vector>
 
 
 namespace crib::Graphics
@@ -197,5 +200,35 @@ namespace crib::Graphics
 		float aspectRatio = { 1.f };
 
 	};
+
+
+	struct ModelPack
+	{
+		struct
+		{
+			std::vector<float2> vertex;
+			std::vector<uint16_t> index;
+		} buffer;
+
+		struct Mesh
+		{
+			size_t startVertex;
+			size_t startIndex;
+			size_t indexCount;
+
+			union
+			{
+				struct
+				{
+					float advance;
+					float lbearing;
+				} font;
+			};
+		};
+
+		std::map<int, Mesh> meshes;
+	};
+
+	ModelPack loadMeshFromTTF(const std::filesystem::path&);
 
 }

@@ -136,76 +136,29 @@ struct DrawableObject
 	void* start;
 	GLsizei numPoints;
 	GLuint objectId;
-
-	float advance;
-	float lbearing;
 };
 std::map<wchar_t, DrawableObject> objects;
 
 
-//DrawableObject tt;
+Graphics::ModelPack fontMesh;
+
 
 void InitializeVertexBuffer()
 {
-	crib::Font font(
+	fontMesh = Graphics::loadMeshFromTTF(
 		std::filesystem::current_path().parent_path().parent_path()
 		/ "assets/Overpass-Bold.ttf");
-
-
-	// temporary buffers to store CPU-side data
-
-	std::vector<float2> vert;
-	std::vector<GLushort> index;
-	std::map<wchar_t, void*> vertOffsets;
-
-	vert.reserve(font->nglyphs * 125);
-	index.reserve(font->nglyphs * 125);
-
-
-	int numErrors = 0;
-	for (int glyphIdx = 0; glyphIdx < font->nglyphs; glyphIdx++)
-	{
-		try
-		{
-			auto g = font.getGlyph(glyphIdx);
-
-			//wprintf(L" '%c' %d vert  %d idx\n", g.glyph->symbol, g.mesh->nvert, g.mesh->nfaces);
-
-
-			auto& obj = objects[g.glyph->symbol];
-
-			obj.advance = g.glyph->advance;
-			obj.lbearing = g.glyph->lbearing;
-			obj.start = (void*)(index.size() * sizeof(GLushort));
-			vertOffsets[g.glyph->symbol] = (void*)(vert.size() * sizeof(vert[0]));
-
-			for (int i = 0; i < g.mesh->nvert; i++)
-				vert.push_back(float2 { g.mesh->vert[i].x, g.mesh->vert[i].y });
-
-			for (int i = 0; i < g.mesh->nfaces; i++)
-			{
-				index.push_back(g.mesh->faces[i].v1);
-				index.push_back(g.mesh->faces[i].v2);
-				index.push_back(g.mesh->faces[i].v3);
-			}
-
-			obj.numPoints = g.mesh->nfaces * 3;
-		}
-		catch (...)
-		{
-			numErrors++;
-		}
-	}
-
-	printf("Encountered %d errors while loading\n", numErrors);
-	// printf("\n\n In total\n   %d vertices\n   %d indices\n", vert.size(), index.size());
 
 
 	//////////////////// create buffers and copy data //////////////////////////
 
 	glGenBuffers(1, &buffer.vertex);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer.vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vert[0]) * vert.size(), vert.data(), GL_STATIC_DRAW);
+	glBufferData(
+		GL_ARRAY_BUFFER,
+		sizeof(fontMesh.buffer.vertex[0]) * fontMesh.buffer.vertex.size(),
+		fontMesh.buffer.vertex.data(),
+		GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glGenBuffers(1, &buffer.index);
@@ -213,21 +166,27 @@ void InitializeVertexBuffer()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.index);
 	glBufferData(
 		GL_ELEMENT_ARRAY_BUFFER,
-		sizeof(index[0]) * index.size(),
-		index.data(),
+		sizeof(fontMesh.buffer.index[0]) * fontMesh.buffer.index.size(),
+		fontMesh.buffer.index.data(),
 		GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	////////////////////// create objects for each glyph ///////////////////////
 
-	for (auto& obj: objects)
+	for (auto& mesh: fontMesh.meshes)
 	{
-		glGenVertexArrays(1, &obj.second.objectId);
-		glBindVertexArray(obj.second.objectId);
+		auto& obj = objects[mesh.first];
+		obj.numPoints = mesh.second.indexCount;
+		obj.start = (void*)(mesh.second.startIndex * sizeof(GLushort));
+
+		auto vertOffset = (void*)(mesh.second.startVertex * sizeof(fontMesh.buffer.vertex[0]));
+
+		glGenVertexArrays(1, &obj.objectId);
+		glBindVertexArray(obj.objectId);
 
 		glBindBuffer(GL_ARRAY_BUFFER, buffer.vertex);
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, vertOffsets.at(obj.first));
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, vertOffset);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.index);
 
@@ -288,17 +247,19 @@ void updateScene(const std::string& text)
 			textPos.x = xStart;
 			textPos.y -= 1.1f;
 		}
-		else if (objects.find(symbol) != objects.end())
+		else
 		{
 			auto& e = scene.emplace_back();
 
-			e.modelId = symbol;
+			e.modelId = fontMesh.meshes.find(symbol) == fontMesh.meshes.end() ? 175 : symbol;
 			e.pos = textPos;
-			textPos.x += objects.at(symbol).advance;
+			textPos.x += fontMesh.meshes.at(e.modelId).font.advance;
 		}
 	}
 }
 
+
+#include <crib/File>
 
 void Context::onResize(int2 dims)
 {
@@ -337,6 +298,12 @@ void Context::drawPlatformIndependent()
 	if (theProgram == 0)
 		initGL_3();
 
+	//File txt(__FILE__, "rb");
+	//char buffer[5000];
+	//fread(buffer, 1, sizeof(buffer),txt);
+	
+	//updateScene(__FILE__);
+	//updateScene(buffer);
 	updateScene(text + "_");
 
 

@@ -1,7 +1,9 @@
 
 #include "Font.h"
+#include <crib/Graphics>
 #include <stdexcept>
 
+using namespace crib;
 using crib::Font;
 
 Font::Font(const std::filesystem::path& filename)
@@ -35,4 +37,50 @@ Font::Glyph Font::getGlyph(int index)
 		throw std::runtime_error("unable to load glyph mesh");
 
 	return ret;
+}
+
+
+Graphics::ModelPack crib::Graphics::loadMeshFromTTF(const std::filesystem::path& filename)
+{
+	Font font(filename);
+
+	ModelPack output;
+
+	output.buffer.vertex.reserve(font->nglyphs * 125);
+	output.buffer.index.reserve(font->nglyphs * 125);
+
+	int numErrors = 0;
+	for (int glyphIdx = 0; glyphIdx < font->nglyphs; glyphIdx++)
+	{
+		try
+		{
+			auto g = font.getGlyph(glyphIdx);
+
+			auto& mesh = output.meshes[g.glyph->symbol];
+
+			mesh.font.advance = g.glyph->advance;
+			mesh.font.lbearing = g.glyph->lbearing;
+			mesh.startVertex = output.buffer.vertex.size();
+			mesh.startIndex = output.buffer.index.size();
+			mesh.indexCount = g.mesh->nfaces * 3;
+
+			for (int i = 0; i < g.mesh->nvert; i++)
+				output.buffer.vertex.emplace_back(g.mesh->vert[i].x, g.mesh->vert[i].y);
+
+			for (int i = 0; i < g.mesh->nfaces; i++)
+			{
+				output.buffer.index.push_back(g.mesh->faces[i].v1);
+				output.buffer.index.push_back(g.mesh->faces[i].v2);
+				output.buffer.index.push_back(g.mesh->faces[i].v3);
+			}
+		}
+		catch (...)
+		{
+			numErrors++;
+		}
+	}
+
+	//printf("Encountered %d errors while loading\n", numErrors);
+
+	return output;
 }
