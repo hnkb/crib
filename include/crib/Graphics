@@ -190,14 +190,14 @@ namespace crib::Graphics
 		// should be replaced with a transformation matrix
 		struct
 		{
-			float2 offset = { 0.f, 0.f };  // or translation
-			float scale = { 1.f };
+			float2 offset = { 0, 0 };  // or translation
+			float scale = 1.f;
 			// no rotation for now
 		} view;
 
 	//private:  (made public for unit tests)
 		float2 pixelSize;
-		float aspectRatio = { 1.f };
+		float aspectRatio = 1.f;
 
 	};
 
