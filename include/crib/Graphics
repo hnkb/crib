@@ -165,12 +165,12 @@ namespace crib::Graphics
 
 		void setViewport(int2 dims)
 		{
-			this->pixelSize = float2 { 2, -2 } / toFloat2(dims);
+			this->pixelSize = float2(2, -2) / (float2)dims;
 			aspectRatio = dims.x / (float)dims.y;
 		}
 
-		float2 pixelToClip(float2 pixel) const { return pixel * pixelSize + float2 { -1, 1 }; }
-		float2 clipToPixel(float2 clip) const { return (clip - float2 { -1, 1 }) / pixelSize; }
+		float2 pixelToClip(float2 pixel) const { return pixel * pixelSize + float2(-1, 1); }
+		float2 clipToPixel(float2 clip) const { return (clip - float2(-1, 1)) / pixelSize; }
 
 		// TODO: these will be replaced with transformation matrix for projection + view
 		// This is basically the same transformation that happens in shader code (and its
