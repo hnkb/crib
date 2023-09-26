@@ -112,8 +112,6 @@ int main()
 		{
 			auto& div = scene.entities.emplace_back();
 			div.type = Graphics::Scene::Entity::Type::Text;
-			div.modelId = -1;
-			div.id = "text-box";
 			div.pos = { -2, 1.1 };
 			div.fontFace = "Overpass-Bold";
 			div.text = "_";

@@ -245,7 +245,7 @@ namespace crib::Graphics
 			enum class Type { None, Text };
 
 			Type type = Type::None;
-			int modelId;  // or uint64_t or void*
+			int modelId = -1;  // or uint64_t or void*
 
 			// model transformation
 			float2 pos;
@@ -258,7 +258,7 @@ namespace crib::Graphics
 			//    - with caching (isDirty)
 			//    - with flattening
 
-			std::string id;
+			// std::string id;
 			std::string text;
 			std::string fontFace;
 			float fontSize;
