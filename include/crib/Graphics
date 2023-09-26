@@ -273,6 +273,8 @@ namespace crib::Graphics
 	{
 		Scene& scene;
 		Camera camera;
+
+		void update();
 	};
 
 }

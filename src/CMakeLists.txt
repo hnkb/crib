@@ -15,7 +15,9 @@ target_sources(crib PRIVATE
 	"App/Window.cpp"
 	"File/Stream.cpp"
 	"Graphics/Text-Layout/Font.cpp"
+	"Graphics/Text-Layout/Layout.cpp"
 	"Graphics/OpenGL/Context_gl.cpp"
+	"Graphics/Scene.cpp"
 )
 
 target_link_libraries(crib PRIVATE glad ttf2mesh)

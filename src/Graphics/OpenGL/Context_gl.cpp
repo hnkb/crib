@@ -201,53 +201,6 @@ void initGL_3()
 
 
 
-
-
-std::map<std::string, std::string> cached;
-
-
-void updateText(Graphics::Scene::Entity& div)
-{
-	auto& cachedText = cached[div.id];
-
-	if (cachedText == div.text)
-		return;
-
-	div.children.clear();
-	cachedText = div.text;
-
-	const auto& font = view.scene.assets.models.at(div.fontFace).meshes;
-
-	auto textPos = div.pos;
-
-	for (auto symbol: div.text)
-	{
-		if (symbol == ' ')
-			textPos.x += .2f;
-		else if (symbol == '\n' || symbol == '\r')
-		{
-			textPos.x = div.pos.x;
-			textPos.y -= 1.1f;
-		}
-		else
-		{
-			auto& e = div.children.emplace_back();
-
-			e.modelId = font.find(symbol) == font.end() ? 175 : symbol;
-			e.pos = textPos;
-			textPos.x += font.at(e.modelId).font.advance;
-		}
-	}
-}
-
-void updateScene()
-{
-	for (auto& e: view.scene.entities)
-		if (e.type == Graphics::Scene::Entity::Type::Text)
-			updateText(e);
-}
-
-
 void Context::onResize(int2 dims)
 {
 	glViewport(0, 0, dims.x, dims.y);
@@ -300,7 +253,7 @@ void Context::drawPlatformIndependent()
 	if (theProgram == 0)
 		initGL_3();
 
-	updateScene();
+	view.update();
 
 
 	glClearColor(0.6f, 0.2f, 0.15f, 0.0f);
