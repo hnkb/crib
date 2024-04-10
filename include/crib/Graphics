@@ -13,6 +13,7 @@
 namespace crib::Graphics
 {
 
+#if 0
 	class Texture
 	{};
 
@@ -138,6 +139,7 @@ namespace crib::Graphics
 	{
 	public:
 	};
+#endif
 
 
 	class Context
@@ -262,6 +264,8 @@ namespace crib::Graphics
 			std::string text;
 			std::string fontFace;
 			float fontSize;
+
+			byte4 color;
 
 			std::vector<Entity> children;
 		};

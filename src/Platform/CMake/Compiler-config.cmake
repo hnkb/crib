@@ -14,7 +14,7 @@ if (MSVC)
 		PUBLIC
 			/utf-8
 		PRIVATE
-			/permissive- /W4 #/WX
+			/permissive- /W4 /WX
 	)
 else()
 	target_compile_options(${TARGET_NAME}

@@ -101,6 +101,11 @@ private:
 	std::string text;
 };
 
+
+#include <crib/File>
+char buffer[5'000'000];
+
+
 int main()
 {
 	try
@@ -117,6 +122,42 @@ int main()
 			div.fontFace = "Overpass-Bold";
 			div.text = "_";
 		}
+		if (0)
+		{
+			auto& div = scene.entities.emplace_back();
+			div.type = Graphics::Scene::Entity::Type::Text;
+			div.pos = { -2, -2 };
+			div.fontFace = "Overpass-Regular";
+
+			File txt(LR"(C:\Users\hani\Downloads\(personal projects)\~~dataset\~dataset\The Claiming of Sleeping Beauty; Roquelaure.txt)", "rb");
+			fread(buffer, 1, sizeof(buffer),txt);
+			div.text = buffer;
+		}
+
+		{
+			auto& model = scene.assets.models["shapes"];
+			model.buffer.vertex.emplace_back(-1, -1);
+			model.buffer.vertex.emplace_back(-1, 1);
+			model.buffer.vertex.emplace_back(1, 1);
+			model.buffer.vertex.emplace_back(1, -1);
+			model.buffer.index = { 0, 1, 2, 0, 2, 3 };
+			auto& mesh = model.meshes[0];
+			mesh.startVertex = 0;
+			mesh.startIndex = 0;
+			mesh.indexCount = 6;
+
+			{
+				auto& square = scene.entities.emplace_back();
+				square.pos = { -3.2f, .9f };
+				square.model = &mesh;
+			}
+			{
+				auto& square = scene.entities.emplace_back();
+				square.pos = { -3.2f, -1.3f };
+				square.model = &mesh;
+			}
+		}
+
 
 		// App::Window win;
 		MyWindow win2;

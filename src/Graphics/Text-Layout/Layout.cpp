@@ -26,6 +26,8 @@ namespace crib::Graphics
 		{
 			if (symbol == ' ')
 				textPos.x += .2f;
+			else if (symbol == '\t')
+				textPos.x += 1.f;
 			else if (symbol == '\n' || symbol == '\r')
 			{
 				textPos.x = div.pos.x;
