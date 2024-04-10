@@ -33,11 +33,12 @@ namespace crib::Graphics
 			}
 			else
 			{
-				auto& e = div.children.emplace_back();
+				auto modelId = font.meshes.find(symbol) == font.meshes.end() ? 175 : symbol;
 
-				e.modelId = font.meshes.find(symbol) == font.meshes.end() ? 175 : symbol;
+				auto& e = div.children.emplace_back();
+				e.model = &font.meshes.at(modelId);
 				e.pos = textPos;
-				textPos.x += font.meshes.at(e.modelId).font.advance;
+				textPos.x += e.model->font.advance;
 			}
 		}
 	}

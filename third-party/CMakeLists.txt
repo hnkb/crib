@@ -47,13 +47,18 @@ target_include_directories(ttf2mesh PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/ttf2mesh
 
 
 
-if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/overpass-font/Overpass-Bold.ttf")
-	message("Downloading Overpass font from GitHub...")
-	file(DOWNLOAD
-		"https://raw.githubusercontent.com/RedHatOfficial/Overpass/master/fonts/ttf/Overpass-Bold.ttf"
-		"${CMAKE_CURRENT_SOURCE_DIR}/overpass-font/Overpass-Bold.ttf"
-	)
-endif()
+function(add_overpass_font STYLE)
+	if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/overpass-font/Overpass-${STYLE}.ttf")
+		message("Downloading Overpass ${STYLE} font from GitHub...")
+		file(DOWNLOAD
+			"https://raw.githubusercontent.com/RedHatOfficial/Overpass/master/fonts/ttf/Overpass-${STYLE}.ttf"
+			"${CMAKE_CURRENT_SOURCE_DIR}/overpass-font/Overpass-${STYLE}.ttf"
+		)
+	endif()
 
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/overpass-font/Overpass-Bold.ttf"
-	DESTINATION "${CMAKE_BINARY_DIR}/assets/")
+	file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/overpass-font/Overpass-${STYLE}.ttf"
+		DESTINATION "${CMAKE_BINARY_DIR}/assets/")
+endfunction()
+
+add_overpass_font("Regular")
+add_overpass_font("Bold")

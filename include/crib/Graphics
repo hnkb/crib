@@ -214,7 +214,7 @@ namespace crib::Graphics
 		{
 			size_t startVertex;
 			size_t startIndex;
-			size_t indexCount;
+			int indexCount;
 
 			union
 			{
@@ -245,7 +245,7 @@ namespace crib::Graphics
 			enum class Type { None, Text };
 
 			Type type = Type::None;
-			int modelId = -1;  // or uint64_t or void*
+			const ModelPack::Mesh* model = nullptr;
 
 			// model transformation
 			float2 pos;

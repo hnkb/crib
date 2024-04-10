@@ -117,9 +117,6 @@ void InitializeProgram()
 	std::for_each(shaderList.begin(), shaderList.end(), glDeleteShader);
 }
 
-//GLuint positionBufferObject;
-//GLuint vao;
-
 
 
 class Buffer
@@ -127,21 +124,15 @@ class Buffer
 public:
 	GLuint vertex;
 	GLuint index;
-} buffer;
-
-
-struct DrawableObject
-{
-	void* start;
-	GLsizei numPoints;
-	GLuint objectId;
 };
-std::map<wchar_t, DrawableObject> objects;
+
+std::map<const Graphics::ModelPack*, Buffer> buffers;
+std::map<const Graphics::ModelPack::Mesh*, GLuint> objectIds;
 
 
-void InitializeVertexBuffer()
+void InitializeVertexBuffer(const Graphics::ModelPack& model)
 {
-	auto& model = view.scene.assets.models.at("Overpass-Bold");
+	auto& buffer = buffers[&model];
 
 	//////////////////// create buffers and copy data //////////////////////////
 
@@ -168,14 +159,12 @@ void InitializeVertexBuffer()
 
 	for (auto& mesh: model.meshes)
 	{
-		auto& obj = objects[mesh.first];
-		obj.numPoints = mesh.second.indexCount;
-		obj.start = (void*)(mesh.second.startIndex * sizeof(GLushort));
+		auto& objectId = objectIds[&mesh.second];
 
 		auto vertOffset = (void*)(mesh.second.startVertex * sizeof(model.buffer.vertex[0]));
 
-		glGenVertexArrays(1, &obj.objectId);
-		glBindVertexArray(obj.objectId);
+		glGenVertexArrays(1, &objectId);
+		glBindVertexArray(objectId);
 
 		glBindBuffer(GL_ARRAY_BUFFER, buffer.vertex);
 		glEnableVertexAttribArray(0);
@@ -193,7 +182,9 @@ GLint scaleLocation;
 void initGL_3()
 {
 	InitializeProgram();
-	InitializeVertexBuffer();
+
+	for (auto& model: view.scene.assets.models)
+		InitializeVertexBuffer(model.second);
 
 	offsetLocation = glGetUniformLocation(theProgram, "offset");
 	scaleLocation = glGetUniformLocation(theProgram, "scale");
@@ -235,13 +226,15 @@ void Context::readDeviceDescription(int swapInterval)
 
 void drawEntity(const Graphics::Scene::Entity& e)
 {
-	if (e.modelId != -1)
+	if (e.model)
 	{
-		auto& obj = objects.at(e.modelId);
+		auto& objectId = objectIds.at(e.model);
+		auto start = (void*)(e.model->startIndex * sizeof(GLushort));
 		auto pos = view.camera.view.offset + e.pos;
-		glBindVertexArray(obj.objectId);
+
+		glBindVertexArray(objectId);
 		glUniform2fv(offsetLocation, 1, (float*)&pos);
-		glDrawElements(GL_TRIANGLES, obj.numPoints, GL_UNSIGNED_SHORT, obj.start);
+		glDrawElements(GL_TRIANGLES, e.model->indexCount, GL_UNSIGNED_SHORT, start);
 	}
 	for (auto& child: e.children)
 		drawEntity(child);

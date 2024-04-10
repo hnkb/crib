@@ -54,7 +54,7 @@ public:
 		{
 			text += str;
 		}
-		scene.entities.back().text = text + "_";
+		scene.entities.front().text = text + "_";
 		draw();
 	}
 	void onMouseEvent(const App::MouseEvent& ev) override
@@ -105,9 +105,10 @@ int main()
 {
 	try
 	{
-		scene.assets.models["Overpass-Bold"] = Graphics::loadMeshFromTTF(
-			std::filesystem::current_path().parent_path().parent_path()
-			/ "assets/Overpass-Bold.ttf");
+		for (auto font: { "Overpass-Regular", "Overpass-Bold" })
+			scene.assets.models[font] = Graphics::loadMeshFromTTF(
+				std::filesystem::current_path().parent_path().parent_path() / "assets"
+				/ (std::string(font) + ".ttf"));
 
 		{
 			auto& div = scene.entities.emplace_back();
