@@ -1,10 +1,12 @@
 .DS_Store
+.cache/
 .vs/
 .vscode/
+node_modules/
 
 CMakeSettings.json
 CMakeUserPresets.json
 
-[Bb]uild/
-[Bb]in/
-[Oo]ut/
+/[Bb]uild/
+/[Bb]in/
+/[Oo]ut/

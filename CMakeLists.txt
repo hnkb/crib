@@ -1,10 +1,10 @@
-
-cmake_minimum_required(VERSION 3.15)
-
+cmake_minimum_required(VERSION 3.24)
 
 include("src/Platform/CMake/Git-version.cmake")
 
-project(crib
+
+project(
+	crib
 	VERSION "${CRIB_VERSION_TAG}.${CRIB_VERSION_PATCH}"
 	DESCRIPTION "crib: C++ library for rendering and processing"
 	HOMEPAGE_URL https://github.com/hnkb/crib
@@ -16,7 +16,7 @@ if (TARGET crib)
 endif()
 
 
-add_subdirectory("third-party")
+add_subdirectory("third-party" EXCLUDE_FROM_ALL)
 add_subdirectory("src")
 
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
