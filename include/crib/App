@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "Math"
@@ -61,26 +60,27 @@ namespace crib::App
 
 		// void createGraphicsContext();
 
-		virtual void onDraw();
-		virtual void onMouseEvent(const MouseEvent&);
+		virtual void onDraw() {}
+		virtual void onMouseEvent(const MouseEvent&) {}
 		virtual void onSwipe(float2 delta) {}
 		virtual void onPinch(float magnification) {}
 		virtual void onRotate(float angle) {}
 		virtual void onKeyChar(const std::string&) {}
 		virtual void onPositionChanged(float2 pos) {}
-		virtual void onSizeChanged(float2 dims) { onDraw(); }
+		virtual void onSizeChanged(float2 dims) {}
 
-	protected:
 #if defined(__EMSCRIPTEN__)
 // TODO add support for Emscripten
 #elif defined(_WIN32)
-		using NativeWindow = HWND;
+		using NativeHandleType = HWND;
 #elif defined(__APPLE__)
-		using NativeWindow = NSWindow*;
+		using NativeHandleType = NSWindow*;
 #else
-		using NativeWindow = std::unique_ptr<Platform::X11::NativeWindow>;
+		using NativeHandleType = std::unique_ptr<Platform::X11::NativeWindow>;
 #endif
-		NativeWindow native = nullptr;
+
+	private:
+		NativeHandleType native = nullptr;
 	};
 
 	struct Window::Options
