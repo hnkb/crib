@@ -1,12 +1,8 @@
 
-#include <crib/App>
+#include <utils/App>
 #import <Cocoa/Cocoa.h>
-#include <Renderer/MetalDevice.h>
 
 using namespace crib::App;
-
-
-crib::Graphics::Metal::Device* dev;
 
 
 namespace
@@ -63,28 +59,8 @@ Window::Window(Options options)
 		[native setAcceptsMouseMovedEvents:YES];  // TODO: do we always want this?
 		[native makeKeyAndOrderFront:nil];
 		[native retain];
-
-
-
-		auto scaleFactor = [native backingScaleFactor];
-		printf("Scale factor: %f\n", scaleFactor);
 	}
 	windowCount++;
-
-	dev = new crib::Graphics::Metal::Device(native);
-	dev->draw();
-	// [native.contentView setNeedsDisplay:YES];
-}
-
-void Window::onMouseEvent(const MouseEvent& event)
-{
-	if (event.type == MouseEvent::Type::ButtonDown)
-		dev->draw();
-}
-
-void Window::onDraw()
-{
-	dev->draw();
 }
 
 Window::~Window()
@@ -161,13 +137,6 @@ Window& Window::options(const Options& options)
 		NSSize size = [window frame].size;
 		self.appWindow->onSizeChanged({ (float)size.width, (float)size.height });
 	}
-}
-
-
-- (void)dealloc
-{
-	printf("<<<<<<<<<<<<<<< delegate being deallocated >>>>>>>>>>>>>>>\n");
-	[super dealloc];
 }
 
 @end
@@ -272,22 +241,9 @@ using Type = MouseEvent::Type;
 		self.appWindow->onKeyChar([[event charactersIgnoringModifiers] UTF8String]);
 }
 
-// - (void)keyUp:(NSEvent*)event
-// {
-// 	// NSLog(@"Key Up: %@", [event charactersIgnoringModifiers]);
-// }
-
-- (void)drawRect:(NSRect)dirtyRect
+- (void)keyUp:(NSEvent*)event
 {
-	printf("-------------------- drawRect\n");
-	if (self.appWindow)
-		self.appWindow->onDraw();
-}
-
-- (void)dealloc
-{
-	printf("<<<<<<<<<<<<<<< view being deallocated >>>>>>>>>>>>>>>\n");
-	[super dealloc];
+	// NSLog(@"Key Up: %@", [event charactersIgnoringModifiers]);
 }
 
 @end
