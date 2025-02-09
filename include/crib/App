@@ -3,13 +3,26 @@
 
 #include "Math"
 #include <string>
-#include <memory>
 
 
-namespace crib::Graphics
+// forward-declare platform-specific native Window types
+#if defined(__EMSCRIPTEN__)
+// TODO add support for Emscripten
+#elif defined(_WIN32)
+using HWND = void*;
+#elif defined(__APPLE__)
+#	if defined(__OBJC__)
+@class NSWindow;
+#	else
+class NSWindow;
+#	endif
+#else
+namespace Platform::X11
 {
-	class Context;
+	class NativeWindow;
 }
+#endif
+
 
 namespace crib::App
 {
@@ -20,22 +33,20 @@ namespace crib::App
 	struct MouseEvent
 	{
 		enum class Type { ButtonDown, ButtonUp, Move, Wheel };
-		enum class Button { Left, Middle, Right };
+		enum class Button { Left, Middle, Right, Other };
 		Type type;
 		Button button;
-		int2 pos;
-		int wheel;
+		float2 pos;
+		float2 wheel;
 	};
 
 	class Window
 	{
 	public:
 		struct Options;
-		enum class Engine;
 
 		Window();
 		Window(Options);
-
 		virtual ~Window();
 
 		Window(const Window&) = delete;
@@ -43,44 +54,39 @@ namespace crib::App
 		Window& operator=(const Window&) = delete;
 		Window& operator=(Window&&);
 
-		Options getOptions() const;
-		Window& setOptions(const Options&);
-
 		void close();
 
-		void createGraphicsContext(Options);
-		virtual void draw();
+		Options options() const;
+		Window& options(const Options&);
 
-		virtual void onMouseEvent(const MouseEvent&) {}
+		// void createGraphicsContext();
+
+		virtual void onDraw();
+		virtual void onMouseEvent(const MouseEvent&);
+		virtual void onSwipe(float2 delta) {}
+		virtual void onPinch(float magnification) {}
+		virtual void onRotate(float angle) {}
 		virtual void onKeyChar(const std::string&) {}
-		virtual void onPosChanged(int2 pos);
-		virtual void onSizeChanged(int2 dims);
+		virtual void onPositionChanged(float2 pos) {}
+		virtual void onSizeChanged(float2 dims) { onDraw(); }
 
-		void* impl = nullptr;
-		Graphics::Context* context = nullptr;
+	protected:
+#if defined(__EMSCRIPTEN__)
+// TODO add support for Emscripten
+#elif defined(_WIN32)
+		using NativeWindow = HWND;
+#elif defined(__APPLE__)
+		using NativeWindow = NSWindow*;
+#else
+		using NativeWindow = std::unique_ptr<Platform::X11::NativeWindow>;
+#endif
+		NativeWindow native = nullptr;
 	};
 
 	struct Window::Options
 	{
 		std::string title;
-		int2 pos;
-		int2 size;
-		Engine preferEngine;
-		// TODO: anti-aliasing settings
-		// TODO: constant redraw or redraw on change?
+		float2 pos;
+		float2 size;
 	};
-
-	enum class Window::Engine {
-		any,
-#if _WIN32
-		d3d11,
-		d3d12,
-#endif
-		openGL,
-		vulkan,
-#if __APPLE__
-		metal,
-#endif
-	};
-
 }
