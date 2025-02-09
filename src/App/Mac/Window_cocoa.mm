@@ -1,5 +1,5 @@
 
-#include <utils/App>
+#include <crib/App>
 #import <Cocoa/Cocoa.h>
 
 using namespace crib::App;
@@ -59,6 +59,11 @@ Window::Window(Options options)
 		[native setAcceptsMouseMovedEvents:YES];  // TODO: do we always want this?
 		[native makeKeyAndOrderFront:nil];
 		[native retain];
+
+
+
+		auto scaleFactor = [native backingScaleFactor];
+		printf("Scale factor: %f\n", scaleFactor);
 	}
 	windowCount++;
 }
@@ -137,6 +142,13 @@ Window& Window::options(const Options& options)
 		NSSize size = [window frame].size;
 		self.appWindow->onSizeChanged({ (float)size.width, (float)size.height });
 	}
+}
+
+
+- (void)dealloc
+{
+	printf("<<<<<<<<<<<<<<< delegate being deallocated >>>>>>>>>>>>>>>\n");
+	[super dealloc];
 }
 
 @end
@@ -226,7 +238,10 @@ using Type = MouseEvent::Type;
 - (void)magnifyWithEvent:(NSEvent*)event
 {
 	if (self.appWindow)
-		self.appWindow->onPinch([event magnification]);
+	{
+		NSPoint pos = [self convertPoint:[event locationInWindow] fromView:nil];
+		self.appWindow->onPinch([event magnification], { (float)pos.x, (float)pos.y });
+	}
 }
 
 - (void)rotateWithEvent:(NSEvent*)event
@@ -241,9 +256,22 @@ using Type = MouseEvent::Type;
 		self.appWindow->onKeyChar([[event charactersIgnoringModifiers] UTF8String]);
 }
 
-- (void)keyUp:(NSEvent*)event
+// - (void)keyUp:(NSEvent*)event
+// {
+// 	// NSLog(@"Key Up: %@", [event charactersIgnoringModifiers]);
+// }
+
+- (void)drawRect:(NSRect)dirtyRect
 {
-	// NSLog(@"Key Up: %@", [event charactersIgnoringModifiers]);
+	printf("-------------------- drawRect\n");
+	if (self.appWindow)
+		self.appWindow->onDraw();
+}
+
+- (void)dealloc
+{
+	printf("<<<<<<<<<<<<<<< view being deallocated >>>>>>>>>>>>>>>\n");
+	[super dealloc];
 }
 
 @end

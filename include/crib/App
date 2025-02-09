@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "Math"
@@ -63,13 +64,13 @@ namespace crib::App
 		virtual void onDraw() {}
 		virtual void onMouseEvent(const MouseEvent&) {}
 		virtual void onSwipe(float2 delta) {}
-		virtual void onPinch(float magnification) {}
+		virtual void onPinch(float magnification, float2 pos) {}
 		virtual void onRotate(float angle) {}
 		virtual void onKeyChar(const std::string&) {}
 		virtual void onPositionChanged(float2 pos) {}
-		virtual void onSizeChanged(float2 dims) {}
+		virtual void onSizeChanged(float2 dims) { onDraw(); }
 
-#if defined(__EMSCRIPTEN__)
+	#if defined(__EMSCRIPTEN__)
 // TODO add support for Emscripten
 #elif defined(_WIN32)
 		using NativeHandleType = HWND;
