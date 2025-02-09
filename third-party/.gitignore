@@ -1,2 +1,8 @@
 doctest/
 overpass-font/
+brotli/
+clipper2/
+glfw/
+libtess2/
+webgpu*/
+woff2/
