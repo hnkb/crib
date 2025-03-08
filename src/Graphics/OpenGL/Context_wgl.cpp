@@ -157,6 +157,7 @@ void Context::draw()
 {
 	PAINTSTRUCT ps;
 	auto hdc = BeginPaint(owner, &ps);
+	wglMakeCurrent(hdc, ctx);
 
 	drawPlatformIndependent();
 
